@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   ...
 }:
@@ -96,7 +97,12 @@
     shell = pkgs.zsh;
     extraGroups = [ "wheel" ];
   };
-
+  
   system.stateVersion = "22.11";
+
+  home-manager.users.emmberkat = {
+    home.stateVersion = config.system.stateVersion;
+    nixpkgs.config.allowUnfree = config.nixpkgs.config.allowUnfree;
+  };
 
 }
