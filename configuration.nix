@@ -9,6 +9,7 @@
     ./audio.nix
     ./backups.nix
     ./bluetooth.nix
+    ./browser.nix
   ];
 
   boot = {
@@ -97,7 +98,7 @@
     shell = pkgs.zsh;
     extraGroups = [ "wheel" ];
   };
-  
+
   system.stateVersion = "22.11";
 
   home-manager.users.emmberkat = {
