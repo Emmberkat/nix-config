@@ -7,6 +7,7 @@
   imports = [
     ./audio.nix
     ./backups.nix
+    ./bluetooth.nix
   ];
 
   boot = {
