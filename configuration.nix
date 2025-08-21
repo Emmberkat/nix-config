@@ -10,6 +10,7 @@
     ./backups.nix
     ./bluetooth.nix
     ./browser.nix
+    ./desktop.nix
   ];
 
   boot = {
