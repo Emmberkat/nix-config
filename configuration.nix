@@ -4,6 +4,10 @@
 }:
 {
 
+  imports = [
+    ./backups.nix
+  ];
+
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
@@ -21,6 +25,8 @@
     ];
     kernelModules = [ "kvm-intel" ];
   };
+
+  services.openssh.enable = true;
 
   systemd = {
     network.enable = true;

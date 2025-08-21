@@ -1,11 +1,21 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
       self,
       nixpkgs,
+      home-manager,
+      agenix,
     }:
     {
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
@@ -13,6 +23,8 @@
         system = "x86_64-linux";
         modules = [
           ./configuration.nix
+          home-manager.nixosModules.home-manager
+          agenix.nixosModules.default
         ];
       };
     };
