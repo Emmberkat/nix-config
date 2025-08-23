@@ -13,6 +13,7 @@
     ./desktop.nix
     ./git.nix
     ./neovim.nix
+    ./zsh.nix
   ];
 
   boot = {
