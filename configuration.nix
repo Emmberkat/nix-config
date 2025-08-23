@@ -11,6 +11,7 @@
     ./bluetooth.nix
     ./browser.nix
     ./desktop.nix
+    ./neovim.nix
   ];
 
   boot = {
