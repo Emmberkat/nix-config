@@ -1,5 +1,6 @@
-{ pkgs
-, ...
+{
+  pkgs,
+  ...
 }:
 {
   services = {
@@ -13,13 +14,26 @@
       };
     };
     gnome.gnome-keyring.enable = true;
+    tumbler.enable = true; # Generate thumbnails
+    gvfs.enable = true;
   };
   security.polkit.enable = true;
   home-manager.users.emmberkat = {
+    home.packages = with pkgs; [
+      swaybg
+
+      discord
+      picard
+    ];
     wayland.windowManager.sway = {
       enable = true;
       wrapperFeatures.gtk = true;
       config = {
+        startup = [
+          {
+            command = "swaybg -i .background-image";
+          }
+        ];
         modifier = "Mod4";
         menu = "${pkgs.wofi}/bin/wofi --show drun";
         terminal = "${pkgs.wezterm}/bin/wezterm";
