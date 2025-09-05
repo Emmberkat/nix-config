@@ -24,6 +24,7 @@
       "${home}/Downloads"
       "${home}/.zsh_history"
       "${home}/.lesshst"
+      "${home}/.cargo"
       "${home}/.config/obsidian"
       "${home}/.config/vlc"
       "${home}/.config/discord"
