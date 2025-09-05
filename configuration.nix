@@ -118,4 +118,12 @@
     nixpkgs.config.allowUnfree = config.nixpkgs.config.allowUnfree;
   };
 
+  programs = {
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true;
+      dedicatedServer.openFirewall = true;
+    };
+  };
+
 }
