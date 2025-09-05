@@ -37,7 +37,15 @@
   services.openssh.enable = true;
 
   systemd = {
-    network.enable = true;
+    network = {
+      enable = true;
+      networks = {
+        "10-eth" = {
+          matchConfig.Type = "ether";
+          networkConfig.DHCP = "ipv4";
+        };
+      };
+    };
     targets = {
       sleep.enable = false;
       suspend.enable = false;
@@ -77,7 +85,7 @@
   };
 
   networking = {
-    useNetworkd = true;
+    useDHCP = false;
     hostName = "crystal";
     firewall.enable = true;
   };
