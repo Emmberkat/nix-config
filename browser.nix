@@ -30,6 +30,27 @@
             };
           };
         };
+        profiles.default = {
+          bookmarks = {
+            force = true;
+            settings = [
+              {
+                toolbar = true;
+                bookmarks = [
+                  {
+                    name = "Nix Search";
+                    url = "https://search.nixos.org";
+                  }
+                ];
+              }
+            ];
+          };
+          settings = {
+            "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+            "browser.newtabpage.activity-stream.trendingSearch.enabled" = false;
+            "browser.newtabpage.activity-stream.feeds.trendingsearchfeed" = false;
+          };
+        };
       };
     };
   };
