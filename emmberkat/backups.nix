@@ -1,8 +1,8 @@
 { config, ... }:
 {
   age.secrets = {
-    "restic/password".file = ./secrets/restic/password.age;
-    "restic/environment".file = ./secrets/restic/environment.age;
+    "restic/password".file = secrets/restic/password.age;
+    "restic/environment".file = secrets/restic/environment.age;
   };
   services.restic.backups.home = with config.users.users.emmberkat; {
     repository = "s3:https://minio.emmberkat.com/mthwate-restic/crystal";

@@ -7,13 +7,8 @@
 
   imports = [
     ./audio.nix
-    ./backups.nix
     ./bluetooth.nix
-    ./browser.nix
     ./desktop.nix
-    ./git.nix
-    ./neovim.nix
-    ./zsh.nix
   ];
 
   boot = {
@@ -112,11 +107,6 @@
   };
 
   system.stateVersion = "22.11";
-
-  home-manager.users.emmberkat = {
-    home.stateVersion = config.system.stateVersion;
-    nixpkgs.config.allowUnfree = config.nixpkgs.config.allowUnfree;
-  };
 
   programs = {
     steam = {

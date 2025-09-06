@@ -25,6 +25,12 @@
           ./configuration.nix
           home-manager.nixosModules.home-manager
           agenix.nixosModules.default
+          {
+            home-manager.users.emmberkat = ./emmberkat/home.nix;
+            home-manager.extraSpecialArgs = {
+              agenix = agenix;
+            };
+          }
         ];
       };
     };
