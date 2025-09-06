@@ -10,5 +10,6 @@
         init.defaultBranch = "main";
       };
     };
+    gh.enable = true;
   };
 }
