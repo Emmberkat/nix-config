@@ -22,3 +22,7 @@ jobs:
           pr-labels: |
             dependencies
             automated
+      - name: Merge
+        if: ${{ steps.update.outputs.pull-request-number != '' }}
+        run: gh pr merge --auto "${{ steps.update.outputs.pull-request-number }}" --rebase
+        
