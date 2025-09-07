@@ -15,5 +15,11 @@ jobs:
         uses: DeterminateSystems/flake-checker-action@main
       - name: Install Nix
         uses: DeterminateSystems/determinate-nix-action@v3
+      - name: Restore and save Nix store
+        uses: nix-community/cache-nix-action@v6
+        with:
+          primary-key: nix-${{ runner.os }}-${{ hashFiles('**/*.nix', '**/flake.lock') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-
+          gc-max-store-size: 1G
       - name: Build all NixOS configurations
         run: "nix flake show --json | jq -r '.nixosConfigurations | keys[]' | xargs -I {} nix build --no-link .#nixosConfigurations.{}.config.system.build.toplevel"
