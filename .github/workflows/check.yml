@@ -11,10 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Check Nix flake inputs
-        uses: DeterminateSystems/flake-checker-action@main
       - name: Install Nix
-        uses: DeterminateSystems/determinate-nix-action@v3
+        uses: nixbuild/nix-quick-install-action@v30
       - name: Restore and save Nix store
         uses: nix-community/cache-nix-action@v6
         with:
