@@ -22,11 +22,11 @@
       nixosConfigurations.crystal = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./configuration.nix
+          ./system/crystal
           home-manager.nixosModules.home-manager
           agenix.nixosModules.default
           {
-            home-manager.users.emmberkat = ./emmberkat/home.nix;
+            home-manager.users.emmberkat = ./user/emmberkat;
             home-manager.extraSpecialArgs = {
               agenix = agenix;
             };
