@@ -6,17 +6,13 @@
 {
 
   imports = [
+    ../common
     ./audio.nix
     ./bluetooth.nix
     ./desktop.nix
   ];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
     initrd.availableKernelModules = [
       "xhci_pci"
       "ahci"
@@ -33,7 +29,6 @@
 
   systemd = {
     network = {
-      enable = true;
       networks = {
         "10-eth" = {
           matchConfig.Type = "ether";
@@ -74,29 +69,11 @@
     };
   };
 
-  nixpkgs = {
-    hostPlatform = "x86_64-linux";
-    config.allowUnfree = true;
-  };
+  nixpkgs.hostPlatform = "x86_64-linux";
 
-  networking = {
-    useDHCP = false;
-    hostName = "crystal";
-    firewall.enable = true;
-  };
+  networking.hostName = "crystal";
 
   time.timeZone = "US/Pacific";
-
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  nix = {
-    gc.automatic = true;
-    settings.experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
-    channel.enable = false;
-  };
 
   programs.zsh.enable = true;
 
