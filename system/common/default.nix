@@ -25,10 +25,15 @@
 
   nix = {
     gc.automatic = true;
-    settings.experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
+    settings = {
+      trusted-substituters = [
+        "s3://emmberkat-nix-cache?region=us-east-1&endpoint=minio.emmberkat.com"
+      ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+    };
     channel.enable = false;
   };
 
