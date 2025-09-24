@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 {
   imports = [
+    ./minio.nix
   ];
 
   networking.firewall.allowedTCPPorts = [
