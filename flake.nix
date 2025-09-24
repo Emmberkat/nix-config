@@ -19,19 +19,35 @@
     }:
     {
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
-      nixosConfigurations.crystal = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./system/crystal
-          home-manager.nixosModules.home-manager
-          agenix.nixosModules.default
-          {
-            home-manager.users.emmberkat = ./user/emmberkat;
-            home-manager.extraSpecialArgs = {
-              agenix = agenix;
-            };
-          }
-        ];
+      nixosConfigurations = {
+        crystal = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./system/crystal
+            home-manager.nixosModules.home-manager
+            agenix.nixosModules.default
+            {
+              home-manager.users.emmberkat = ./user/emmberkat;
+              home-manager.extraSpecialArgs = {
+                agenix = agenix;
+              };
+            }
+          ];
+        };
+        catalyst = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./system/catalyst
+            home-manager.nixosModules.home-manager
+            agenix.nixosModules.default
+            {
+              home-manager.users.emmberkat = ./user/emmberkat;
+              home-manager.extraSpecialArgs = {
+                agenix = agenix;
+              };
+            }
+          ];
+        };
       };
     };
 }
