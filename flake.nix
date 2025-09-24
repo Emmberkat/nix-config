@@ -1,4 +1,9 @@
 {
+  nixConfig = {
+    extra-substituters = [
+      "s3://emmberkat-nix-cache?region=us-east-1&endpoint=minio.emmberkat.com"
+    ];
+  };
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
