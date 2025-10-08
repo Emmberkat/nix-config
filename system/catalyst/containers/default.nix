@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 {
   imports = [
+    ./immich.nix
     ./minio.nix
   ];
 
@@ -57,7 +58,7 @@
         middlewares = "internal";
         tls.certresolver = "letsencrypt";
       };
-      services.traefik.loadbalancer.servers = [{ url = "http://localhost:8080"; }];
+      services.traefik.loadbalancer.servers = [ { url = "http://localhost:8080"; } ];
       middlewares.internal.ipallowlist.sourcerange = "127.0.0.1/32, 10.0.0.0/8";
     };
   };
