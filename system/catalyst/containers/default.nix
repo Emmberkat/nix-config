@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 {
   imports = [
+    ./immich.nix
     ./minio.nix
   ];
 
