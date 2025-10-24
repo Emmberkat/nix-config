@@ -56,11 +56,11 @@
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/b1841eac-f236-4a69-aa39-e96017a66808";
+      device = "/dev/disk/by-uuid/d6007436-3e0d-48be-a852-677c3995ddb1";
       fsType = "btrfs";
     };
     "/boot" = {
-      device = "/dev/disk/by-uuid/6024-2D3B";
+      device = "/dev/disk/by-uuid/D537-F5B1";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
