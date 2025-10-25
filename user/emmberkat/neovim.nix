@@ -82,28 +82,19 @@
         plugin = nvim-lspconfig;
         type = "lua";
         config = ''
-          local lspconfig = require('lspconfig')
-          lspconfig.pyright.setup {}
-          lspconfig.gopls.setup {}
-          lspconfig.kotlin_language_server.setup {}
-          lspconfig.jdtls.setup {}
-          lspconfig.ocamllsp.setup {}
-          lspconfig.clangd.setup {}
-          lspconfig.html.setup {}
-          lspconfig.ts_ls.setup {}
-          lspconfig.rust_analyzer.setup {}
-          lspconfig.terraformls.setup {}
-          lspconfig.yamlls.setup {}
-          lspconfig.gleam.setup {}
-          lspconfig.nil_ls.setup {
-            settings = {
-              ['nil'] = {
-                formatting = {
-                  command = { "nixpkgs-fmt" },
-                },
-              },
-            },
-          }
+          vim.lsp.enable('pyright')
+          vim.lsp.enable('gopls')
+          vim.lsp.enable('kotlin_language_server')
+          vim.lsp.enable('jdtls')
+          vim.lsp.enable('ocamllsp')
+          vim.lsp.enable('clangd')
+          vim.lsp.enable('html')
+          vim.lsp.enable('ts_ls')
+          vim.lsp.enable('rust_analyzer')
+          vim.lsp.enable('terraformls')
+          vim.lsp.enable('yamlls')
+          vim.lsp.enable('gleam')
+          vim.lsp.enable('nil_ls')
 
           vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
           vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
