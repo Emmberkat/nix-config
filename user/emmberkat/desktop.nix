@@ -10,6 +10,7 @@
 
     discord
     picard
+    leocad
   ];
 
   age.secrets = {
