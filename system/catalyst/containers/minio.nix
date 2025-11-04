@@ -19,8 +19,8 @@ in
       };
     };
     services = {
-      minio.loadBalancer.servers = [{ url = "http://${ipAddress}:9000"; }];
-      minioConsole.loadBalancer.servers = [{ url = "http://${ipAddress}:9001"; }];
+      minio.loadBalancer.servers = [ { url = "http://${ipAddress}:9000"; } ];
+      minioConsole.loadBalancer.servers = [ { url = "http://${ipAddress}:9001"; } ];
     };
   };
   age.secrets."minio/credentials".file = ../secrets/minio/credentials.age;
