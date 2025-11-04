@@ -11,6 +11,7 @@
     discord
     picard
     leocad
+    goose-cli
   ];
 
   age.secrets = {
