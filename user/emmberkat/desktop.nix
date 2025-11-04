@@ -114,6 +114,7 @@
     };
   };
   programs = {
+    swaylock.enable = true;
     waybar = {
       enable = true;
       systemd.enable = true;
