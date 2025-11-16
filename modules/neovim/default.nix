@@ -15,14 +15,11 @@
       gopls
       ocamlPackages.ocaml-lsp
       ocamlPackages.ocamlformat
-      clang-tools
       nil
       nixpkgs-fmt
       nodePackages.typescript-language-server
       vscode-langservers-extracted
-      terraform-ls
       yaml-language-server
-      gleam
     ];
     programs.neovim = {
       enable = true;
@@ -86,12 +83,9 @@
           config = ''
             vim.lsp.enable('gopls')
             vim.lsp.enable('ocamllsp')
-            vim.lsp.enable('clangd')
             vim.lsp.enable('html')
             vim.lsp.enable('ts_ls')
-            vim.lsp.enable('terraformls')
             vim.lsp.enable('yamlls')
-            vim.lsp.enable('gleam')
             vim.lsp.config('nil_ls', {
               settings = {
                 ['nil'] = {
@@ -148,7 +142,6 @@
         nvim-treesitter-parsers.typescript
         nvim-treesitter-parsers.vim
         nvim-treesitter-parsers.vimdoc
-        nvim-treesitter-parsers.gleam
         nvim-treesitter-context
         cmp-nvim-lsp
         vim-vsnip
