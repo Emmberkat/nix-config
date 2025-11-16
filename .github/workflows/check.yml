@@ -13,6 +13,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Measure space
         run: |
+          cat /mnt/DATALOSS_WARNING_README.txt
           df -hT
           lsblk
           du -sh /mnt/*
