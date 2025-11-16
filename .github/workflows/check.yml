@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Mount Nix store
+        run: |
+          sudo install -d -o "$USER" /mnt/nixroot
+          sudo mount --bind /mnt/nixroot /nix
       - name: Install Nix
         uses: nixbuild/nix-quick-install-action@v30
         with:
