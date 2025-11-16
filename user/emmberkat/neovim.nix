@@ -6,21 +6,21 @@
     pyright
     go
     gopls
-    kotlin-language-server
-    jdt-language-server
+    #kotlin-language-server
+    #jdt-language-server
     ocamlPackages.ocaml-lsp
     ocamlPackages.ocamlformat
-    clang-tools
+    #clang-tools
     nil
     nixpkgs-fmt
     nodePackages.typescript-language-server
     vscode-langservers-extracted
-    rust-analyzer
-    rustfmt
-    rustc
+    #rust-analyzer
+    #rustfmt
+    #rustc
     terraform-ls
     yaml-language-server
-    gleam
+    #gleam
   ];
   programs.neovim = {
     enable = true;
@@ -85,16 +85,16 @@
           local lspconfig = require('lspconfig')
           lspconfig.pyright.setup {}
           lspconfig.gopls.setup {}
-          lspconfig.kotlin_language_server.setup {}
-          lspconfig.jdtls.setup {}
+          -- lspconfig.kotlin_language_server.setup {}
+          -- lspconfig.jdtls.setup {}
           lspconfig.ocamllsp.setup {}
-          lspconfig.clangd.setup {}
+          -- lspconfig.clangd.setup {}
           lspconfig.html.setup {}
           lspconfig.ts_ls.setup {}
-          lspconfig.rust_analyzer.setup {}
+          -- lspconfig.rust_analyzer.setup {}
           lspconfig.terraformls.setup {}
           lspconfig.yamlls.setup {}
-          lspconfig.gleam.setup {}
+          -- lspconfig.gleam.setup {}
           lspconfig.nil_ls.setup {
             settings = {
               ['nil'] = {
