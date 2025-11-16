@@ -22,7 +22,8 @@
       home-manager,
       agenix,
     }:
-    {
+    rec {
+      nixosModules.neovim = ./modules/neovim;
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
       nixosConfigurations = {
         crystal = nixpkgs.lib.nixosSystem {
@@ -31,6 +32,9 @@
             ./system/crystal
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
+            {
+              home-manager.users.emmberkat = nixosModules.neovim;
+            }
             {
               home-manager.users.emmberkat = ./user/emmberkat;
               home-manager.extraSpecialArgs = {
@@ -45,6 +49,9 @@
             ./system/catalyst
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
+            {
+              home-manager.users.emmberkat = nixosModules.neovim;
+            }
             {
               home-manager.users.emmberkat = ./user/emmberkat;
               home-manager.extraSpecialArgs = {
