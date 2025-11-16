@@ -12,7 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Measure space
-        run: "df -h"
+        run: |
+          df -hT
+          lsblk
+          du -sh /mnt/*
+          du -sh /*
       - name: Install Nix
         uses: nixbuild/nix-quick-install-action@v30
         with:
