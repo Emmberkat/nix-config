@@ -4,14 +4,14 @@ let
   keys = builtins.mapAttrs (name: value: builtins.readFile (keysDir + "/${name}")) keyFiles;
 in
 {
-  "user/emmberkat/secrets/syncthing/key.age" = {
+  "system/crystal/secrets/syncthing/key.age" = {
     publicKeys = [
       keys.emmberkat
       keys.crystal
     ];
     armor = true;
   };
-  "user/emmberkat/secrets/syncthing/cert.age" = {
+  "system/crystal/secrets/syncthing/cert.age" = {
     publicKeys = [
       keys.emmberkat
       keys.crystal
