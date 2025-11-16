@@ -63,6 +63,7 @@ in
       "google_mail"
       "ring"
       "tesla_fleet"
+      "jellyfin"
     ];
     configDir = "/mnt/hass";
     config = {

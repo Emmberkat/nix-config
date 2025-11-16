@@ -3,6 +3,7 @@
   imports = [
     ./homeassistant.nix
     ./immich.nix
+    ./jellyfin.nix
     ./llm.nix
     ./minio.nix
   ];
