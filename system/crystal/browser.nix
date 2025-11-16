@@ -2,7 +2,7 @@
   ...
 }:
 {
-  programs = {
+  home-manager.users.emmberkat.programs = {
     firefox = {
       enable = true;
       policies = {

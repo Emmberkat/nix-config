@@ -7,7 +7,6 @@
 
   imports = [
     ./backups.nix
-    ./browser.nix
     ./desktop.nix
     ./git.nix
     ./zsh.nix
