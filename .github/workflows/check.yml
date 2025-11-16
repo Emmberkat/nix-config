@@ -19,4 +19,6 @@ jobs:
             min-free = 1000000000
             max-free = 2000000000
       - name: Build all NixOS configurations
-        run: "nix flake show --json | jq -r '.nixosConfigurations | keys[]' | xargs -I {} nix build --store /mnt/nixroot --no-link .#nixosConfigurations.{}.config.system.build.toplevel"
+        run: |
+          sudo install -d -o "$USER" /mnt/nixroot
+          nix flake show --json | jq -r '.nixosConfigurations | keys[]' | xargs -I {} nix build --store /mnt/nixroot --no-link .#nixosConfigurations.{}.config.system.build.toplevel
