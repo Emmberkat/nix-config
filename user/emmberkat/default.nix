@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  agenix,
   ...
 }:
 {
@@ -12,7 +11,6 @@
     ./desktop.nix
     ./git.nix
     ./zsh.nix
-    agenix.homeManagerModules.default
   ];
 
   home.stateVersion = "22.11";

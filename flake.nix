@@ -16,11 +16,11 @@
     };
   };
   outputs =
-    {
-      self,
-      nixpkgs,
-      home-manager,
-      agenix,
+    { self
+    , nixpkgs
+    , home-manager
+    , agenix
+    ,
     }:
     rec {
       nixosModules.neovim = ./modules/neovim;
@@ -33,12 +33,12 @@
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
             {
-              home-manager.users.emmberkat = nixosModules.neovim;
-            }
-            {
-              home-manager.users.emmberkat = ./user/emmberkat;
-              home-manager.extraSpecialArgs = {
-                agenix = agenix;
+              home-manager.users.emmberkat = {
+                imports = [
+                  agenix.homeManagerModules.default
+                  nixosModules.neovim
+                  ./user/emmberkat
+                ];
               };
             }
           ];
@@ -50,12 +50,17 @@
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
             {
-              home-manager.users.emmberkat = nixosModules.neovim;
-            }
-            {
-              home-manager.users.emmberkat = ./user/emmberkat;
-              home-manager.extraSpecialArgs = {
-                agenix = agenix;
+              home-manager.users.emmberkat = {
+                imports = [
+                  agenix.homeManagerModules.default
+                  nixosModules.neovim
+                  ./user/emmberkat
+                ];
+                emmberkat.neovim = {
+                  java.enable = false;
+                  kotlin.enable = false;
+                  rust.enable = false;
+                };
               };
             }
           ];
