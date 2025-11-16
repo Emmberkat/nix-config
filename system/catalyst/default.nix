@@ -146,6 +146,42 @@
       ];
     };
 
+    "/mnt/ollama" = {
+      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
+      fsType = "btrfs";
+      options = [
+        "subvol=ollama"
+        "noatime"
+      ];
+    };
+
+    "/mnt/hass" = {
+      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
+      fsType = "btrfs";
+      options = [
+        "subvol=hass"
+        "noatime"
+      ];
+    };
+
+    "/mnt/sws" = {
+      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
+      fsType = "btrfs";
+      options = [
+        "subvol=sws"
+        "noatime"
+      ];
+    };
+
+    "/mnt/media" = {
+      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
+      fsType = "btrfs";
+      options = [
+        "subvol=media"
+        "noatime"
+      ];
+    };
+
   };
 
   swapDevices = [
