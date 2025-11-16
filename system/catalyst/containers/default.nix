@@ -1,7 +1,9 @@
 { config, pkgs, ... }:
 {
   imports = [
+    ./homeassistant.nix
     ./immich.nix
+    ./llm.nix
     ./minio.nix
   ];
 
