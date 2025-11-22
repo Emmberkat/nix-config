@@ -18,10 +18,5 @@ jobs:
           sudo mount --bind /mnt/nixroot /nix
       - name: Install Nix
         uses: nixbuild/nix-quick-install-action@v30
-        with:
-          nix_conf: |
-            auto-optimise-store = true
-            min-free = 1000000000
-            max-free = 2000000000
       - name: Build all NixOS configurations
         run: "nix flake show --json | jq -r '.nixosConfigurations | keys[]' | xargs -I {} nix build --no-link .#nixosConfigurations.{}.config.system.build.toplevel"
