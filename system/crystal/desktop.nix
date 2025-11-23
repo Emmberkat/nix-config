@@ -1,6 +1,7 @@
-{ pkgs
-, config
-, ...
+{
+  pkgs,
+  config,
+  ...
 }:
 {
   services = {
@@ -20,19 +21,10 @@
 
   security.polkit.enable = true;
 
-
-
-
-
-
-
-    age.secrets = {
-      "syncthing/cert".file = ./secrets/syncthing/cert.age;
-      "syncthing/key".file = ./secrets/syncthing/key.age;
-    };
-
-
-
+  age.secrets = {
+    "syncthing/cert".file = ./secrets/syncthing/cert.age;
+    "syncthing/key".file = ./secrets/syncthing/key.age;
+  };
 
   home-manager.users.emmberkat = {
 
@@ -42,7 +34,6 @@
       picard
       leocad
     ];
-
 
     services.syncthing = {
       enable = true;
@@ -161,10 +152,5 @@
       };
     };
   };
-
-
-
-
-
 
 }
