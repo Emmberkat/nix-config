@@ -16,11 +16,11 @@
     };
   };
   outputs =
-    { self
-    , nixpkgs
-    , home-manager
-    , agenix
-    ,
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      agenix,
     }:
     rec {
       nixosModules.neovim = ./modules/neovim;
