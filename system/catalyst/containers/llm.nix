@@ -40,7 +40,7 @@ in
   };
 
   services.open-webui = {
-    enable = false; # TODO enable once build issues are fixed
+    enable = true;
     port = openwebuiPort;
     environment = {
       ANONYMIZED_TELEMETRY = "False";
