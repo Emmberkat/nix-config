@@ -27,7 +27,7 @@
     gc.automatic = true;
     settings = {
       trusted-substituters = [
-        "s3://emmberkat-nix-cache?region=us-east-1&endpoint=minio.emmberkat.com"
+        "s3://emmberkat-nix-cache?region=sea&endpoint=minio.emmberkat.com"
       ];
       experimental-features = [
         "nix-command"
