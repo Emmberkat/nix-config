@@ -1,7 +1,7 @@
 {
   nixConfig = {
     extra-substituters = [
-      "s3://emmberkat-nix-cache?region=us-east-1&endpoint=minio.emmberkat.com"
+      "s3://emmberkat-nix-cache?region=sea&endpoint=minio.emmberkat.com"
     ];
   };
   inputs = {
