@@ -10,6 +10,12 @@ jobs:
     name: "Build Nix targets"
     runs-on: ubuntu-latest
     steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.1
+        with:
+          aws-region: "sea"
+          aws-access-key-id: ${{ secrets.NIX_CACHE_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.NIX_CACHE_SECRET_ACCESS_KEY }}
       - uses: actions/checkout@v3
       - name: Mount Nix store
         run: |
