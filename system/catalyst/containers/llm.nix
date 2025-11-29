@@ -72,6 +72,7 @@ in
       "llava:7b"
       "minicpm-v:8b"
       "mistral-small3.2:24b"
+      "qwen3:4b"
       "qwen3:8b"
       "qwen3:14b"
       "granite4:micro"
