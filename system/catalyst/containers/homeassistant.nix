@@ -12,24 +12,8 @@ in
         service = "homeassistant";
         tls.certresolver = "letsencrypt";
       };
-      homeassistant-tesla = {
-        rule = "Host(`tesla.home.emmberkat.com`)";
-        entrypoints = "websecure";
-        service = "homeassistant-tesla";
-        middlewares = "homeassistant-tesla";
-        tls.certresolver = "letsencrypt";
-      };
     };
     services.homeassistant.loadBalancer.servers = [ { url = "http://localhost:${toString port}"; } ];
-    services.homeassistant-tesla.loadBalancer.servers = [
-      { url = "http://localhost:${toString swsPort}"; }
-    ];
-    middlewares.homeassistant-tesla.addPrefix.prefix = "/hass/tesla";
-  };
-  services.static-web-server = {
-    enable = true;
-    root = "/mnt/sws";
-    listen = "localhost:${toString swsPort}";
   };
   networking.firewall.allowedTCPPorts = [ swsPort ];
   services.home-assistant = {
