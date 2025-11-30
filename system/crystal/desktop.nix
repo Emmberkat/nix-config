@@ -33,6 +33,7 @@
       discord
       picard
       leocad
+      prismlauncher
     ];
 
     services.syncthing = {
