@@ -9,6 +9,10 @@
   };
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nix-minecraft = {
+      url = "github:Infinidoge/nix-minecraft";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -24,6 +28,7 @@
       nixpkgs,
       home-manager,
       agenix,
+      nix-minecraft,
     }:
     rec {
       nixosModules.neovim = ./modules/neovim;
@@ -49,9 +54,13 @@
         catalyst = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
+            {
+              nixpkgs.overlays = [ nix-minecraft.overlay ];
+            }
             ./system/catalyst
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
+            nix-minecraft.nixosModules.minecraft-servers
             {
               home-manager.users.emmberkat = {
                 imports = [
