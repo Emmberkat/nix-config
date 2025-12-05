@@ -3,6 +3,9 @@
     extra-substituters = [
       "s3://emmberkat-nix-cache?region=sea&endpoint=minio.emmberkat.com"
     ];
+    extra-trusted-public-keys = [
+      "crystal:1ejOpnHE9Io7242e2uHtGeN2Mtcey67OyDp7qNwk5Rs="
+    ];
   };
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
