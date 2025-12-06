@@ -29,7 +29,7 @@
   services.minio = {
     enable = true;
     region = "sea";
-    dataDir = ["/mnt/minio"];
+    dataDir = [ "/mnt/minio" ];
     listenAddress = ":9000";
     consoleAddress = ":9001";
     rootCredentialsFile = config.age.secrets."minio/credentials".path;
