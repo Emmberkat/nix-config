@@ -37,7 +37,7 @@ in
       "shopping_list"
       "scl"
       "tile"
-      "samsungtv"
+      "webostv"
       "waze_travel_time"
       "opower"
       "immich"
