@@ -20,5 +20,4 @@ in
     #dataDir = "/mnt/media";
   };
 
-
 }
