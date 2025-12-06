@@ -26,6 +26,7 @@
   nix = {
     gc.automatic = true;
     settings = {
+      download-buffer-size = 536870912;
       trusted-substituters = [
         "https://cache.nixos-cuda.org"
         "s3://emmberkat-nix-cache?region=sea&endpoint=minio.emmberkat.com"
