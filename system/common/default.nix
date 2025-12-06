@@ -29,6 +29,9 @@
       trusted-substituters = [
         "s3://emmberkat-nix-cache?region=sea&endpoint=minio.emmberkat.com"
       ];
+      trusted-public-keys = [
+        "crystal:1ejOpnHE9Io7242e2uHtGeN2Mtcey67OyDp7qNwk5Rs="
+      ];
       experimental-features = [
         "nix-command"
         "flakes"
