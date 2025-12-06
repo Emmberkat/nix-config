@@ -54,7 +54,7 @@ in
     port = ollamaPort;
     user = "ollama";
     home = "/mnt/ollama";
-    acceleration = "cuda";
+    package = pkgs.ollama-cuda;
     openFirewall = true;
     environmentVariables = {
       OLLAMA_ORIGINS = "*";
