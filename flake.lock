@@ -129,15 +129,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1764986396,
-        "narHash": "sha256-HYBvpziKGvKY/XfMCBRCTuUUqhPWjWiWaPthIsPzGDk=",
-        "owner": "Infinidoge",
+        "lastModified": 1765137075,
+        "narHash": "sha256-Ghpf0L/N4Do8mrSt7tsBlnM10TNQNkEbjo/+d0vJg50=",
+        "owner": "Emmberkat",
         "repo": "nix-minecraft",
-        "rev": "70b931d67256ad7ebfced45ed797c016943bbff2",
+        "rev": "d2a660ec9b8f3281dacbe20beac822c4e254af61",
         "type": "github"
       },
       "original": {
-        "owner": "Infinidoge",
+        "owner": "Emmberkat",
+        "ref": "neoforge",
         "repo": "nix-minecraft",
         "type": "github"
       }
