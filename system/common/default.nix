@@ -19,6 +19,7 @@
   networking = {
     useDHCP = false;
     firewall.enable = true;
+    enableIPv6 = false;
   };
 
   i18n.defaultLocale = "en_US.UTF-8";
