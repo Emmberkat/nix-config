@@ -6,26 +6,16 @@
     ./containers
   ];
 
-  systemd.network = {
-    networks = {
-      "10-eth" = {
-        matchConfig.Type = "ether";
-        networkConfig.Bridge = "br0";
-      };
-      "10-br0" = {
-        matchConfig.Name = "br0";
-        networkConfig = {
-          Address = "10.1.0.1/8";
-          Gateway = "10.0.0.1";
-          DNS = "10.0.0.1";
-        };
-      };
-    };
-    netdevs = {
-      "10-br0" = {
-        netdevConfig = {
-          Name = "br0";
-          Kind = "bridge";
+  systemd = {
+    network = {
+      networks = {
+        "10-eth" = {
+          matchConfig.Type = "ether";
+          networkConfig = {
+            Address = "10.1.0.1/8";
+            Gateway = "10.0.0.1";
+            DNS = "10.0.0.1";
+          };
         };
       };
     };
