@@ -11,7 +11,7 @@
     ];
   };
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/master";
     nix-minecraft = {
       # Switch back to github:Infinidoge/nix-minecraft once
       # https://github.com/Infinidoge/nix-minecraft/pull/161
