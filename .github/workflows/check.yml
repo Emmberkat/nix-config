@@ -19,7 +19,7 @@ jobs:
       - name: Install Nix
         uses: nixbuild/nix-quick-install-action@v30
       - name: Build all NixOS configurations
-        run: "nix flake show --json | jq -r '.nixosConfigurations | keys[]' | xargs -I {} nix build --accept-flake-config --no-link .#nixosConfigurations.{}.config.system.build.toplevel"
+        run: "nix flake show --json | jq -r '.nixosConfigurations | keys[]' | xargs -I {} nix build -vvvvv --accept-flake-config --no-link .#nixosConfigurations.{}.config.system.build.toplevel"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.NIX_CACHE_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.NIX_CACHE_SECRET_ACCESS_KEY }}
