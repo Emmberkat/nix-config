@@ -79,13 +79,12 @@
         output = {
           DP-3 = {
             pos = "0 0";
-            transform = "90";
           };
           DP-1 = {
-            pos = "1080 0";
+            pos = "1920 0";
           };
           DP-2 = {
-            pos = "3640 0";
+            pos = "4480 0";
           };
         };
         workspaceOutputAssign = [
