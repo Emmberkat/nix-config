@@ -189,7 +189,6 @@
   ];
 
   nixpkgs.hostPlatform = "x86_64-linux";
-  nixpkgs.config.cudaSupport = true;
   hardware.cpu.amd.updateMicrocode = true;
 
   services.xserver.videoDrivers = [ "nvidia" ];
