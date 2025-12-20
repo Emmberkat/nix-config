@@ -48,15 +48,24 @@
           "Pixel 9 Pro Fold" = {
             id = "7CX57MN-BK5VPUZ-LY24SUX-DY6URT2-ZLE4MJR-LWUJEC5-45LNELE-B33HRQY";
           };
+          "Pixel 10 Pro Fold" = {
+            id = "F7UDS5N-J5H4JYF-KS3WUD3-WCBZIVF-VNOGEQN-4AXWA3M-QY3AZHT-KCCXYAI";
+          };
         };
         folders = {
           "Obsidian" = {
             path = "~/Documents/Obsidian";
-            devices = [ "Pixel 9 Pro Fold" ];
+            devices = [
+              "Pixel 9 Pro Fold"
+              "Pixel 10 Pro Fold"
+            ];
           };
           "Music" = {
             path = "~/Music";
-            devices = [ "Pixel 9 Pro Fold" ];
+            devices = [
+              "Pixel 9 Pro Fold"
+              "Pixel 10 Pro Fold"
+            ];
             type = "sendonly";
           };
         };
