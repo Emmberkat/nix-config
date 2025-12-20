@@ -24,6 +24,10 @@
 
   i18n.defaultLocale = "en_US.UTF-8";
 
+  environment.systemPackages = with pkgs; [
+    jq
+  ];
+
   nix = {
     gc.automatic = true;
     settings = {
