@@ -40,7 +40,7 @@ in
   };
 
   services.open-webui = {
-    enable = false;
+    enable = true;
     port = openwebuiPort;
     environment = {
       ANONYMIZED_TELEMETRY = "False";
