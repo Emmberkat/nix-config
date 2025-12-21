@@ -21,12 +21,12 @@
 
   security.polkit.enable = true;
 
-  age.secrets = {
-    "syncthing/cert".file = ./secrets/syncthing/cert.age;
-    "syncthing/key".file = ./secrets/syncthing/key.age;
-  };
-
   home-manager.users.emmberkat = {
+
+    age.secrets = {
+      "syncthing/cert".file = ./secrets/syncthing/cert.age;
+      "syncthing/key".file = ./secrets/syncthing/key.age;
+    };
 
     home.packages = with pkgs; [
       swaybg
