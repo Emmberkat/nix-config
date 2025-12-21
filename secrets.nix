@@ -32,16 +32,4 @@ in
     ];
     armor = true;
   };
-  "system/catalyst/secrets/ddclient/password.age" = {
-    publicKeys = [
-      keys.catalyst
-    ];
-    armor = true;
-  };
-  "system/catalyst/secrets/minio/credentials.age" = {
-    publicKeys = [
-      keys.catalyst
-    ];
-    armor = true;
-  };
 }
