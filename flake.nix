@@ -52,6 +52,7 @@
                   agenix.homeManagerModules.default
                   nixosModules.neovim
                   ./user/emmberkat
+                  ./system/crystal/user/emmberkat
                 ];
               };
             }
