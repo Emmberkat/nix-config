@@ -20,6 +20,7 @@
       nodePackages.typescript-language-server
       vscode-langservers-extracted
       yaml-language-server
+      rumdl
     ];
     programs.neovim = {
       enable = true;
@@ -86,6 +87,7 @@
             vim.lsp.enable('html')
             vim.lsp.enable('ts_ls')
             vim.lsp.enable('yamlls')
+            vim.lsp.enable('rumdl')
             vim.lsp.config('nil_ls', {
               settings = {
                 ['nil'] = {
