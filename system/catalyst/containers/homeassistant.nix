@@ -78,6 +78,7 @@ in
       uri = "tcp://0.0.0.0:10300";
       language = "en";
       model = "medium.en";
+      device = "cuda";
     };
 
   };
