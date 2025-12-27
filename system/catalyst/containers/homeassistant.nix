@@ -73,12 +73,15 @@ in
       voice = "en_US-danny-low";
     };
 
-    faster-whisper.servers.hass = {
-      enable = true;
-      uri = "tcp://0.0.0.0:10300";
-      language = "en";
-      model = "medium.en";
-      device = "cuda";
+    faster-whisper = {
+      package = pkgs.pkgsCuda.wyoming-faster-whisper;
+      servers.hass = {
+        enable = true;
+        uri = "tcp://0.0.0.0:10300";
+        language = "en";
+        model = "medium.en";
+        device = "cuda";
+      };
     };
 
   };
