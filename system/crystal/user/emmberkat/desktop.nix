@@ -1,9 +1,9 @@
-{ pkgs
-, config
-, ...
+{
+  pkgs,
+  config,
+  ...
 }:
 {
-
 
   age.secrets = {
     "syncthing/cert".file = ./secrets/syncthing/cert.age;
