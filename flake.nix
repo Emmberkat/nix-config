@@ -27,6 +27,10 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    jovian = {
+      url = "github:Jovian-Experiments/Jovian-NixOS";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
@@ -35,11 +39,13 @@
       home-manager,
       agenix,
       nix-minecraft,
+      jovian,
     }:
     rec {
       nixosModules.neovim = ./modules/neovim;
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
       nixosConfigurations = {
+
         crystal = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
@@ -58,6 +64,7 @@
             }
           ];
         };
+
         catalyst = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
@@ -84,6 +91,31 @@
             }
           ];
         };
+
+        emmberdeck = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./system/emmberdeck
+            home-manager.nixosModules.home-manager
+            agenix.nixosModules.default
+            jovian.nixosModules.jovian
+            {
+              home-manager.users.emmberkat = {
+                imports = [
+                  agenix.homeManagerModules.default
+                  nixosModules.neovim
+                  ./user/emmberkat
+                ];
+                emmberkat.neovim = {
+                  java.enable = false;
+                  kotlin.enable = false;
+                  rust.enable = false;
+                };
+              };
+            }
+          ];
+        };
+
       };
     };
 }
