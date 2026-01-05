@@ -20,6 +20,9 @@
       "sdhci_pci"
     ];
     kernelModules = [ "kvm-amd" ];
+
+    # Sets the correct boot menu orientation on the steam deck.
+    loader.systemd-boot.consoleMode = "5";
   };
 
   networking.hostName = "emmberdeck";
