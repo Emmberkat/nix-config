@@ -36,8 +36,11 @@
     isNormalUser = true;
   };
 
+  programs.zsh.enable = true;
+
   users.users.emmberkat = {
     isNormalUser = true;
+    shell = pkgs.zsh;
     extraGroups = [ "wheel" ];
   };
 
