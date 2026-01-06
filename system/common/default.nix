@@ -33,6 +33,10 @@
     settings = {
       auto-optimise-store = true;
       download-buffer-size = 536870912;
+      trusted-users = [
+        "root"
+        "@wheel"
+      ];
       trusted-substituters = [
         "https://cache.nixos-cuda.org"
         "s3://emmberkat-nix-cache?region=sea&endpoint=minio.emmberkat.com"
