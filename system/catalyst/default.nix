@@ -44,6 +44,7 @@
     tmux
     htop
     smartmontools
+    ncdu
   ];
 
   programs.zsh.enable = true;
