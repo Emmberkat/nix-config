@@ -28,6 +28,9 @@
 
   services.openssh.enable = true;
 
+  # Temporarily used for iOS access
+  services.usbmuxd.enable = true;
+
   systemd = {
     network = {
       networks = {
