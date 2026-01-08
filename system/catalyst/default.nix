@@ -188,7 +188,7 @@
     { device = "/dev/disk/by-uuid/0a97e7b1-5e81-4833-8cce-eb50a945b265"; }
     {
       device = "/swapfile";
-      size = 32768;
+      size = 16384;
     }
   ];
 
