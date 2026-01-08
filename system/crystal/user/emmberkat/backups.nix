@@ -1,13 +1,20 @@
-{ config, ... }:
+{ lib, config, ... }:
 {
   age.secrets = {
     "restic/password".file = secrets/restic/password.age;
     "restic/environment".file = secrets/restic/environment.age;
   };
-  services.restic.backups.home = with config.users.users.emmberkat; {
+  services.restic.enable = true;
+  services.restic.backups.home = let
+  home = config.home.homeDirectory;
+  in {
     repository = "s3:https://minio.emmberkat.com/mthwate-restic/crystal";
-    passwordFile = config.age.secrets."restic/password".path;
-    environmentFile = config.age.secrets."restic/environment".path;
+
+    # Quoted to work around restic not doing that itself.
+    # Its needed to preserve ${XDG_RUNTIME_DIR} added by agenix.
+    passwordFile = "\"${config.age.secrets."restic/password".path}\"";
+    environmentFile = "\"${config.age.secrets."restic/environment".path}\"";
+
     extraBackupArgs = [
       "--skip-if-unchanged"
     ];
