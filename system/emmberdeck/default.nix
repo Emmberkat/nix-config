@@ -32,6 +32,9 @@
   jovian.steam.enable = true;
   jovian.steam.autoStart = true;
   jovian.devices.steamdeck.enable = true;
+  jovian.steam.desktopSession = "plasma";
+  services.desktopManager.plasma6.enable = true;
+
 
   jovian.steam.user = "deck";
 
