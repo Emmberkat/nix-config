@@ -48,6 +48,7 @@ in
       "ring"
       "tesla_fleet"
       "jellyfin"
+      "litterrobot"
     ];
     configDir = "/mnt/hass";
     config = {
