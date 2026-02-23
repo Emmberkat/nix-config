@@ -75,6 +75,8 @@ in
       "qwen3:4b"
       "qwen3:8b"
       "qwen3:14b"
+      "qwen3-vl:4b"
+      "qwen3-vl:8b"
       "granite4:micro"
       "granite4:micro-h"
       "granite4:tiny-h"
