@@ -49,6 +49,7 @@ in
       "tesla_fleet"
       "jellyfin"
       "litterrobot"
+      "onvif"
     ];
     configDir = "/mnt/hass";
     config = {
