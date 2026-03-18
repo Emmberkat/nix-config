@@ -15,7 +15,7 @@ in
 
   config = mkIf cfg.enable {
     programs.neovim = {
-      extraLuaConfig = ''
+      initLua = ''
         vim.lsp.config('rust_analyzer', {
           cmd = { '${pkgs.rust-analyzer}/bin/rust-analyzer' }
         })
