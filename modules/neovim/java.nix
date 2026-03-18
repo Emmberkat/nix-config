@@ -15,7 +15,7 @@ in
 
   config = mkIf cfg.enable {
     programs.neovim = {
-      extraLuaConfig = ''
+      initLua = ''
         vim.lsp.config('jdtls', {
           cmd = { '${pkgs.jdt-language-server}/bin/jdt-language-server' }
         })

@@ -15,7 +15,7 @@ in
 
   config = mkIf cfg.enable {
     programs.neovim = {
-      extraLuaConfig = ''
+      initLua = ''
         vim.lsp.config('pyright', {
           cmd = { '${pkgs.pyright}/bin/pyright-langserver', '--stdio' }
         })

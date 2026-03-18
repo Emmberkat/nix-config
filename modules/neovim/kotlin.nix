@@ -15,7 +15,7 @@ in
 
   config = mkIf cfg.enable {
     programs.neovim = {
-      extraLuaConfig = ''
+      initLua = ''
         vim.lsp.config('kotlin_language_server', {
           cmd = { '${pkgs.kotlin-language-server}/bin/kotlin-language-server' }
         })
