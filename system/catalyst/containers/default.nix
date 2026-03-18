@@ -30,40 +30,11 @@
     ];
   };
 
-  services.traefik = {
-    enable = true;
-    staticConfigOptions = {
-      providers.docker = false;
-      api = {
-        dashboard = true;
-        insecure = true;
-      };
-      certificatesresolvers.letsencrypt.acme = {
-        tlschallenge = true;
-        email = "emmabenkart@gmail.com";
-        storage = "${config.services.traefik.dataDir}/acme.json";
-      };
-      entryPoints = {
-        web = {
-          address = ":80";
-          http.redirections.entryPoint = {
-            to = "websecure";
-            scheme = "https";
-          };
-        };
-        websecure.address = ":443";
-      };
-    };
-    dynamicConfigOptions.http = {
-      routers.traefik = {
-        rule = "Host(`traefik.emmberkat.com`)";
-        entrypoints = "websecure";
-        service = "traefik";
-        middlewares = "internal";
-        tls.certresolver = "letsencrypt";
-      };
-      services.traefik.loadbalancer.servers = [ { url = "http://localhost:8080"; } ];
-      middlewares.internal.ipallowlist.sourcerange = "127.0.0.1/32, 10.0.0.0/8";
-    };
+  services.nginx.enable = true;
+
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "emmabenkart@gmail.com";
   };
+
 }

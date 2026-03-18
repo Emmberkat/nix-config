@@ -4,16 +4,13 @@ let
   swsPort = 8787;
 in
 {
-  services.traefik.dynamicConfigOptions.http = {
-    routers = {
-      homeassistant = {
-        rule = "Host(`home.emmberkat.com`)";
-        entrypoints = "websecure";
-        service = "homeassistant";
-        tls.certresolver = "letsencrypt";
-      };
+  services.nginx.virtualHosts."home.emmberkat.com" = {
+    enableACME = true;
+    forceSSL = true;
+    locations."/" = {
+      proxyPass = "http://localhost:${toString port}";
+      proxyWebsockets = true;
     };
-    services.homeassistant.loadBalancer.servers = [ { url = "http://localhost:${toString port}"; } ];
   };
   networking.firewall.allowedTCPPorts = [ swsPort ];
   services.home-assistant = {

@@ -1,23 +1,15 @@
 { config, ... }:
 {
-  services.traefik.dynamicConfigOptions.http = {
-    routers = {
-      minio = {
-        rule = "Host(`minio.emmberkat.com`)";
-        entrypoints = "websecure";
-        service = "minio";
-        tls.certresolver = "letsencrypt";
-      };
-      minioConsole = {
-        rule = "Host(`console.minio.emmberkat.com`)";
-        entrypoints = "websecure";
-        service = "minioConsole";
-        tls.certresolver = "letsencrypt";
-      };
+  services.nginx.virtualHosts = {
+    "minio.emmberkat.com" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/".proxyPass = "http://localhost:9000";
     };
-    services = {
-      minio.loadBalancer.servers = [ { url = "http://localhost:9000"; } ];
-      minioConsole.loadBalancer.servers = [ { url = "http://localhost:9001"; } ];
+    "console.minio.emmberkat.com" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/".proxyPass = "http://localhost:9001";
     };
   };
   age.secrets."minio/credentials".file = ../secrets/minio/credentials.age;

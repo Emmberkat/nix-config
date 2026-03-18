@@ -4,37 +4,26 @@ let
   ollamaPort = 8041;
 in
 {
-  services.traefik.dynamicConfigOptions.http = {
-    routers = {
-      openwebui = {
-        rule = "Host(`llm.emmberkat.com`)";
-        entrypoints = "websecure";
-        service = "openwebui";
-        tls.certresolver = "letsencrypt";
-      };
-      ollama = {
-        rule = "Host(`ollama.emmberkat.com`)";
-        entrypoints = "websecure";
-        service = "ollama";
-        middlewares = [
-          "internal"
-          "ollama-headers"
-        ];
-        tls.certresolver = "letsencrypt";
+  services.nginx.virtualHosts = {
+    "llm.emmberkat.com" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://localhost:${toString openwebuiPort}";
+        proxyWebsockets = true;
       };
     };
-    services.openwebui.loadBalancer.servers = [
-      { url = "http://localhost:${toString openwebuiPort}"; }
-    ];
-    services.ollama.loadBalancer.servers = [ { url = "http://localhost:${toString ollamaPort}"; } ];
-    middlewares = {
-      ollama-headers = {
-        headers = {
-          customRequestHeaders = {
-            "Host" = "127.0.0.1";
-            "Origin" = "";
-          };
-        };
+    "ollama.emmberkat.com" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://localhost:${toString ollamaPort}";
+        proxyWebsockets = true;
+        extraConfig = ''
+          allow 127.0.0.1/32;
+          allow 10.0.0.0/8;
+          deny all;
+        '';
       };
     };
   };
