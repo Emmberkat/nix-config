@@ -6,7 +6,7 @@
 {
 
   home.packages = with pkgs; [
-    goose-cli
+    qwen-code
   ];
 
 }
