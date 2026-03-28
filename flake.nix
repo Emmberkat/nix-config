@@ -13,10 +13,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/master";
     nix-minecraft = {
-      # Switch back to github:Infinidoge/nix-minecraft once
-      # https://github.com/Infinidoge/nix-minecraft/pull/161
-      # is merged.
-      url = "github:Emmberkat/nix-minecraft/neoforge";
+      url = "github:Infinidoge/nix-minecraft";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
