@@ -92,30 +92,6 @@
           ];
         };
 
-        emmberdeck = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./system/emmberdeck
-            home-manager.nixosModules.home-manager
-            agenix.nixosModules.default
-            jovian.nixosModules.jovian
-            {
-              home-manager.users.emmberkat = {
-                imports = [
-                  agenix.homeManagerModules.default
-                  nixosModules.neovim
-                  ./user/emmberkat
-                ];
-                emmberkat.neovim = {
-                  java.enable = false;
-                  kotlin.enable = false;
-                  rust.enable = false;
-                };
-              };
-            }
-          ];
-        };
-
       };
     };
 }
