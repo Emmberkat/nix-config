@@ -17,7 +17,7 @@
       ocamlPackages.ocamlformat
       nil
       nixpkgs-fmt
-      nodePackages.typescript-language-server
+      typescript-language-server
       vscode-langservers-extracted
       yaml-language-server
       rumdl
