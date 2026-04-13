@@ -5,7 +5,7 @@
     "restic/environment".file = secrets/restic/environment.age;
   };
   services.restic = {
-    enable = true;
+    enable = false;
     backups.home =
       let
         home = config.home.homeDirectory;
