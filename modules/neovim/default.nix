@@ -26,6 +26,7 @@
       enable = true;
       defaultEditor = true;
       withRuby = false;
+      withPython3 = false;
       extraConfig = ''
         set shiftwidth=4 smarttab
         set expandtab
