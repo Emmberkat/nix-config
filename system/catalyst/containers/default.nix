@@ -30,7 +30,16 @@
     ];
   };
 
-  services.nginx.enable = true;
+  services.nginx = {
+    enable = true;
+    recommendedProxySettings = true;
+    clientMaxBodySize = "0";
+    virtualHosts."emmberkat.com" = {
+      default = true;
+      enableACME = true;
+      forceSSL = true;
+    };
+  };
 
   security.acme = {
     acceptTerms = true;
