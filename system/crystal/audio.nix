@@ -9,15 +9,13 @@
     pulseaudio.enable = false;
 
     pipewire = {
-
       enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      extraLadspaPackages = [pkgs.rnnoise-plugin];
       wireplumber = {
         enable = true;
-        extraLadspaPackages = [pkgs.rnnoise-plugin];
-
         extraConfig = {
           "51-disable-devices" = {
             "monitor.alsa.rules" = [
