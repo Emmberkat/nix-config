@@ -16,6 +16,7 @@
       pulse.enable = true;
       wireplumber = {
         enable = true;
+        extraLadspaPackages = [pkgs.rnnoise-plugin];
 
         extraConfig = {
           "51-disable-devices" = {
@@ -64,7 +65,7 @@
                     {
                       "type" = "ladspa";
                       "name" = "rnnoise";
-                      "plugin" = "${pkgs.rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so";
+                      "plugin" = "librnnoise_ladspa";
                       "label" = "noise_suppressor_mono";
                       "control" = {
                         "VAD Threshold (%)" = 90.0;
