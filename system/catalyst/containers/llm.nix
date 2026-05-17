@@ -49,33 +49,8 @@ in
       OLLAMA_ORIGINS = "*";
     };
     loadModels = [
-      "deepseek-r1:1.5b"
-      "deepseek-r1:14b"
-      "deepseek-r1:7b"
-      "deepseek-r1:8b"
-      "dolphin-mistral:7b"
-      "dolphin-phi:2.7b"
-      "gemma3:12b"
-      "gemma3:1b"
-      "gemma3:27b"
-      "gemma3:4b"
-      "gemma3n:e4b"
-      "gpt-oss:20b"
-      "granite4:micro"
-      "granite4:micro-h"
-      "granite4:tiny-h"
-      "llama4:16x17b"
-      "llava:7b"
-      "minicpm-v:8b"
-      "mistral-small3.2:24b"
-      "qwen3-vl:4b"
-      "qwen3-vl:8b"
       "qwen3.5:4b"
       "qwen3.5:9b"
-      "qwen3:14b"
-      "qwen3:4b"
-      "qwen3:8b"
-
     ];
   };
 
