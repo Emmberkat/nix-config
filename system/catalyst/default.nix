@@ -119,6 +119,16 @@
       options = [ "subvol=home" ];
     };
 
+    "/nix" = {
+      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
+      fsType = "btrfs";
+      neededForBoot = true;
+      options = [
+        "subvol=nix"
+        "noatime"
+      ];
+    };
+
     "/var/lib/containers" = {
       device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
       fsType = "btrfs";
