@@ -97,6 +97,7 @@
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true;
     };
+    obsidian.enable = true;
   };
 
 }
