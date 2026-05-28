@@ -10,6 +10,7 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
+    swraid.enable = false;
   };
 
   systemd.network.enable = true;
