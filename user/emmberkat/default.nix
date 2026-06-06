@@ -15,5 +15,6 @@
   nixpkgs.config.allowUnfree = true;
   programs.tmux.enable = true;
   programs.zellij.enable = true;
+  programs.obsidian.enable = true;
 
 }
