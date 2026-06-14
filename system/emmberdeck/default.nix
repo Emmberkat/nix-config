@@ -34,15 +34,11 @@
       enable = true;
       autoStart = true;
       desktopSession = "plasma";
-      user = "deck";
+      user = "emmberkat";
     };
     devices.steamdeck.enable = true;
   };
   services.desktopManager.plasma6.enable = true;
-
-  users.users.deck = {
-    isNormalUser = true;
-  };
 
   programs.zsh.enable = true;
 
