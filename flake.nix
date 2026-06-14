@@ -10,9 +10,11 @@
   };
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/master";
+    systems.url = "github:nix-systems/default";
     nix-minecraft = {
       url = "github:Infinidoge/nix-minecraft";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
     };
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -21,6 +23,8 @@
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+      inputs.systems.follows = "systems";
     };
     jovian = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
