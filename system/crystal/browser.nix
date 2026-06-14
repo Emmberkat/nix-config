@@ -1,7 +1,4 @@
-{
-  ...
-}:
-{
+_: {
   home-manager.users.emmberkat.programs = {
     firefox = {
       enable = true;

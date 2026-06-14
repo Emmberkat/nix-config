@@ -13,8 +13,10 @@
 
   home.stateVersion = "22.11";
   nixpkgs.config.allowUnfree = true;
-  programs.tmux.enable = true;
-  programs.zellij.enable = true;
-  programs.obsidian.enable = true;
+  programs = {
+    tmux.enable = true;
+    zellij.enable = true;
+    obsidian.enable = true;
+  };
 
 }

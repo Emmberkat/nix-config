@@ -29,13 +29,16 @@
 
   networking.networkmanager.enable = true;
 
-  jovian.steam.enable = true;
-  jovian.steam.autoStart = true;
-  jovian.devices.steamdeck.enable = true;
-  jovian.steam.desktopSession = "plasma";
+  jovian = {
+    steam = {
+      enable = true;
+      autoStart = true;
+      desktopSession = "plasma";
+      user = "deck";
+    };
+    devices.steamdeck.enable = true;
+  };
   services.desktopManager.plasma6.enable = true;
-
-  jovian.steam.user = "deck";
 
   users.users.deck = {
     isNormalUser = true;

@@ -206,17 +206,19 @@
   ];
 
   nixpkgs.hostPlatform = "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = true;
 
   services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.graphics = {
-    enable = true;
-  };
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = false;
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
+  hardware = {
+    cpu.amd.updateMicrocode = true;
+    graphics = {
+      enable = true;
+    };
+    nvidia = {
+      modesetting.enable = true;
+      open = false;
+      powerManagement.enable = false;
+      powerManagement.finegrained = false;
+    };
   };
 
 }

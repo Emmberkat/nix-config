@@ -22,9 +22,11 @@
     };
     agenix = {
       url = "github:ryantm/agenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-      inputs.systems.follows = "systems";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
+        systems.follows = "systems";
+      };
     };
     jovian = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
@@ -47,6 +49,9 @@
       formatter = nixpkgs.lib.genAttrs (import systems) (
         system: (import nixpkgs { inherit system; }).nixfmt-tree
       );
+      checks = nixpkgs.lib.genAttrs (import systems) (system: {
+        statix = (import nixpkgs { inherit system; }).statix;
+      });
       nixosConfigurations = {
 
         crystal = nixpkgs.lib.nixosSystem {
