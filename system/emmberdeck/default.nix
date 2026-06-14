@@ -35,7 +35,6 @@
   jovian.steam.desktopSession = "plasma";
   services.desktopManager.plasma6.enable = true;
 
-
   jovian.steam.user = "deck";
 
   users.users.deck = {
