@@ -28,7 +28,10 @@
       emmberkat = {
         isNormalUser = true;
         shell = pkgs.zsh;
-        extraGroups = [ "wheel" "jellyfin" ];
+        extraGroups = [
+          "wheel"
+          "jellyfin"
+        ];
       };
     };
   };

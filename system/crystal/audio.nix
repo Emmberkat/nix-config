@@ -13,7 +13,7 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      extraLadspaPackages = [pkgs.rnnoise-plugin];
+      extraLadspaPackages = [ pkgs.rnnoise-plugin ];
       wireplumber = {
         enable = true;
         extraConfig = {

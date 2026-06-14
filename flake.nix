@@ -39,11 +39,14 @@
       agenix,
       nix-minecraft,
       jovian,
+      systems,
       ...
     }:
     rec {
       nixosModules.neovim = ./modules/neovim;
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
+      formatter = nixpkgs.lib.genAttrs (import systems) (
+        system: (import nixpkgs { inherit system; }).nixfmt-tree
+      );
       nixosConfigurations = {
 
         crystal = nixpkgs.lib.nixosSystem {
