@@ -69,7 +69,23 @@ in
       piper.servers.hass = {
         enable = true;
         uri = "tcp://0.0.0.0:10200";
-        voice = "en_US-danny-low";
+
+        voice = "jarvis-high";
+        extraArgs =
+          let
+            repo = pkgs.fetchgit {
+              url = "https://huggingface.co/jgkawell/jarvis";
+              rev = "37f8763122312665f091d1fc760abaf1f79b02cc";
+              fetchLFS = true;
+              hash = "sha256-yqKRDc4FyavsrrMvwVvImXGFwLj/Kxtc36JIKL0HJNE=";
+            };
+          in
+          [
+            "--data-dir"
+            "${repo}/en/en_GB/jarvis/medium"
+            "--data-dir"
+            "${repo}/en/en_GB/jarvis/high"
+          ];
       };
 
       faster-whisper = {
