@@ -50,7 +50,7 @@
         system: (import nixpkgs { inherit system; }).nixfmt-tree
       );
       checks = nixpkgs.lib.genAttrs (import systems) (system: {
-        statix = (import nixpkgs { inherit system; }).statix;
+        inherit (import nixpkgs { inherit system; }) statix;
       });
       nixosConfigurations = {
 
