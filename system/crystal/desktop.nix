@@ -20,5 +20,6 @@
   };
 
   security.polkit.enable = true;
+  xdg.portal.wlr.enable = true;
 
 }
