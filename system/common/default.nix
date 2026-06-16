@@ -39,7 +39,6 @@
       ];
       trusted-substituters = [
         "https://cache.nixos-cuda.org"
-        "s3://emmberkat-nix-cache?region=sea&endpoint=minio.emmberkat.com"
       ];
       trusted-public-keys = [
         "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
