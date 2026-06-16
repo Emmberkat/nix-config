@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 let
   openwebuiPort = 8040;
-  ollamaPort = 8041;
+  llamaPort = 8041;
 in
 {
   services = {
@@ -14,11 +14,11 @@ in
           proxyWebsockets = true;
         };
       };
-      "ollama.emmberkat.com" = {
+      "llama.emmberkat.com" = {
         enableACME = true;
         forceSSL = true;
         locations."/" = {
-          proxyPass = "http://localhost:${toString ollamaPort}";
+          proxyPass = "http://localhost:${toString llamaPort}";
           proxyWebsockets = true;
           extraConfig = ''
             allow 127.0.0.1/32;
@@ -36,24 +36,19 @@ in
         ANONYMIZED_TELEMETRY = "False";
         DO_NOT_TRACK = "True";
         SCARF_NO_ANALYTICS = "True";
-        OLLAMA_API_BASE_URL = "http://localhost:${toString ollamaPort}";
       };
     };
 
-    ollama = {
+    llama-cpp = {
       enable = true;
-      port = ollamaPort;
-      user = "ollama";
-      home = "/mnt/ollama";
-      package = pkgs.ollama-cuda;
-      openFirewall = true;
-      environmentVariables = {
-        OLLAMA_ORIGINS = "*";
+      package = pkgs.pkgsCuda.llama-cpp;
+      settings = {
+        models-max = 1;
+        fit = "on";
+        ctx-size = 0;
+        port = llamaPort;
+        models-dir = "/mnt/models";
       };
-      loadModels = [
-        "qwen3.5:4b"
-        "qwen3.5:9b"
-      ];
     };
   };
 
