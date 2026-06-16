@@ -6,7 +6,6 @@
     ./jellyfin.nix
     ./llm.nix
     ./minecraft.nix
-    #./minio.nix
   ];
 
   networking.firewall.allowedTCPPorts = [
