@@ -37,7 +37,6 @@ in
         "webostv"
         "waze_travel_time"
         "opower"
-        "immich"
         "habitica"
         "steam_online"
         "google"

@@ -2,7 +2,6 @@
 {
   imports = [
     ./homeassistant.nix
-    #./immich.nix
     ./jellyfin.nix
     ./llm.nix
     ./minecraft.nix
