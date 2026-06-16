@@ -1,8 +1,8 @@
 { config, pkgs, ... }:
 let
   atm10_files = pkgs.fetchzip {
-    url = "https://mediafilez.forgecdn.net/files/7294/979/ServerFiles-5.3.1.zip";
-    hash = "sha256-I2zBOHjgtV1gWogWVbplc0zzMh0EQxRqrIkpJ7AYdR4=";
+    url = "https://mediafilez.forgecdn.net/files/8094/893/ServerFiles-7.0.zip";
+    hash = "sha256-xFnCV+3fqOFgKcNDUZdZeE82r10HsgkggUnNY0yQm00=";
     stripRoot = false;
   };
 
@@ -50,7 +50,7 @@ in
 
     servers.atm10 = {
       enable = true;
-      package = pkgs.neoforgeServers.neoforge-1_21_1-21_1_215;
+      package = pkgs.neoforgeServers.neoforge-1_21_1-21_1_228;
       serverProperties = {
         server-port = 25566;
         server-ip = "10.1.0.1";
