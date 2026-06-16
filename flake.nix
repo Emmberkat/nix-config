@@ -2,9 +2,13 @@
   nixConfig = {
     extra-substituters = [
       "https://cache.nixos-cuda.org"
+      "https://comfyui.cachix.org"
+      "https://nix-community.cachix.org"
     ];
     extra-trusted-public-keys = [
       "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+      "comfyui.cachix.org-1:33mf9VzoIjzVbp0zwj+fT51HG0y31ZTK3nzYZAX0rec="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "crystal:1ejOpnHE9Io7242e2uHtGeN2Mtcey67OyDp7qNwk5Rs="
     ];
   };
@@ -32,6 +36,9 @@
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    comfyui = {
+      url = "github:utensils/comfyui-nix";
+    };
   };
   outputs =
     {
@@ -42,6 +49,7 @@
       nix-minecraft,
       jovian,
       systems,
+      comfyui,
       ...
     }:
     rec {
@@ -77,9 +85,13 @@
           system = "x86_64-linux";
           modules = [
             {
-              nixpkgs.overlays = [ nix-minecraft.overlay ];
+              nixpkgs.overlays = [
+                nix-minecraft.overlay
+                comfyui.overlays.default
+              ];
             }
             ./system/catalyst
+            comfyui.nixosModules.default
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
             nix-minecraft.nixosModules.minecraft-servers
