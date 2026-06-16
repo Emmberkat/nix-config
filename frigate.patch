@@ -1,0 +1,12 @@
+diff --git a/frigate/data_processing/real_time/face.py b/frigate/data_processing/real_time/face.py
+index e1c11bf1..7180bec7 100644
+--- a/frigate/data_processing/real_time/face.py
++++ b/frigate/data_processing/real_time/face.py
+@@ -283,6 +283,7 @@ class FaceRealTimeProcessor(RealTimeProcessorApi):
+             return
+ 
+         sub_label, score = res
++        score = float(score)
+ 
+         if score <= self.face_config.unknown_score:
+             sub_label = "unknown"

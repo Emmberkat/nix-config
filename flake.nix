@@ -77,7 +77,14 @@
           system = "x86_64-linux";
           modules = [
             {
-              nixpkgs.overlays = [ nix-minecraft.overlay ];
+              nixpkgs.overlays = [
+                nix-minecraft.overlay
+                (self: super: {
+                  frigate = super.frigate.overrideAttrs (old: {
+                    patches = (old.patches or [ ]) ++ [ ./frigate.patch ];
+                  });
+                })
+              ];
             }
             ./system/catalyst
             home-manager.nixosModules.home-manager
