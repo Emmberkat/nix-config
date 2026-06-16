@@ -46,6 +46,7 @@ in
         "jellyfin"
         "litterrobot"
         "onvif"
+        "lutron_caseta"
       ];
       configDir = "/mnt/hass";
       config = {
