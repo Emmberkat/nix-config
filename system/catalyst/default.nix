@@ -90,15 +90,20 @@
 
   system.stateVersion = "22.11";
 
-  boot.initrd.availableKernelModules = [
-    "xhci_pci"
-    "ahci"
-    "usbhid"
-    "usb_storage"
-    "sd_mod"
-    "sr_mod"
-  ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot = {
+    devShmSize = "4G";
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "ahci"
+      "usbhid"
+      "usb_storage"
+      "sd_mod"
+      "sr_mod"
+    ];
+    kernelModules = [ "kvm-amd" ];
+  };
+
+  time.timeZone = "UTC";
 
   fileSystems = {
     "/" = {
@@ -141,6 +146,15 @@
       ];
     };
 
+    "/var/lib/frigate" = {
+      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
+      fsType = "btrfs";
+      options = [
+        "subvol=frigate"
+        "noatime"
+      ];
+    };
+
     "/var/lib/nixos-containers" = {
       device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
       fsType = "btrfs";
@@ -164,6 +178,15 @@
       fsType = "btrfs";
       options = [
         "subvol=hass"
+        "noatime"
+      ];
+    };
+
+    "/media" = {
+      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
+      fsType = "btrfs";
+      options = [
+        "subvol=hass_media"
         "noatime"
       ];
     };

@@ -38,4 +38,10 @@ in
     ];
     armor = true;
   };
+  "system/catalyst/secrets/frigate/environment.age" = {
+    publicKeys = [
+      keys.catalyst
+    ];
+    armor = true;
+  };
 }
