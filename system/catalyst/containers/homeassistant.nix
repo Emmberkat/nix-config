@@ -97,6 +97,7 @@ in
         "litterrobot"
         "onvif"
         "lutron_caseta"
+        "reolink"
       ];
       configDir = "/mnt/hass";
       config = {
