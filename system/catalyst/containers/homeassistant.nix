@@ -37,6 +37,7 @@ in
       openFirewall = true;
       customComponents = with pkgs.home-assistant-custom-components; [
         frigate
+        local_openai
 
         (pkgs.buildHomeAssistantComponent rec {
           owner = "valentinfrlch";
