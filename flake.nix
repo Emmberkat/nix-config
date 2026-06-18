@@ -28,10 +28,6 @@
         systems.follows = "systems";
       };
     };
-    jovian = {
-      url = "github:Jovian-Experiments/Jovian-NixOS";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
   outputs =
     {
@@ -40,7 +36,6 @@
       home-manager,
       agenix,
       nix-minecraft,
-      jovian,
       systems,
       ...
     }:
@@ -113,7 +108,6 @@
             ./system/emmberdeck
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
-            jovian.nixosModules.jovian
             {
               home-manager.users.emmberkat = {
                 imports = [

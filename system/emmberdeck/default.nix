@@ -19,26 +19,40 @@
       "sd_mod"
       "sdhci_pci"
     ];
-    kernelModules = [ "kvm-amd" ];
+    kernelModules = [
+      "kvm-amd"
+      "ntsync"
+    ];
 
     # Sets the correct boot menu orientation on the steam deck.
     loader.systemd-boot.consoleMode = "5";
   };
 
+  hardware.enableRedistributableFirmware = true;
+
   networking.hostName = "emmberdeck";
 
   networking.networkmanager.enable = true;
 
-  jovian = {
-    steam = {
-      enable = true;
-      autoStart = true;
-      desktopSession = "plasma";
-      user = "emmberkat";
+  programs.steam.gamescopeSession.enable = true;
+
+  services.greetd = {
+    enable = true;
+    settings = {
+      initial_session = {
+        command = "steam-gamescope";
+        user = "emmberkat";
+      };
+      default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd steam-gamescope";
+        user = "emmberkat";
+      };
     };
-    devices.steamdeck.enable = true;
   };
-  services.desktopManager.plasma6.enable = true;
+
+  programs.steam.enable = true;
+
+  hardware.steam-hardware.enable = true;
 
   programs.zsh.enable = true;
 
