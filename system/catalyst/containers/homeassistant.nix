@@ -42,13 +42,13 @@ in
         (pkgs.buildHomeAssistantComponent rec {
           owner = "valentinfrlch";
           domain = "llmvision";
-          version = "1.6.0";
+          version = "1.7.0";
 
           src = pkgs.fetchFromGitHub {
             owner = "valentinfrlch";
             repo = "ha-llmvision";
             tag = "v${version}";
-            hash = "sha256-Bt6InfyPhC5gHNE/6w+M0WEL8hmv1Fxxeh6FrpsJCsQ=";
+            hash = "sha256-EjbnkMQQdcKgSNEQLEmMdsifi/FdPW33te+0l9RRk00=";
           };
 
           dependencies = with pkgs.home-assistant.python3Packages; [
