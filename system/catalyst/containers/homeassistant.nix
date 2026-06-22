@@ -238,7 +238,6 @@ in
         objects.track = [
           "person"
           "cat"
-          "dog"
           "cell phone"
           "laptop"
         ];
