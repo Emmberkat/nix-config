@@ -92,11 +92,9 @@ in
         "steam_online"
         "google"
         "google_mail"
-        "ring"
         "tesla_fleet"
         "jellyfin"
         "litterrobot"
-        "onvif"
         "lutron_caseta"
         "reolink"
       ];
