@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   ...
 }:
@@ -12,6 +13,8 @@
     };
     swraid.enable = false;
   };
+
+  home-manager.sharedModules = [ { home.stateVersion = config.system.stateVersion; } ];
 
   systemd.network.enable = true;
 
