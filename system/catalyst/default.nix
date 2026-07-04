@@ -85,7 +85,7 @@
     options = "--delete-older-than 90d";
   };
 
-  system.stateVersion = "22.11";
+  system.stateVersion = "23.05";
 
   boot = {
     devShmSize = "4G";
