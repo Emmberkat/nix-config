@@ -89,7 +89,7 @@
     extraGroups = [ "wheel" ];
   };
 
-  system.stateVersion = "23.05";
+  system.stateVersion = "25.11";
 
   programs = {
     steam = {
