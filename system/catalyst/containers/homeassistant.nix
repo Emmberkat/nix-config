@@ -270,6 +270,30 @@ in
             }
           ];
         };
+        "master_bedroom" = {
+          ffmpeg.inputs = [
+            {
+              path = "rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@10.0.1.139:554/cam/realmonitor?channel=1&subtype=0";
+              roles = [
+                "detect"
+                "record"
+                "audio"
+              ];
+            }
+          ];
+        };
+        "office" = {
+          ffmpeg.inputs = [
+            {
+              path = "rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@10.0.1.137:554/cam/realmonitor?channel=1&subtype=0";
+              roles = [
+                "detect"
+                "record"
+                "audio"
+              ];
+            }
+          ];
+        };
         "entry_stairs" = {
           ffmpeg.inputs = [
             {
