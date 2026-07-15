@@ -230,6 +230,16 @@ in
             };
           };
 
+          people = {
+            enabled = true;
+            name = "people";
+            threshold = 0.8;
+            object_config = {
+              objects = [ "person" ];
+              classification_type = "sub_label";
+            };
+          };
+
         };
 
         detect.enabled = true;
