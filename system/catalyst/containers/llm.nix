@@ -43,11 +43,16 @@ in
       enable = true;
       package = pkgs.pkgsCuda.llama-cpp;
       settings = {
-        models-max = 1;
         fit = "on";
-        ctx-size = 0;
+        flash-attn = "on";
+        ctx-size = 65536;
+        parallel = 4;
+        cont-batching = "";
+        cache-reuse = 256;
         port = llamaPort;
-        models-dir = "/mnt/models";
+        alias = "Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive-Q4_K_M";
+        model = "/mnt/models/Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive-Q4_K_M/Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive-Q4_K_M.gguf";
+        mmproj = "/mnt/models/Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive-Q4_K_M/mmproj-Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive-f16.gguf";
       };
     };
   };
