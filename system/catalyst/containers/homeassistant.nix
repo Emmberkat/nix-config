@@ -236,7 +236,7 @@ in
             threshold = 0.8;
             object_config = {
               objects = [ "person" ];
-              classification_type = "sub_label";
+              classification_type = "attribute";
             };
           };
 
