@@ -45,7 +45,7 @@ in
       settings = {
         fit = "on";
         flash-attn = "on";
-        ctx-size = 65536;
+        ctx-size = 262144;
         parallel = 4;
         cont-batching = "";
         cache-reuse = 256;
