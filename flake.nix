@@ -74,11 +74,6 @@
             {
               nixpkgs.overlays = [
                 nix-minecraft.overlay
-                (self: super: {
-                  frigate = super.frigate.overrideAttrs (old: {
-                    patches = (old.patches or [ ]) ++ [ ./frigate.patch ];
-                  });
-                })
               ];
             }
             ./system/catalyst
