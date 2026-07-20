@@ -14,8 +14,10 @@ in
     "frigate/environment".file = ../secrets/frigate/environment.age;
   };
 
-  systemd.services.frigate.serviceConfig.EnvironmentFile =
-    config.age.secrets."frigate/environment".path;
+  systemd.services = {
+    frigate.serviceConfig.EnvironmentFile = config.age.secrets."frigate/environment".path;
+    home-assistant.path = [ pkgs.ffmpeg-headless ];
+  };
 
   services = {
     nginx.virtualHosts = {
