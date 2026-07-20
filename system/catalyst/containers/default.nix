@@ -5,7 +5,6 @@
     ./immich.nix
     ./jellyfin.nix
     ./llm.nix
-    ./minecraft.nix
     ./unifi.nix
   ];
 
