@@ -134,38 +134,11 @@
       ];
     };
 
-    "/var/lib/containers" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      options = [
-        "subvol=containers"
-        "noatime"
-      ];
-    };
-
     "/var/lib/frigate" = {
       device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
       fsType = "btrfs";
       options = [
         "subvol=frigate"
-        "noatime"
-      ];
-    };
-
-    "/var/lib/nixos-containers" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      options = [
-        "subvol=nixos-containers"
-        "noatime"
-      ];
-    };
-
-    "/mnt/ollama" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      options = [
-        "subvol=ollama"
         "noatime"
       ];
     };
