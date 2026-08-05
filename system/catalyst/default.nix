@@ -188,6 +188,24 @@
       ];
     };
 
+    "/mnt/garage-data" = {
+      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
+      fsType = "btrfs";
+      options = [
+        "subvol=garage-data"
+        "noatime"
+      ];
+    };
+
+    "/mnt/garage-meta" = {
+      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
+      fsType = "btrfs";
+      options = [
+        "subvol=garage-meta"
+        "noatime"
+      ];
+    };
+
     "/mnt/immich" = {
       device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
       fsType = "btrfs";

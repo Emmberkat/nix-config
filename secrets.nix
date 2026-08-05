@@ -44,4 +44,10 @@ in
     ];
     armor = true;
   };
+  "system/catalyst/secrets/garage/rpc_secret.age" = {
+    publicKeys = [
+      keys.catalyst
+    ];
+    armor = true;
+  };
 }
