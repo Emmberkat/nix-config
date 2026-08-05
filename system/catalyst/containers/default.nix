@@ -6,6 +6,7 @@
     ./immich.nix
     ./jellyfin.nix
     ./llm.nix
+    ./nextcloud.nix
     ./unifi.nix
   ];
 
