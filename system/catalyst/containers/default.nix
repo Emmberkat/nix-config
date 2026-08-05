@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 {
   imports = [
+    ./garage.nix
     ./homeassistant.nix
     ./immich.nix
     ./jellyfin.nix
