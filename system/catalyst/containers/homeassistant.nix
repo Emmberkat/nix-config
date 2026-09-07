@@ -10,6 +10,27 @@ let
 in
 {
 
+  # aioimaplib 2.0.1's tests pass STORE flags as one combined argument, which
+  # CPython 3.14.7 rejects since imaplib argument quoting was restored in
+  # python/cpython#152703. Drop the workaround once upstream lands a fix:
+  # https://github.com/iroco-co/aioimaplib/issues/137
+  nixpkgs.overlays = [
+    (_final: prev: {
+      pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+        (_pyfinal: pyprev: {
+          # Deselected by node id: test_aioimaplib.py has a same-named
+          # test_store_and_search_by_keyword that still passes.
+          aioimaplib = pyprev.aioimaplib.overrideAttrs (old: {
+            disabledTestPaths = (old.disabledTestPaths or [ ]) ++ [
+              "tests/test_imapserver_imaplib.py::test_store"
+              "tests/test_imapserver_imaplib.py::test_store_and_search_by_keyword"
+            ];
+          });
+        })
+      ];
+    })
+  ];
+
   age.secrets = {
     "frigate/environment".file = ../secrets/frigate/environment.age;
   };
