@@ -42,6 +42,10 @@
     }:
     rec {
       nixosModules.neovim = ./modules/neovim;
+      homeManagerModules.kirocrew = ./modules/kirocrew;
+      overlays.default = _final: prev: {
+        kirocrew = prev.callPackage ./pkgs/kirocrew.nix { };
+      };
       formatter = nixpkgs.lib.genAttrs (import systems) (
         system: (import nixpkgs { inherit system; }).nixfmt-tree
       );
@@ -75,6 +79,7 @@
             {
               nixpkgs.overlays = [
                 nix-minecraft.overlay
+                overlays.default
               ];
             }
             ./system/catalyst
@@ -82,10 +87,14 @@
             agenix.nixosModules.default
             nix-minecraft.nixosModules.minecraft-servers
             {
+              # The kirocrew package comes from overlays.default above; home-manager
+              # builds its own pkgs instance unless told to reuse the system one.
+              home-manager.useGlobalPkgs = true;
               home-manager.users.emmberkat = {
                 imports = [
                   agenix.homeManagerModules.default
                   nixosModules.neovim
+                  homeManagerModules.kirocrew
                   ./user/emmberkat
                 ];
                 emmberkat.neovim = {
