@@ -45,6 +45,8 @@
     smartmontools
     ncdu
     pkgsCuda.whisperx
+    kiro-cli
+    kirocrew
   ];
 
   programs.zsh.enable = true;
