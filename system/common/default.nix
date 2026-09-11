@@ -40,6 +40,16 @@
         "root"
         "@wheel"
       ];
+      # Enabled, not merely permitted. These are also declared in the flake's
+      # nixConfig, but flake nixConfig is ignored without --accept-flake-config,
+      # so local builds silently fell back to cache.nixos.org alone and
+      # recompiled every CUDA package. CI passes that flag and so was already
+      # getting the cache; this makes workstation builds match.
+      substituters = [
+        "https://cache.nixos-cuda.org"
+        "https://nix.emmberkat.com"
+      ];
+      # Kept so a non-root user can still opt into these explicitly.
       trusted-substituters = [
         "https://cache.nixos-cuda.org"
         "https://nix.emmberkat.com"
