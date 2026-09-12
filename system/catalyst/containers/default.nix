@@ -32,6 +32,14 @@
     ];
   };
 
+  # ddclient is DynamicUser and its ExecStartPre runs `install -o ddclient`, so
+  # the transient user must be resolvable before the prestart does. The module
+  # orders the unit only After=network.target, so at boot it races nscd and dies
+  # with "install: invalid user 'ddclient'". It then recovers on the next timer
+  # firing, which is why this looked like a transient network blip rather than an
+  # ordering bug.
+  systemd.services.ddclient.after = [ "nss-user-lookup.target" ];
+
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
