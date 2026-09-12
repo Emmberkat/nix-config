@@ -64,7 +64,8 @@ in
       settings = {
         alias = "Qwen3.6-35B-A3B-UD-Q4_K_XL-MTP";
         # Fetched at runtime into LLAMA_CACHE (/var/cache/llama-cpp, which the
-        # module already provisions) rather than pinned as a Nix derivation.
+        # module already provisions, backed by the pool's models subvol) rather
+        # than pinned as a Nix derivation.
         # A fetchurl pin would put 22GB into catalyst's closure, and
         # .github/workflows/check.yml builds every host's toplevel on a
         # GitHub-hosted runner -- which would drag the weights down on every PR
@@ -121,5 +122,11 @@ in
   # so llama-server fails to pin the ~22GB of weights and quietly carries on
   # with them evictable -- exactly what mlock was meant to prevent.
   systemd.services.llama-cpp.serviceConfig.LimitMEMLOCK = "infinity";
+
+  # The weights live on the pool, mounted over systemd's CacheDirectory. Without
+  # this ordering llama-cpp can win the race against the mount, have
+  # CacheDirectory= recreate the dir on the SSD, and re-download 22GB -- which
+  # the mount then hides, stranding the space.
+  systemd.services.llama-cpp.unitConfig.RequiresMountsFor = "/var/cache/private/llama-cpp";
 
 }

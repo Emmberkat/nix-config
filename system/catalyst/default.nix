@@ -126,16 +126,6 @@
       options = [ "subvol=home" ];
     };
 
-    "/nix" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      neededForBoot = true;
-      options = [
-        "subvol=nix"
-        "noatime"
-      ];
-    };
-
     "/var/lib/frigate" = {
       device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
       fsType = "btrfs";
@@ -145,7 +135,13 @@
       ];
     };
 
-    "/mnt/models" = {
+    # llama-cpp's LLAMA_CACHE. Targets systemd's DynamicUser cache dir directly
+    # rather than /mnt/models so that CacheDirectory= keeps managing it -- the
+    # dynamic UID can change across boots, and systemd re-chowns this path on
+    # every start, which a plain /mnt mount would not get. The weights are read
+    # once sequentially and then pinned via mlock, so the pool's latency costs
+    # nothing after startup, and the SSD is needed for /nix instead.
+    "/var/cache/private/llama-cpp" = {
       device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
       fsType = "btrfs";
       options = [
@@ -221,10 +217,6 @@
 
   swapDevices = [
     { device = "/dev/disk/by-uuid/0a97e7b1-5e81-4833-8cce-eb50a945b265"; }
-    {
-      device = "/swapfile";
-      size = 16384;
-    }
   ];
 
   nixpkgs.hostPlatform = "x86_64-linux";
