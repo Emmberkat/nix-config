@@ -112,10 +112,9 @@ in
         };
       };
 
-      # catalyst: the Qwen model served by llm.nix, under its llama-server alias. The
-      # server runs several slots over one unified KV pool, so each slot sees
-      # the full context window, but OpenClaw and open-webui draw on the same
-      # 64K between them.
+      # kuzco serves this over the LAN. Its llama-server runs a single slot, so
+      # the whole 96K window belongs to whoever is asking; open-webui no longer
+      # shares it, since catalyst stopped serving a model of its own.
       models = {
         mode = "merge";
         providers.kuzco = {
@@ -127,8 +126,11 @@ in
               id = "Qwen3.8-27B-Q4_K_XL";
               name = "Qwen3.8 27B";
               reasoning = true;
-              input = [ "text" "image" ];
-              contextWindow = 65536;
+              input = [
+                "text"
+                "image"
+              ];
+              contextWindow = 98304;
               contextTokens = contextBudget;
               # Qwen3.8 thinks at length by default: a 1500-token test was spent
               # entirely on reasoning with no answer. Leave room for both.

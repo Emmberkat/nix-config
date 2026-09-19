@@ -1,35 +1,18 @@
-{ pkgs, config, ... }:
+_:
 let
   openwebuiPort = 8040;
   llamaPort = 8041;
-
-  # Sampling per the Qwen model card. llama.cpp's defaults make this model look
-  # broken, so a profile is always selected explicitly rather than left off.
-  samplingProfiles = {
-    # Thinking mode: precise coding and agentic tool-calling.
-    coding = {
-      temp = 0.6;
-      top-p = 0.95;
-      top-k = 20;
-      presence-penalty = 0.0;
-    };
-    # Instruct / non-thinking conversational use.
-    chat = {
-      temp = 0.7;
-      top-p = 0.80;
-      presence-penalty = 1.5;
-    };
-  };
-  activeProfile = "coding";
 in
 {
   services = {
     nginx.virtualHosts = {
+      # kuzco serves the model now; catalyst has no llama-cpp of its own. The
+      # allow list already covers kuzco, which sits on the same /8.
       "llama.emmberkat.com" = {
         enableACME = true;
         forceSSL = true;
         locations."/" = {
-          proxyPass = "http://localhost:${toString llamaPort}";
+          proxyPass = "http://10.1.0.2:${toString llamaPort}";
           proxyWebsockets = true;
           extraConfig = ''
             allow 127.0.0.1/32;
