@@ -29,6 +29,13 @@
         systems.follows = "systems";
       };
     };
+    nix-openclaw = {
+      url = "github:openclaw/nix-openclaw";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
+      };
+    };
   };
   outputs =
     {
@@ -37,15 +44,12 @@
       home-manager,
       agenix,
       nix-minecraft,
+      nix-openclaw,
       systems,
       ...
     }:
     rec {
       nixosModules.neovim = ./modules/neovim;
-      homeManagerModules.kirocrew = ./modules/kirocrew;
-      overlays.default = _final: prev: {
-        kirocrew = prev.callPackage ./pkgs/kirocrew.nix { };
-      };
       formatter = nixpkgs.lib.genAttrs (import systems) (
         system: (import nixpkgs { inherit system; }).nixfmt-tree
       );
@@ -57,14 +61,21 @@
         crystal = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
+            {
+              nixpkgs.overlays = [
+                nix-openclaw.overlays.default
+              ];
+            }
             ./system/crystal
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
             {
+              home-manager.useGlobalPkgs = true;
               home-manager.users.emmberkat = {
                 imports = [
                   agenix.homeManagerModules.default
                   nixosModules.neovim
+                  nix-openclaw.homeManagerModules.openclaw
                   ./user/emmberkat
                   ./system/crystal/user/emmberkat
                 ];
@@ -79,7 +90,7 @@
             {
               nixpkgs.overlays = [
                 nix-minecraft.overlay
-                overlays.default
+                nix-openclaw.overlays.default
               ];
             }
             ./system/catalyst
@@ -87,14 +98,12 @@
             agenix.nixosModules.default
             nix-minecraft.nixosModules.minecraft-servers
             {
-              # The kirocrew package comes from overlays.default above; home-manager
-              # builds its own pkgs instance unless told to reuse the system one.
               home-manager.useGlobalPkgs = true;
               home-manager.users.emmberkat = {
                 imports = [
                   agenix.homeManagerModules.default
                   nixosModules.neovim
-                  homeManagerModules.kirocrew
+                  nix-openclaw.homeManagerModules.openclaw
                   ./user/emmberkat
                 ];
                 emmberkat.neovim = {

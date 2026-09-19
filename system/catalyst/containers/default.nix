@@ -5,9 +5,10 @@
     ./homeassistant.nix
     ./immich.nix
     ./jellyfin.nix
-    ./kirocrew.nix
     ./llm.nix
     ./nextcloud.nix
+    ./openclaw.nix
+    ./searx.nix
     ./unifi.nix
   ];
 
