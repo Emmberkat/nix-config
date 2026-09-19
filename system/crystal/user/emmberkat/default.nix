@@ -18,13 +18,10 @@
       gateway = {
         remote = {
           url = "http://10.1.0.1:18789";
-          auth = {
-            mode = "token";
-            token = {
-              source = "env";
-              provider = "default";
-              id = "OPENCLAW_GATEWAY_TOKEN";
-            };
+          token = {
+            source = "env";
+            provider = "default";
+            id = "OPENCLAW_GATEWAY_TOKEN";
           };
         };
       };
