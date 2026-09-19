@@ -29,9 +29,16 @@ in
       alias = "Qwen3.8-27B-Q4_K_XL";
 
       n-gpu-layers = 99;
-      # 96K: measured on crystal's 7900 XTX with this exact model, using
-      # 22,681 MiB of 24,560. 128K also loaded but left only 470 MiB free.
+      # 96K, measured on kuzco: 22,583 MiB of 24,560 at load, peaking at
+      # 23,473 MiB on an 89,144-token prompt. Prompt processing falls off with
+      # depth well before the window does -- 862 tok/s at 10K, 632 at 39K,
+      # 398 at 89K -- so a larger window would buy little.
       ctx-size = 98304;
+      # One consumer, one slot. llama-server defaults to 4, and each slot
+      # reserves the full context: that left 154 MiB free and the server took
+      # a ROCm out-of-memory abort on its first real prompt. With one slot a
+      # 89,144-token request completes with 1,086 MiB still free.
+      parallel = 1;
       flash-attn = "on";
       # The cache is what limits context here, not the weights: crystal's own
       # 96K and 128K measurements differ by 1,409 MiB over 32,768 tokens, about
@@ -39,8 +46,8 @@ in
       # than taking a bit off every weight would. Requires flash attention.
       cache-type-k = "q8_0";
       cache-type-v = "q8_0";
-      cache-reuse = 256;
-      # Multi-token prediction: the measured difference between 34 and 55 tok/s.
+      # Multi-token prediction. Draft acceptance reached 1.00 on a deep prompt
+      # here, with generation at 47 tok/s.
       spec-type = "draft-mtp";
       jinja = "";
 
