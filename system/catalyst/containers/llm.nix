@@ -6,6 +6,15 @@ in
 {
   services = {
     nginx.virtualHosts = {
+      "llm.emmberkat.com" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://localhost:${toString openwebuiPort}";
+          proxyWebsockets = true;
+        };
+      };
+
       # kuzco serves the model now; catalyst has no llama-cpp of its own. The
       # allow list already covers kuzco, which sits on the same /8.
       "llama.emmberkat.com" = {

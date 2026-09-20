@@ -50,6 +50,19 @@
     }:
     rec {
       nixosModules.neovim = ./modules/neovim;
+      # whisperx pulls the whole PyTorch/CUDA stack: 14.57 GB across 225 store
+      # paths, nearly a third of catalyst's closure. Nothing consumes it
+      # programmatically -- Home Assistant's speech-to-text uses
+      # wyoming-faster-whisper -- so it is exposed here for `nix run .#whisperx`
+      # instead of being pinned into catalyst's system-path. CI builds
+      # nixosConfigurations only, so this costs nothing on a PR.
+      packages = nixpkgs.lib.genAttrs (import systems) (system: {
+        whisperx =
+          (import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          }).pkgsCuda.whisperx;
+      });
       formatter = nixpkgs.lib.genAttrs (import systems) (
         system: (import nixpkgs { inherit system; }).nixfmt-tree
       );
