@@ -7,6 +7,7 @@
     ./jellyfin.nix
     ./llm.nix
     ./nextcloud.nix
+    ./openclaw.nix
     ./searx.nix
     ./unifi.nix
   ];
