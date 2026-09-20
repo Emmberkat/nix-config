@@ -16,6 +16,8 @@
     picard
     leocad
     prismlauncher
+    nautilus
+    file-roller
   ];
 
   services.syncthing = {
