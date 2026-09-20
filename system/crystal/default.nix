@@ -92,6 +92,8 @@
   system.stateVersion = "25.11";
 
   programs = {
+    zoom-us.enable = true;
+
     steam = {
       enable = true;
       remotePlay.openFirewall = true;
