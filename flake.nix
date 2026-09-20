@@ -67,9 +67,11 @@
             agenix.nixosModules.default
             {
               home-manager.users.emmberkat = {
+                nixpkgs.overlays = [ nix-openclaw.overlays.default ];
                 imports = [
                   agenix.homeManagerModules.default
                   nixosModules.neovim
+                  nix-openclaw.homeManagerModules.openclaw
                   ./user/emmberkat
                   ./system/crystal/user/emmberkat
                 ];
@@ -92,10 +94,6 @@
             nix-minecraft.nixosModules.minecraft-servers
             {
               home-manager.users.emmberkat = {
-                # The openclaw package comes from this overlay. Applied to
-                # home-managers own pkgs rather than the system set, since the
-                # gateway is a user service and nothing at the NixOS level
-                # needs it.
                 nixpkgs.overlays = [ nix-openclaw.overlays.default ];
                 imports = [
                   agenix.homeManagerModules.default
