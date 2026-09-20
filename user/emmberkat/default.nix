@@ -16,7 +16,6 @@
     tmux.enable = true;
     zellij.enable = true;
     obsidian.enable = true;
-    kiro.enable = true;
   };
 
 }
