@@ -44,7 +44,6 @@
     htop
     smartmontools
     ncdu
-    pkgsCuda.whisperx
   ];
 
   programs.zsh.enable = true;
