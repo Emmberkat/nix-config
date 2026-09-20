@@ -68,4 +68,16 @@ in
     ];
     armor = true;
   };
+  "system/catalyst/secrets/openclaw/gateway-token.age" = {
+    publicKeys = [ keys.catalyst ];
+    armor = true;
+  };
+  "system/catalyst/secrets/openclaw/telegram-bot-token.age" = {
+    publicKeys = [ keys.catalyst ];
+    armor = true;
+  };
+  "system/catalyst/secrets/openclaw/discord-bot-token.age" = {
+    publicKeys = [ keys.catalyst ];
+    armor = true;
+  };
 }
