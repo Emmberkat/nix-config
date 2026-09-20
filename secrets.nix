@@ -62,4 +62,10 @@ in
     ];
     armor = true;
   };
+  "system/catalyst/secrets/searx/environment.age" = {
+    publicKeys = [
+      keys.catalyst
+    ];
+    armor = true;
+  };
 }

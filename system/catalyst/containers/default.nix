@@ -8,6 +8,7 @@
     ./kirocrew.nix
     ./llm.nix
     ./nextcloud.nix
+    ./searx.nix
     ./unifi.nix
   ];
 
