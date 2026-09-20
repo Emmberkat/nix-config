@@ -126,16 +126,6 @@
       options = [ "subvol=home" ];
     };
 
-    "/nix" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      neededForBoot = true;
-      options = [
-        "subvol=nix"
-        "noatime"
-      ];
-    };
-
     "/var/lib/frigate" = {
       device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
       fsType = "btrfs";
@@ -221,10 +211,6 @@
 
   swapDevices = [
     { device = "/dev/disk/by-uuid/0a97e7b1-5e81-4833-8cce-eb50a945b265"; }
-    {
-      device = "/swapfile";
-      size = 16384;
-    }
   ];
 
   nixpkgs.hostPlatform = "x86_64-linux";
