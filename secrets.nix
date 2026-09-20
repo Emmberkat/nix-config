@@ -69,7 +69,10 @@ in
     armor = true;
   };
   "system/catalyst/secrets/openclaw/gateway-token.age" = {
-    publicKeys = [ keys.catalyst ];
+    publicKeys = [
+      keys.catalyst
+      keys.crystal
+    ];
     armor = true;
   };
   "system/catalyst/secrets/openclaw/telegram-bot-token.age" = {
