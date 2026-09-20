@@ -28,6 +28,7 @@
 
   services = {
     openssh.enable = true;
+    fwupd.enable = true;
     # Vial talks to the keyboard over hidraw; its rules grant a normal user
     # access to it. QMK is not involved: qmk-udev-rules targets bootloader
     # devices for flashing firmware, which Vial does not do.
