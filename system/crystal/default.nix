@@ -26,7 +26,13 @@
     kernelModules = [ "kvm-intel" ];
   };
 
-  services.openssh.enable = true;
+  services = {
+    openssh.enable = true;
+    # Vial talks to the keyboard over hidraw; its rules grant a normal user
+    # access to it. QMK is not involved: qmk-udev-rules targets bootloader
+    # devices for flashing firmware, which Vial does not do.
+    udev.packages = [ pkgs.vial ];
+  };
 
   # Temporarily used for iOS access
   services.usbmuxd.enable = true;
@@ -51,6 +57,10 @@
       extraPackages = with pkgs; [ rocmPackages.clr.icd ];
     };
   };
+
+  environment.systemPackages = with pkgs; [
+    vial
+  ];
 
   fileSystems = {
     "/" = {
