@@ -44,6 +44,13 @@ in
       # 96K and 128K measurements differ by 1,409 MiB over 32,768 tokens, about
       # 44 KB per token. q8_0 roughly halves that, and costs far less quality
       # than taking a bit off every weight would. Requires flash attention.
+      # Prompt cache, in host RAM. Each ~60K-token conversation snapshot is
+      # about 4.3 GB, and the 8192 MiB default holds exactly one, so every
+      # turn evicted the last and reprocessed the whole prompt: ~80 s at
+      # ~730 tok/s, against a logged prefix similarity of 0.977. kuzco has
+      # 62 GB of RAM and the model lives in VRAM, so there is room to keep
+      # several conversations resident.
+      cache-ram = 32768;
       cache-type-k = "q8_0";
       cache-type-v = "q8_0";
       # Multi-token prediction. Draft acceptance reached 1.00 on a deep prompt
