@@ -2,15 +2,6 @@
 let
   secret = name: config.age.secrets."openclaw/${name}".path;
 
-  # The budget OpenClaw plans against, below the 64K the servers actually
-  # serve. Both runs that died did so the same way: history grew to ~61K of
-  # 65,536, leaving less room than the requested output, so llama-server
-  # returned finish_reason=length after a single token. OpenClaw never
-  # compacted, because "length" is not the overflow error it retries on -- it
-  # only salvaged the second run by truncating a fetched page. Planning against
-  # a smaller window makes it compact while ~17K of real context is still free.
-  contextBudget = 48000;
-
   # Off until https://github.com/openclaw/nix-openclaw/issues/158 is fixed.
   # On 2026.9.4 the Discord plugin calls openKeyedStore while registering, and
   # the runtime only grants that to bundled plugins or verified official
@@ -131,10 +122,7 @@ in
                 "image"
               ];
               contextWindow = 98304;
-              contextTokens = contextBudget;
-              # Qwen3.8 thinks at length by default: a 1500-token test was spent
-              # entirely on reasoning with no answer. Leave room for both.
-              maxTokens = 16384;
+              contextTokens = 73728;
             }
           ];
         };
