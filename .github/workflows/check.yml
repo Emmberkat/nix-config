@@ -6,20 +6,47 @@ on:
     branches: [main]
 
 jobs:
-  build:
-    name: "Build Nix targets"
+  nix-matrix:
+    name: "Compute check matrix"
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: nixbuild/nix-quick-install-action@v35
+      - id: set-matrix
+        name: Generate Nix matrix
+        run: |
+          set -Eeu
+          matrix="$(nix eval --no-update-lock-file --json '.#githubActions.matrix')"
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  nix-check:
+    name: ${{ matrix.name }} (${{ matrix.system }})
+    needs: nix-matrix
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix: ${{ fromJSON(needs.nix-matrix.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
       - name: Mount Nix store
         run: |
           sudo install -d -o "$USER" /nix
           sudo install -d -o "$USER" /mnt/nixroot
           sudo mount --bind /mnt/nixroot /nix
-      - name: Install Nix
-        uses: nixbuild/nix-quick-install-action@v30
-      - name: Build all NixOS configurations
-        run: "nix flake show --json | jq -r '.nixosConfigurations | keys[]' | xargs -I {} nix build --accept-flake-config --fallback --no-link .#nixosConfigurations.{}.config.system.build.toplevel"
+      - uses: nixbuild/nix-quick-install-action@v35
+      - run: nix build -L ".#${{ matrix.attr }}" --no-update-lock-file --accept-flake-config --fallback
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.NIX_CACHE_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.NIX_CACHE_SECRET_ACCESS_KEY }}
+
+  # Matrix job names vary with the check set, which doesn't work as a
+  # required status check. This gate reports under a fixed name instead.
+  gate:
+    name: "Build Nix targets"
+    needs: [nix-matrix, nix-check]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          [ "${{ needs.nix-matrix.result }}" = "success" ] && [ "${{ needs.nix-check.result }}" = "success" ]
