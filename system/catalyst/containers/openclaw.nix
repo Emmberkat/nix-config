@@ -122,7 +122,16 @@ in
                 "image"
               ];
               contextWindow = 98304;
-              contextTokens = 73728;
+              # Matched to the window rather than set below it. OpenClaw derives
+              # its prompt budget by subtracting a reserve of one quarter of
+              # contextTokens, capped at 20000 once contextTokens reaches 80000.
+              # At 73728 the quarter still binds, reserving 18432 and leaving a
+              # 55296 prompt budget that compaction kept overshooting -- logged
+              # as estimatedPromptTokens=102892 against promptBudgetBeforeReserve
+              # =55296, then a one-token answer and reasoning-only retries
+              # exhausted. At 98304 the 20000 cap binds instead, so the prompt
+              # budget is 78304 and output room is still reserved.
+              contextTokens = 98304;
             }
           ];
         };
