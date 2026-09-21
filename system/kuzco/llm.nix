@@ -57,6 +57,14 @@ in
       # here, with generation at 47 tok/s.
       spec-type = "draft-mtp";
       jinja = "";
+      # Cap thinking so a squeezed context can't eat the whole output budget.
+      # 2026-09-21: an 88,750-token prompt left ~9.5K tokens for output and
+      # the model spent it all reasoning, so the turn ended with no visible
+      # answer and OpenClaw surfaced "Agent couldn't generate a response"
+      # after two reasoning-only retries. At 4096 the model must stop
+      # thinking and answer, leaving ~5K for the reply even at the
+      # worst-case prompt depth.
+      reasoning-budget = 4096;
 
       temp = 0.6;
       top-k = 20;
