@@ -28,13 +28,9 @@
     loader.systemd-boot.consoleMode = "5";
   };
 
-  hardware.enableRedistributableFirmware = true;
-
   networking.hostName = "emmberdeck";
 
   networking.networkmanager.enable = true;
-
-  programs.steam.gamescopeSession.enable = true;
 
   services.greetd = {
     enable = true;
@@ -50,11 +46,13 @@
     };
   };
 
-  programs.steam.enable = true;
-
-  hardware.steam-hardware.enable = true;
-
-  programs.zsh.enable = true;
+  programs = {
+    steam = {
+      enable = true;
+      gamescopeSession.enable = true;
+    };
+    zsh.enable = true;
+  };
 
   users.users.emmberkat = {
     isNormalUser = true;
@@ -87,5 +85,9 @@
   swapDevices = [ { device = "/dev/disk/by-uuid/ff500b66-3b16-4bae-8e8a-d4c7ccd48ac9"; } ];
 
   nixpkgs.hostPlatform = "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = true;
+  hardware = {
+    enableRedistributableFirmware = true;
+    steam-hardware.enable = true;
+    cpu.amd.updateMicrocode = true;
+  };
 }

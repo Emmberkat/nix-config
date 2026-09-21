@@ -37,6 +37,10 @@
         systems.follows = "systems";
       };
     };
+    nix-github-actions = {
+      url = "github:nix-community/nix-github-actions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
@@ -46,6 +50,7 @@
       agenix,
       nix-minecraft,
       nix-openclaw,
+      nix-github-actions,
       systems,
       ...
     }:
@@ -54,9 +59,26 @@
       formatter = nixpkgs.lib.genAttrs (import systems) (
         system: (import nixpkgs { inherit system; }).nixfmt-tree
       );
-      checks = nixpkgs.lib.genAttrs (import systems) (system: {
-        inherit (import nixpkgs { inherit system; }) statix;
-      });
+      checks = nixpkgs.lib.genAttrs (import systems) (
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        {
+          statix = pkgs.runCommand "statix-check" { nativeBuildInputs = [ pkgs.statix ]; } ''
+            statix check ${self}
+            touch $out
+          '';
+        }
+        // nixpkgs.lib.optionalAttrs (system == "x86_64-linux") (
+          nixpkgs.lib.mapAttrs' (
+            name: cfg: nixpkgs.lib.nameValuePair "nixos-${name}" cfg.config.system.build.toplevel
+          ) nixosConfigurations
+        )
+      );
+      githubActions = nix-github-actions.lib.mkGithubMatrix {
+        checks = nixpkgs.lib.getAttrs [ "x86_64-linux" ] self.checks;
+      };
       nixosConfigurations = {
 
         crystal = nixpkgs.lib.nixosSystem {

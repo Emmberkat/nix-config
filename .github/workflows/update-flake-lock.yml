@@ -15,13 +15,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: DeterminateSystems/determinate-nix-action@v3
-      - uses: DeterminateSystems/update-flake-lock@main
+      - uses: nixbuild/nix-quick-install-action@v35
+      - run: nix flake update
+      - uses: peter-evans/create-pull-request@v8
         id: update
         with:
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
-          pr-title: "Update Nix flake inputs"
-          pr-labels: |
+          commit-message: "flake.lock: Update"
+          title: "Update Nix flake inputs"
+          body: "Automated update of flake.lock via `nix flake update`."
+          branch: nix-flake-lock-update
+          delete-branch: true
+          labels: |
             dependencies
             automated
       - name: Merge
@@ -29,4 +34,3 @@ jobs:
         run: gh pr merge --auto "${{ steps.update.outputs.pull-request-number }}" --rebase
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        
