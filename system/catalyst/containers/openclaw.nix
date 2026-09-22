@@ -59,7 +59,10 @@ in
     runtimePlugins = [ "searxng" ] ++ lib.optional discord "discord";
 
     config = {
-      # Loopback only; reach the control UI over an SSH tunnel to 18789.
+      # LAN-reachable at 10.1.0.1:18789 (see networking.firewall.allowedTCPPorts
+      # below). Every connection -- the dashboard included -- still needs the
+      # shared OPENCLAW_GATEWAY_TOKEN, so this isn't opening the gateway up
+      # wide, just off of localhost/SSH-tunnel-only.
       gateway = {
         mode = "local";
         bind = "lan";
@@ -161,4 +164,10 @@ in
         "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
     };
   };
+
+  # gateway.bind = "lan" above only makes the app itself listen on the LAN
+  # interface; the host firewall still blocked it, so nothing outside
+  # catalyst could actually reach 18789 (the node connection from crystal
+  # included, which retried a timed-out handshake indefinitely).
+  networking.firewall.allowedTCPPorts = [ 18789 ];
 }
