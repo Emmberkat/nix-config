@@ -72,6 +72,7 @@ in
     publicKeys = [
       keys.catalyst
       keys.crystal
+      keys.emmberkat
     ];
     armor = true;
   };
