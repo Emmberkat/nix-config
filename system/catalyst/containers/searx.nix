@@ -2,7 +2,7 @@
 {
   age.secrets."searx/environment".file = ../secrets/searx/environment.age;
 
-  # A private meta-search backend for OpenClaw's web_search tool. Without a
+  # A private meta-search backend for Hermes's web_search tool. Without a
   # search provider the agent can only guess URLs, and it guessed domains that
   # do not exist.
   #
@@ -20,7 +20,7 @@
         limiter = false;
         public_instance = false;
       };
-      # OpenClaw's provider queries format=json, which SearXNG rejects with a
+      # The searxng provider queries format=json, which SearXNG rejects with a
       # 403 unless json is listed here.
       search.formats = [
         "html"
