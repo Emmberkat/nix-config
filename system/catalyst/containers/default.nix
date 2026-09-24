@@ -3,11 +3,11 @@
   imports = [
     ./garage.nix
     ./homeassistant.nix
+    ./hermes.nix
     ./immich.nix
     ./jellyfin.nix
     ./llm.nix
     ./nextcloud.nix
-    ./openclaw.nix
     ./searx.nix
     ./unifi.nix
   ];

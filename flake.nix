@@ -21,14 +21,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-openclaw = {
-      url = "github:openclaw/nix-openclaw";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        home-manager.follows = "home-manager";
-        nix-openclaw-tools.inputs.nixpkgs.follows = "nixpkgs";
-      };
-    };
     agenix = {
       url = "github:ryantm/agenix";
       inputs = {
@@ -41,6 +33,12 @@
       url = "github:nix-community/nix-github-actions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Pinned to a release tag: the Nix path is upstream Tier 2 (best-effort),
+    # and commits to main may break the flake at any time.
+    hermes-agent = {
+      url = "github:NousResearch/hermes-agent/v2026.9.21";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
@@ -49,8 +47,8 @@
       home-manager,
       agenix,
       nix-minecraft,
-      nix-openclaw,
       nix-github-actions,
+      hermes-agent,
       systems,
       ...
     }:
@@ -89,11 +87,9 @@
             agenix.nixosModules.default
             {
               home-manager.users.emmberkat = {
-                nixpkgs.overlays = [ nix-openclaw.overlays.default ];
                 imports = [
                   agenix.homeManagerModules.default
                   nixosModules.neovim
-                  nix-openclaw.homeManagerModules.openclaw
                   ./user/emmberkat
                   ./system/crystal/user/emmberkat
                 ];
@@ -113,14 +109,13 @@
             ./system/catalyst
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
+            hermes-agent.nixosModules.default
             nix-minecraft.nixosModules.minecraft-servers
             {
               home-manager.users.emmberkat = {
-                nixpkgs.overlays = [ nix-openclaw.overlays.default ];
                 imports = [
                   agenix.homeManagerModules.default
                   nixosModules.neovim
-                  nix-openclaw.homeManagerModules.openclaw
                   ./user/emmberkat
                 ];
                 emmberkat.neovim = {
