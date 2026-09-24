@@ -12,6 +12,19 @@
     owner = "hermes";
   };
 
+  services = {
+    nginx.virtualHosts = {
+      "hermes.emmberkat.com" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://localhost:9119";
+          proxyWebsockets = true;
+        };
+      };
+    };
+  };
+
   services.hermes-agent = {
     enable = true;
 
@@ -32,7 +45,12 @@
     # Not a secret, so plain `environment` rather than environmentFiles: this
     # is how Hermes discovers a self-hosted SearXNG.
     environment.SEARXNG_URL = "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
-
+    environment = {
+      HERMES_DASHBOARD_AUTH_PROVIDER = "self-hosted";
+      HERMES_DASHBOARD_OIDC_ISSUER = "https://auth.emmberkat.com";
+      HERMES_DASHBOARD_OIDC_CLIENT_ID = "4a326920-c869-423c-bbd6-e201a99e4f8b";
+      HERMES_DASHBOARD_PUBLIC_URL = "https://hermes.emmberkat.com";
+    };
     # LAN-reachable at 10.1.0.1:9119 (see networking.firewall.allowedTCPPorts
     # below). Binding off loopback makes the module turn on its own auth
     # gate automatically; sessionTokenFile pins that to a stable secret
@@ -40,7 +58,7 @@
     # doubles as the token Hermes Desktop needs to reach this backend.
     backend = {
       mode = "dashboard";
-      host = "10.1.0.1";
+      port = 9119;
       sessionTokenFile = config.age.secrets."hermes/dashboard-token".path;
     };
 

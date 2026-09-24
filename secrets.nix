@@ -72,4 +72,8 @@ in
     publicKeys = [ keys.catalyst ];
     armor = true;
   };
+  "system/catalyst/secrets/pocketid/key.age" = {
+    publicKeys = [ keys.catalyst ];
+    armor = true;
+  };
 }

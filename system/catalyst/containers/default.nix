@@ -8,6 +8,7 @@
     ./jellyfin.nix
     ./llm.nix
     ./nextcloud.nix
+    ./pocketid.nix
     ./searx.nix
     ./unifi.nix
   ];
