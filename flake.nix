@@ -33,10 +33,8 @@
       url = "github:nix-community/nix-github-actions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Pinned to a release tag: the Nix path is upstream Tier 2 (best-effort),
-    # and commits to main may break the flake at any time.
     hermes-agent = {
-      url = "github:NousResearch/hermes-agent/v2026.9.21";
+      url = "github:NousResearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
