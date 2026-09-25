@@ -1,4 +1,7 @@
 { config, lib, ... }:
+let
+  messagingEnv = "/run/hermes-messaging.env";
+in
 {
   # Self-hosted Hermes Agent (Nous Research) — the open-source agent behind
   # the managed "Hermes Cloud" service. Native mode: a hardened systemd
@@ -7,9 +10,34 @@
   # Model: kuzco's llama-cpp server over the LAN. It serves a single slot, so
   # the whole window belongs to whoever is asking. "llama-cpp-local" is a
   # placeholder, not a secret, so it is safe in the Nix store.
-  age.secrets."hermes/dashboard-token" = {
-    file = ../secrets/hermes/dashboard-token.age;
-    owner = "hermes";
+  age.secrets = {
+    "hermes/dashboard-token" = {
+      file = ../secrets/hermes/dashboard-token.age;
+      owner = "hermes";
+    };
+    # Bare tokens, one per file (carried over from the OpenClaw setup), so
+    # they stay root-only: the activation script below reads them as root.
+    "hermes/telegram-bot-token".file = ../secrets/hermes/telegram-bot-token.age;
+    "hermes/discord-bot-token".file = ../secrets/hermes/discord-bot-token.age;
+  };
+
+  # environmentFiles wants KEY=VALUE lines, but the bot token secrets hold
+  # only the bare token. Build the env file on tmpfs from them after agenix
+  # has decrypted, and before the module merges it into $HERMES_HOME/.env.
+  # A token in .env is all it takes to turn a platform on in the gateway.
+  #
+  # DMs default to pairing: an unknown sender gets a code, and nothing
+  # reaches the agent until it is approved on catalyst with
+  #   hermes pairing approve <telegram|discord> <CODE>
+  system.activationScripts = {
+    hermes-messaging-env = lib.stringAfter [ "agenix" ] ''
+      install -m 0400 /dev/null ${messagingEnv}
+      {
+        printf 'TELEGRAM_BOT_TOKEN=%s\n' "$(cat ${config.age.secrets."hermes/telegram-bot-token".path})"
+        printf 'DISCORD_BOT_TOKEN=%s\n' "$(cat ${config.age.secrets."hermes/discord-bot-token".path})"
+      } > ${messagingEnv}
+    '';
+    hermes-agent-setup.deps = [ "hermes-messaging-env" ];
   };
 
   services = {
@@ -41,6 +69,9 @@
       # rate-limit and leak the query off-network.
       web.search_backend = "searxng";
     };
+
+    # Telegram and Discord bot tokens; see hermes-messaging-env above.
+    environmentFiles = [ messagingEnv ];
 
     # Not a secret, so plain `environment` rather than environmentFiles: this
     # is how Hermes discovers a self-hosted SearXNG.

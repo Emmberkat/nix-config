@@ -72,6 +72,14 @@ in
     publicKeys = [ keys.catalyst ];
     armor = true;
   };
+  "system/catalyst/secrets/hermes/telegram-bot-token.age" = {
+    publicKeys = [ keys.catalyst ];
+    armor = true;
+  };
+  "system/catalyst/secrets/hermes/discord-bot-token.age" = {
+    publicKeys = [ keys.catalyst ];
+    armor = true;
+  };
   "system/catalyst/secrets/pocketid/key.age" = {
     publicKeys = [ keys.catalyst ];
     armor = true;
