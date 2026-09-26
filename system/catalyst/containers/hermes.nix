@@ -20,6 +20,14 @@
     owner = "hermes";
   };
 
+  # Bearer key for the OpenAI-compatible API server (port 8642), which Open
+  # WebUI (llm.nix) connects to as its backend. Rendered into $HERMES_HOME/.env
+  # as API_SERVER_KEY via environmentFiles.
+  age.secrets."hermes/api-server-key" = {
+    file = ../secrets/hermes/api-server-key.age;
+    owner = "hermes";
+  };
+
   services = {
     nginx.virtualHosts = {
       "hermes.emmberkat.com" = {
@@ -57,20 +65,32 @@
       web.search_backend = "searxng";
     };
 
-    # Not a secret, so plain `environment` rather than environmentFiles: this
-    # is how Hermes discovers a self-hosted SearXNG.
-    environment.SEARXNG_URL = "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
+    # Not a secret, so plain `environment` rather than environmentFiles:
+    # SEARXNG_URL is how Hermes discovers a self-hosted SearXNG, and the
+    # API_SERVER_* vars enable the OpenAI-compatible API server that Open
+    # WebUI (llm.nix) connects to. The API server is loopback-only — same
+    # host as Open WebUI, so no firewall port and no LAN exposure. Its
+    # bearer key comes from the age secret below.
     environment = {
+      SEARXNG_URL = "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
       HERMES_DASHBOARD_AUTH_PROVIDER = "self-hosted";
       HERMES_DASHBOARD_OIDC_ISSUER = "https://auth.emmberkat.com";
       HERMES_DASHBOARD_OIDC_CLIENT_ID = "4a326920-c869-423c-bbd6-e201a99e4f8b";
       HERMES_DASHBOARD_PUBLIC_URL = "https://hermes.emmberkat.com";
+      API_SERVER_ENABLED = "true";
+      API_SERVER_HOST = "127.0.0.1";
+      API_SERVER_PORT = "8642";
     };
 
-    # Appended to $HERMES_HOME/.env on every activation. The secret file holds
-    # `CLAUDE_CODE_OAUTH_TOKEN=<token>` — the credential for the anthropic
-    # provider (see the comment in the hermes config above).
-    environmentFiles = [ config.age.secrets."hermes/claude-oauth-token".path ];
+    # Appended to $HERMES_HOME/.env on every activation. The claude secret
+    # holds `CLAUDE_CODE_OAUTH_TOKEN=<token>` — the credential for the
+    # anthropic provider (see the comment in the hermes config above); the
+    # api-server secret holds `API_SERVER_KEY=<key>` — the bearer token for
+    # the OpenAI-compatible API server.
+    environmentFiles = [
+      config.age.secrets."hermes/claude-oauth-token".path
+      config.age.secrets."hermes/api-server-key".path
+    ];
     # LAN-reachable at 10.1.0.1:9119 (see networking.firewall.allowedTCPPorts
     # below). Binding off loopback makes the module turn on its own auth
     # gate automatically; sessionTokenFile pins that to a stable secret
