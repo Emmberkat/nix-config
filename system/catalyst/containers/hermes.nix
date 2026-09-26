@@ -12,6 +12,14 @@
     owner = "hermes";
   };
 
+  # Claude subscription OAuth token (sk-ant-oat01…, from `claude setup-token`).
+  # Rendered into $HERMES_HOME/.env as CLAUDE_CODE_OAUTH_TOKEN, which
+  # authenticates the "anthropic" provider for on-demand /model switches.
+  age.secrets."hermes/claude-oauth-token" = {
+    file = ../secrets/hermes/claude-oauth-token.age;
+    owner = "hermes";
+  };
+
   services = {
     nginx.virtualHosts = {
       "hermes.emmberkat.com" = {
@@ -36,6 +44,13 @@
         default = "Qwen3.8-27B-Q4_K_XL";
       };
 
+      # The Claude subscription OAuth token (from the age secret, rendered
+      # into $HERMES_HOME/.env via environmentFiles) authenticates the
+      # "anthropic" provider. It is NOT a fallback — it's an on-demand
+      # option: switch a session to a Claude model with /model
+      # (e.g. /model claude-opus-4-6), or pin subagents/cron jobs to one
+      # via delegation.model / per-job model settings.
+
       # Pin web_search to the SearXNG instance in searx.nix. Without this
       # Hermes rotates through the keyless public free tiers instead, which
       # rate-limit and leak the query off-network.
@@ -51,6 +66,11 @@
       HERMES_DASHBOARD_OIDC_CLIENT_ID = "4a326920-c869-423c-bbd6-e201a99e4f8b";
       HERMES_DASHBOARD_PUBLIC_URL = "https://hermes.emmberkat.com";
     };
+
+    # Appended to $HERMES_HOME/.env on every activation. The secret file holds
+    # `CLAUDE_CODE_OAUTH_TOKEN=<token>` — the credential for the anthropic
+    # provider (see the comment in the hermes config above).
+    environmentFiles = [ config.age.secrets."hermes/claude-oauth-token".path ];
     # LAN-reachable at 10.1.0.1:9119 (see networking.firewall.allowedTCPPorts
     # below). Binding off loopback makes the module turn on its own auth
     # gate automatically; sessionTokenFile pins that to a stable secret
