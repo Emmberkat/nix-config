@@ -15,7 +15,7 @@
 
     nextcloud = {
       enable = true;
-      package = pkgs.nextcloud34;
+      package = pkgs.nextcloud35;
       hostName = "nextcloud.emmberkat.com";
       config = {
         dbtype = "sqlite";
@@ -60,9 +60,11 @@
           cookbook
           user_oidc
           ;
+        # v1.7.0 is the first release whose info.xml allows Nextcloud 35
+        # (v1.3.0 capped at 34, which fails extraAppsCheckVersionRanges).
         integration_immich = pkgs.fetchNextcloudApp {
-          url = "https://github.com/xXRoxXeRXx/integration_immich/releases/download/v1.3.0/integration_immich.tar.gz";
-          hash = "sha256-qj17akAhoXQjIWmBts1a8pinS4usXq5iV5SrVcqrTrQ=";
+          url = "https://github.com/xXRoxXeRXx/integration_immich/releases/download/v1.7.0/integration_immich.tar.gz";
+          hash = "sha256-BgZzbYCmY4qvcFB4Pb6TVyH9mZS1pXcCnasnM3CN9Hc";
           license = "agpl3Only";
         };
       };
