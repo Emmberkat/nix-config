@@ -106,7 +106,21 @@ in
     ];
     armor = true;
   };
+  "system/catalyst/secrets/hermes/api-server-key.age" = {
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
+    armor = true;
+  };
   "system/catalyst/secrets/pocketid/key.age" = {
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
+    armor = true;
+  };
+  "system/catalyst/secrets/open-webui/api-server-key.age" = {
     publicKeys = [
       keys.admin
       keys.catalyst
