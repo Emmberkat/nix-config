@@ -67,6 +67,7 @@
     environment = {
       SEARXNG_URL = "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
       TELEGRAM_ALLOWED_USERS = "1629004256";
+      DISCORD_ALLOWED_USERS = "288503618250735616";
       HERMES_DASHBOARD_AUTH_PROVIDER = "self-hosted";
       HERMES_DASHBOARD_OIDC_ISSUER = "https://auth.emmberkat.com";
       HERMES_DASHBOARD_OIDC_CLIENT_ID = "4a326920-c869-423c-bbd6-e201a99e4f8b";
