@@ -50,14 +50,31 @@
       ...
     }:
     let
-      # Home Manager modules every host's users get. Importing only declares
-      # options; nothing is enabled until a config sets it.
-      homeManagerShared = {
-        home-manager.sharedModules = [
-          agenix.homeManagerModules.default
-          hermes-agent.homeManagerModules.default
-        ];
-      };
+      # Modules every host gets. Importing a module only declares its
+      # options; nothing is enabled until a host or user config sets it.
+      sharedModules = [
+        home-manager.nixosModules.home-manager
+        agenix.nixosModules.default
+        hermes-agent.nixosModules.default
+        {
+          home-manager = {
+            sharedModules = [
+              agenix.homeManagerModules.default
+              hermes-agent.homeManagerModules.default
+            ];
+            users.emmberkat.imports = [
+              self.nixosModules.neovim
+              ./user/emmberkat
+            ];
+          };
+        }
+      ];
+      mkHost =
+        modules:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = sharedModules ++ modules;
+        };
     in
     rec {
       nixosModules.neovim = ./modules/neovim;
@@ -86,102 +103,53 @@
       };
       nixosConfigurations = {
 
-        crystal = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./system/crystal
-            home-manager.nixosModules.home-manager
-            homeManagerShared
-            agenix.nixosModules.default
-            {
-              home-manager.users.emmberkat = {
-                imports = [
-                  nixosModules.neovim
-                  ./user/emmberkat
-                  ./system/crystal/user/emmberkat
-                ];
-                emmberkat.ui.enable = true;
-              };
-            }
-          ];
-        };
+        crystal = mkHost [
+          ./system/crystal
+          {
+            home-manager.users.emmberkat = {
+              imports = [ ./system/crystal/user/emmberkat ];
+              emmberkat.ui.enable = true;
+            };
+          }
+        ];
 
-        catalyst = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            {
-              nixpkgs.overlays = [
-                nix-minecraft.overlay
-              ];
-            }
-            ./system/catalyst
-            home-manager.nixosModules.home-manager
-            homeManagerShared
-            agenix.nixosModules.default
-            hermes-agent.nixosModules.default
-            nix-minecraft.nixosModules.minecraft-servers
-            {
-              home-manager.users.emmberkat = {
-                imports = [
-                  nixosModules.neovim
-                  ./user/emmberkat
-                ];
-                emmberkat.neovim = {
-                  java.enable = false;
-                  kotlin.enable = false;
-                  rust.enable = false;
-                };
-              };
-            }
-          ];
-        };
+        catalyst = mkHost [
+          { nixpkgs.overlays = [ nix-minecraft.overlay ]; }
+          ./system/catalyst
+          nix-minecraft.nixosModules.minecraft-servers
+          {
+            home-manager.users.emmberkat.emmberkat.neovim = {
+              java.enable = false;
+              kotlin.enable = false;
+              rust.enable = false;
+            };
+          }
+        ];
 
-        emmberdeck = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./system/emmberdeck
-            home-manager.nixosModules.home-manager
-            homeManagerShared
-            agenix.nixosModules.default
-            {
-              home-manager.users.emmberkat = {
-                imports = [
-                  nixosModules.neovim
-                  ./user/emmberkat
-                ];
-                emmberkat.ui.enable = true;
-                emmberkat.neovim = {
-                  java.enable = false;
-                  kotlin.enable = false;
-                  rust.enable = false;
-                };
+        emmberdeck = mkHost [
+          ./system/emmberdeck
+          {
+            home-manager.users.emmberkat.emmberkat = {
+              ui.enable = true;
+              neovim = {
+                java.enable = false;
+                kotlin.enable = false;
+                rust.enable = false;
               };
-            }
-          ];
-        };
+            };
+          }
+        ];
 
-        kuzco = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./system/kuzco
-            home-manager.nixosModules.home-manager
-            homeManagerShared
-            agenix.nixosModules.default
-            {
-              home-manager.users.emmberkat = {
-                imports = [
-                  nixosModules.neovim
-                  ./user/emmberkat
-                ];
-                emmberkat.neovim = {
-                  java.enable = false;
-                  kotlin.enable = false;
-                  rust.enable = false;
-                };
-              };
-            }
-          ];
-        };
+        kuzco = mkHost [
+          ./system/kuzco
+          {
+            home-manager.users.emmberkat.emmberkat.neovim = {
+              java.enable = false;
+              kotlin.enable = false;
+              rust.enable = false;
+            };
+          }
+        ];
 
       };
     };
