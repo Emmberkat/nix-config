@@ -1,8 +1,8 @@
 { config, ... }:
 {
   age.secrets."pocketid/key" = {
-  file = ../secrets/pocketid/key.age;
-  owner = "pocket-id";
+    file = ../secrets/pocketid/key.age;
+    owner = "pocket-id";
   };
 
   services = {
@@ -26,6 +26,5 @@
       };
     };
   };
-
 
 }
