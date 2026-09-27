@@ -91,6 +91,7 @@
                   ./user/emmberkat
                   ./system/crystal/user/emmberkat
                 ];
+                emmberkat.ui.enable = true;
               };
             }
           ];
@@ -139,6 +140,7 @@
                   nixosModules.neovim
                   ./user/emmberkat
                 ];
+                emmberkat.ui.enable = true;
                 emmberkat.neovim = {
                   java.enable = false;
                   kotlin.enable = false;
