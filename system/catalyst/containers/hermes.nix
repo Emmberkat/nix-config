@@ -6,6 +6,16 @@
       owner = "hermes";
     };
 
+    "hermes/messaging-env" = {
+      file = ../secrets/hermes/messaging-env.age;
+      owner = "hermes";
+    };
+
+    "hermes/mcp" = {
+      file = ../secrets/hermes/mcp.age;
+      owner = "hermes";
+    };
+
     "hermes/claude-oauth-token" = {
       file = ../secrets/hermes/claude-oauth-token.age;
       owner = "hermes";
@@ -33,6 +43,16 @@
   services.hermes-agent = {
     enable = true;
 
+    mcpServers = {
+      github = {
+        command = "npx";
+        args = [
+          "-y"
+          "@modelcontextprotocol/server-github"
+        ];
+      };
+    };
+
     settings = {
       model = {
         provider = "custom";
@@ -46,6 +66,7 @@
 
     environment = {
       SEARXNG_URL = "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
+      TELEGRAM_ALLOWED_USERS = "1629004256";
       HERMES_DASHBOARD_AUTH_PROVIDER = "self-hosted";
       HERMES_DASHBOARD_OIDC_ISSUER = "https://auth.emmberkat.com";
       HERMES_DASHBOARD_OIDC_CLIENT_ID = "4a326920-c869-423c-bbd6-e201a99e4f8b";
@@ -56,6 +77,8 @@
     };
 
     environmentFiles = [
+      config.age.secrets."hermes/mcp".path
+      config.age.secrets."hermes/messaging-env".path
       config.age.secrets."hermes/claude-oauth-token".path
       config.age.secrets."hermes/api-server-key".path
     ];

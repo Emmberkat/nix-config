@@ -92,6 +92,20 @@ in
     ];
     armor = true;
   };
+  "system/catalyst/secrets/hermes/messaging-env.age" = {
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
+    armor = true;
+  };
+  "system/catalyst/secrets/hermes/mcp.age" = {
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
+    armor = true;
+  };
   "system/catalyst/secrets/pocketid/key.age" = {
     publicKeys = [
       keys.admin
