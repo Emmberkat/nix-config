@@ -50,6 +50,16 @@
       systems,
       ...
     }:
+    let
+      # Home Manager modules every host's users get. Importing only declares
+      # options; nothing is enabled until a config sets it.
+      homeManagerShared = {
+        home-manager.sharedModules = [
+          agenix.homeManagerModules.default
+          hermes-agent.homeManagerModules.default
+        ];
+      };
+    in
     rec {
       nixosModules.neovim = ./modules/neovim;
       formatter = nixpkgs.lib.genAttrs (import systems) (
@@ -82,11 +92,11 @@
           modules = [
             ./system/crystal
             home-manager.nixosModules.home-manager
+            homeManagerShared
             agenix.nixosModules.default
             {
               home-manager.users.emmberkat = {
                 imports = [
-                  agenix.homeManagerModules.default
                   nixosModules.neovim
                   ./user/emmberkat
                   ./system/crystal/user/emmberkat
@@ -107,13 +117,13 @@
             }
             ./system/catalyst
             home-manager.nixosModules.home-manager
+            homeManagerShared
             agenix.nixosModules.default
             hermes-agent.nixosModules.default
             nix-minecraft.nixosModules.minecraft-servers
             {
               home-manager.users.emmberkat = {
                 imports = [
-                  agenix.homeManagerModules.default
                   nixosModules.neovim
                   ./user/emmberkat
                 ];
@@ -132,11 +142,11 @@
           modules = [
             ./system/emmberdeck
             home-manager.nixosModules.home-manager
+            homeManagerShared
             agenix.nixosModules.default
             {
               home-manager.users.emmberkat = {
                 imports = [
-                  agenix.homeManagerModules.default
                   nixosModules.neovim
                   ./user/emmberkat
                 ];
@@ -156,11 +166,11 @@
           modules = [
             ./system/kuzco
             home-manager.nixosModules.home-manager
+            homeManagerShared
             agenix.nixosModules.default
             {
               home-manager.users.emmberkat = {
                 imports = [
-                  agenix.homeManagerModules.default
                   nixosModules.neovim
                   ./user/emmberkat
                 ];
