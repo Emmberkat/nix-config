@@ -1,4 +1,23 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  # Native Kiro model provider (AWS Builder ID / IAM Identity Center login).
+  # Catalog entry `kiro-provider`; the plugin lives in the repo's provider/ subdir.
+  kiro-provider =
+    let
+      src = pkgs.fetchFromGitHub {
+        owner = "anpicasso";
+        repo = "hermes-kiro-provider";
+        rev = "013017d27acd58051c4ad654bb21036d93bdd3ce"; # v1.0.1
+        hash = "sha256-OwZTt8uSTr9zEAvUT/gToDXWbCaeA9t5Rk9uQLEuk2g=";
+      };
+    in
+    pkgs.runCommand "kiro-provider" { } "cp -r ${src}/provider $out";
+in
 {
   age.secrets = {
     "hermes/dashboard-token" = {
@@ -42,6 +61,8 @@
 
   services.hermes-agent = {
     enable = true;
+
+    extraPlugins = [ kiro-provider ];
 
     mcpServers = {
       github = {
