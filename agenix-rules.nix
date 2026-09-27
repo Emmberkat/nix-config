@@ -4,29 +4,33 @@ let
   keys = builtins.mapAttrs (name: value: builtins.readFile (keysDir + "/${name}")) keyFiles;
 in
 {
-  "system/crystal/secrets/syncthing/key.age" = {
+  "system/crystal/user/emmberkat/secrets/syncthing/key.age" = {
     publicKeys = [
+      keys.admin
       keys.emmberkat
       keys.crystal
     ];
     armor = true;
   };
-  "system/crystal/secrets/syncthing/cert.age" = {
+  "system/crystal/user/emmberkat/secrets/syncthing/cert.age" = {
     publicKeys = [
+      keys.admin
       keys.emmberkat
       keys.crystal
     ];
     armor = true;
   };
-  "user/emmberkat/secrets/restic/environment.age" = {
+  "system/crystal/user/emmberkat/secrets/restic/environment.age" = {
     publicKeys = [
+      keys.admin
       keys.emmberkat
       keys.crystal
     ];
     armor = true;
   };
-  "user/emmberkat/secrets/restic/password.age" = {
+  "system/crystal/user/emmberkat/secrets/restic/password.age" = {
     publicKeys = [
+      keys.admin
       keys.emmberkat
       keys.crystal
     ];
@@ -34,50 +38,65 @@ in
   };
   "system/catalyst/secrets/ddclient/password.age" = {
     publicKeys = [
+      keys.admin
       keys.catalyst
     ];
     armor = true;
   };
   "system/catalyst/secrets/frigate/environment.age" = {
     publicKeys = [
+      keys.admin
       keys.catalyst
     ];
     armor = true;
   };
   "system/catalyst/secrets/garage/rpc_secret.age" = {
     publicKeys = [
+      keys.admin
       keys.catalyst
     ];
     armor = true;
   };
   "system/catalyst/secrets/nextcloud/adminpass.age" = {
     publicKeys = [
+      keys.admin
       keys.catalyst
     ];
     armor = true;
   };
   "system/catalyst/secrets/nextcloud/s3secret.age" = {
     publicKeys = [
+      keys.admin
       keys.catalyst
     ];
     armor = true;
   };
   "system/catalyst/secrets/searx/environment.age" = {
     publicKeys = [
+      keys.admin
       keys.catalyst
     ];
     armor = true;
   };
   "system/catalyst/secrets/hermes/dashboard-token.age" = {
-    publicKeys = [ keys.catalyst ];
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
     armor = true;
   };
   "system/catalyst/secrets/hermes/claude-oauth-token.age" = {
-    publicKeys = [ keys.catalyst ];
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
     armor = true;
   };
   "system/catalyst/secrets/pocketid/key.age" = {
-    publicKeys = [ keys.catalyst ];
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
     armor = true;
   };
 }
