@@ -12,10 +12,6 @@
 
   home.packages = with pkgs; [
     swaybg
-    discord
-    picard
-    leocad
-    prismlauncher
     nautilus
     file-roller
   ];

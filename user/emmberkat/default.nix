@@ -8,6 +8,7 @@
   imports = [
     ./desktop.nix
     ./git.nix
+    ./ui.nix
     ./zsh.nix
   ];
 
@@ -15,7 +16,6 @@
   programs = {
     tmux.enable = true;
     zellij.enable = true;
-    obsidian.enable = true;
   };
 
 }
