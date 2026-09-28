@@ -1,11 +1,6 @@
 { config, lib, ... }:
 {
   age.secrets = {
-    "hermes/dashboard-token" = {
-      file = ../secrets/hermes/dashboard-token.age;
-      owner = "hermes";
-    };
-
     "hermes/messaging-env" = {
       file = ../secrets/hermes/messaging-env.age;
       owner = "hermes";
@@ -33,7 +28,7 @@
         enableACME = true;
         forceSSL = true;
         locations."/" = {
-          proxyPass = "http://localhost:9119";
+          proxyPass = "http://127.0.0.1:${toString config.services.hermes-webui.port}";
           proxyWebsockets = true;
         };
       };
@@ -68,10 +63,6 @@
       SEARXNG_URL = "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
       TELEGRAM_ALLOWED_USERS = "1629004256";
       DISCORD_ALLOWED_USERS = "288503618250735616";
-      HERMES_DASHBOARD_AUTH_PROVIDER = "self-hosted";
-      HERMES_DASHBOARD_OIDC_ISSUER = "https://auth.emmberkat.com";
-      HERMES_DASHBOARD_OIDC_CLIENT_ID = "4a326920-c869-423c-bbd6-e201a99e4f8b";
-      HERMES_DASHBOARD_PUBLIC_URL = "https://hermes.emmberkat.com";
       API_SERVER_ENABLED = "true";
       API_SERVER_HOST = "127.0.0.1";
       API_SERVER_PORT = "8642";
@@ -84,14 +75,35 @@
       config.age.secrets."hermes/api-server-key".path
     ];
 
-    backend = {
-      mode = "dashboard";
-      port = 9119;
-      sessionTokenFile = config.age.secrets."hermes/dashboard-token".path;
-    };
-
     addToSystemPackages = true;
   };
 
-  networking.firewall.allowedTCPPorts = [ 9119 ];
+  # nesquena/hermes-webui replaces the built-in dashboard (backend.mode
+  # defaults to "none"). It runs the agent in-process with the agent's own
+  # venv, as the hermes user so it shares HERMES_HOME/state.db with the
+  # messaging gateway.
+  services.hermes-webui =
+    let
+      agentPkg = config.services.hermes-agent.package;
+      inherit (agentPkg.passthru.python) pythonVersion;
+    in
+    {
+      enable = true;
+      agent = {
+        package = agentPkg;
+        dir = "${agentPkg.passthru.hermesVenv}/lib/python${pythonVersion}/site-packages";
+      };
+      user = "hermes";
+      group = "hermes";
+      hermesHome = "${config.services.hermes-agent.stateDir}/.hermes";
+      port = 9119;
+      extraEnvironment = {
+        HERMES_WEBUI_OIDC_ISSUER = "https://auth.emmberkat.com";
+        HERMES_WEBUI_OIDC_CLIENT_ID = "4a326920-c869-423c-bbd6-e201a99e4f8b";
+        HERMES_WEBUI_OIDC_ALLOW_CLAIM = "email";
+        HERMES_WEBUI_OIDC_ALLOW_VALUES = "emmabenkart@gmail.com";
+        HERMES_WEBUI_OIDC_REDIRECT_URI = "https://hermes.emmberkat.com/api/auth/oidc/callback";
+        HERMES_WEBUI_SECURE = "1";
+      };
+    };
 }

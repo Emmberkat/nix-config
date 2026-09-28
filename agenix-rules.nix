@@ -78,13 +78,6 @@ in
     ];
     armor = true;
   };
-  "system/catalyst/secrets/hermes/dashboard-token.age" = {
-    publicKeys = [
-      keys.admin
-      keys.catalyst
-    ];
-    armor = true;
-  };
   "system/catalyst/secrets/hermes/claude-oauth-token.age" = {
     publicKeys = [
       keys.admin
