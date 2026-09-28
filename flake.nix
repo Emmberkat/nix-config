@@ -36,6 +36,10 @@
       url = "github:NousResearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hermes-webui = {
+      url = "github:nesquena/hermes-webui";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
@@ -46,6 +50,7 @@
       nix-minecraft,
       nix-github-actions,
       hermes-agent,
+      hermes-webui,
       systems,
       ...
     }:
@@ -56,6 +61,7 @@
         home-manager.nixosModules.home-manager
         agenix.nixosModules.default
         hermes-agent.nixosModules.default
+        hermes-webui.nixosModules.default
         {
           home-manager = {
             sharedModules = [
