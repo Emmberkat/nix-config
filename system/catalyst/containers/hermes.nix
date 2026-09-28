@@ -53,7 +53,7 @@
         provider = "custom";
         base_url = "http://10.1.0.2:8041/v1";
         api_key = "llama-cpp-local";
-        default = "Qwen3.8-27B-Q4_K_XL";
+        default = "Qwen3.8-27B";
       };
 
       web.search_backend = "searxng";
