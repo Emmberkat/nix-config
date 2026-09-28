@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 {
   imports = [
+    ./artifact-relay.nix
     ./garage.nix
     ./homeassistant.nix
     ./hermes.nix

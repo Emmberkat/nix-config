@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   age.secrets = {
     "hermes/messaging-env" = {
@@ -18,6 +23,13 @@
 
     "hermes/api-server-key" = {
       file = ../secrets/hermes/api-server-key.age;
+      owner = "hermes";
+    };
+
+    # ARTIFACT_RELAY_API_TOKEN: the same value as ARTIFACT_API_TOKEN in
+    # artifact-relay/environment -- rotate both together.
+    "hermes/artifact-relay-env" = {
+      file = ../secrets/hermes/artifact-relay-env.age;
       owner = "hermes";
     };
   };
@@ -48,6 +60,18 @@
       };
     };
 
+    # Publishes long results as private links on the self-hosted relay
+    # (artifact-relay.nix). Pinned to the commit reviewed for the plugin catalog.
+    extraPlugins = [
+      (pkgs.fetchFromGitHub {
+        owner = "eloktev";
+        repo = "hermes-artifact-relay";
+        name = "artifact-relay";
+        rev = "c91fa9229121dd616a275a45447301eacca45e6f";
+        hash = "sha256-IafH8ROMIdkddoC4Zqguc7JLncR44m+Hg7Hl2vpJ8rc=";
+      })
+    ];
+
     settings = {
       model = {
         provider = "custom";
@@ -57,6 +81,11 @@
       };
 
       web.search_backend = "searxng";
+
+      plugins = {
+        enabled = [ "artifact-relay" ];
+        entries.artifact-relay.settings.base_url = "https://artifacts.emmberkat.com";
+      };
     };
 
     environment = {
@@ -73,6 +102,7 @@
       config.age.secrets."hermes/messaging-env".path
       config.age.secrets."hermes/claude-oauth-token".path
       config.age.secrets."hermes/api-server-key".path
+      config.age.secrets."hermes/artifact-relay-env".path
     ];
 
     addToSystemPackages = true;
