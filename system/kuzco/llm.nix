@@ -32,7 +32,7 @@ in
       # tower are left unmodified, so draft-mtp below still applies.
       hf-repo = "huihui-ai/Huihui-Qwen3.8-27B-abliterated-GGUF";
       hf-file = "Huihui-Qwen3.8-27B-abliterated-UD-Q4_K_XL.gguf";
-      alias = "Qwen3.8-27B-abliterated-Q4_K_XL";
+      alias = "Qwen3.8-27B";
 
       n-gpu-layers = 99;
       # 96K, measured on kuzco: 22,583 MiB of 24,560 at load, peaking at
