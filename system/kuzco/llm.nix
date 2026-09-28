@@ -26,30 +26,47 @@ in
       # LLAMA_CACHE on first start, so there is no GGUF to copy by hand.
       #
       # Uncensored (abliterated) build: huihui-ai re-quantizes straight from
-      # unsloth's own GGUF weights, so this UD-Q4_K_XL is the same base model
-      # and the same dynamic quant scheme as unsloth/Qwen3.8-27B-GGUF, just
-      # with refusals ablated. huihui-ai's card notes MTP and the vision
-      # tower are left unmodified, so draft-mtp below still applies.
+      # unsloth's own GGUF weights, so this file is the same base model and
+      # the same dynamic quant family as unsloth/Qwen3.8-27B-GGUF, just with
+      # refusals ablated. huihui-ai's card notes MTP and the vision tower are
+      # left unmodified, so draft-mtp below still applies.
       hf-repo = "huihui-ai/Huihui-Qwen3.8-27B-abliterated-GGUF";
-      hf-file = "Huihui-Qwen3.8-27B-abliterated-UD-Q4_K_XL.gguf";
+      hf-file = "Huihui-Qwen3.8-27B-abliterated-UD-IQ4_XS.gguf";
       alias = "Qwen3.8-27B";
 
       n-gpu-layers = 99;
-      # 96K, measured on kuzco: 22,583 MiB of 24,560 at load, peaking at
-      # 23,473 MiB on an 89,144-token prompt. Prompt processing falls off with
-      # depth well before the window does -- 862 tok/s at 10K, 632 at 39K,
-      # 398 at 89K -- so a larger window would buy little.
-      ctx-size = 98304;
+      # Full native window. UD-IQ4_XS (14.40 GB, MTP head embedded as
+      # blk.64.nextn.* -- confirmed against the file's own GGUF header) frees
+      # enough VRAM over UD-Q4_K_XL (17.38 GB) to fit the full 262,144-token
+      # window instead of the 98,304 the Q4 quant was capped at, but only
+      # once cache-type-k/v below also drop to q4_0: at q8_0 the KV cache
+      # alone would need ~8.6 GiB and the total overruns kuzco's 24 GiB card
+      # by measurement-calibrated estimate (fixed overhead of ~3 GiB for
+      # compute buffers, the 48 linear-attention layers' recurrent state, and
+      # MTP scaffolding, plus ~1 GiB of peak growth during deep-prompt
+      # processing -- both derived from this host's own 98K-context load and
+      # peak VRAM figures before this change). At q4_0 the full window's KV
+      # cache is ~4.3 GiB, landing around 22.8 GiB total with ~3 GiB margin.
+      # Trade-off: IQ4_XS is a measurable step down from Q4_K_XL in published
+      # BF16-relative quality tests (top-1 token agreement ~95.4% vs ~96.0%),
+      # and q4_0 KV is coarser than q8_0, which costs the most exactly at the
+      # deep-context end this change is meant to unlock. Re-measure actual
+      # VRAM and tok/s on kuzco after this change -- everything above is
+      # arithmetic, not a live measurement of this exact config.
+      ctx-size = 262144;
       # One consumer, one slot. llama-server defaults to 4, and each slot
       # reserves the full context: that left 154 MiB free and the server took
       # a ROCm out-of-memory abort on its first real prompt. With one slot a
       # 89,144-token request completes with 1,086 MiB still free.
       parallel = 1;
       flash-attn = "on";
-      # The cache is what limits context here, not the weights: crystal's own
-      # 96K and 128K measurements differ by 1,409 MiB over 32,768 tokens, about
-      # 44 KB per token. q8_0 roughly halves that, and costs far less quality
-      # than taking a bit off every weight would. Requires flash attention.
+      # q4_0, not the q8_0 this ran at through 98,304 ctx: reaching the full
+      # 262,144 window on a 24 GiB card requires the coarser KV quant (see
+      # ctx-size above for the arithmetic). This is the one change here that
+      # trades quality specifically at the deep-context end the larger window
+      # exists to serve, so if agentic tool-call reliability regresses at
+      # high context, this is the first setting to revisit. Requires flash
+      # attention.
       # Prompt cache, in host RAM. Each ~60K-token conversation snapshot is
       # about 4.3 GB, and the 8192 MiB default holds exactly one, so every
       # turn evicted the last and reprocessed the whole prompt: ~80 s at
@@ -57,10 +74,13 @@ in
       # 62 GB of RAM and the model lives in VRAM, so there is room to keep
       # several conversations resident.
       cache-ram = 32768;
-      cache-type-k = "q8_0";
-      cache-type-v = "q8_0";
+      cache-type-k = "q4_0";
+      cache-type-v = "q4_0";
       # Multi-token prediction. Draft acceptance reached 1.00 on a deep prompt
-      # here, with generation at 47 tok/s.
+      # here, with generation at 47 tok/s -- measured against UD-Q4_K_XL at
+      # q8_0 KV, before the IQ4_XS + q4_0 KV switch above. Re-measure: a
+      # coarser draft model and a coarser KV cache can both change acceptance
+      # rate.
       spec-type = "draft-mtp";
       jinja = "";
       # Cap thinking so a squeezed context can't eat the whole output budget.
