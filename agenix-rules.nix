@@ -99,6 +99,13 @@ in
     ];
     armor = true;
   };
+  "system/catalyst/secrets/hermes/nextcloud-env.age" = {
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
+    armor = true;
+  };
   "system/catalyst/secrets/hermes/api-server-key.age" = {
     publicKeys = [
       keys.admin

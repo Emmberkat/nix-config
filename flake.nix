@@ -40,6 +40,29 @@
       url = "github:nesquena/hermes-webui";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pyproject-nix = {
+      url = "github:pyproject-nix/pyproject.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    uv2nix = {
+      url = "github:pyproject-nix/uv2nix";
+      inputs = {
+        pyproject-nix.follows = "pyproject-nix";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+    pyproject-build-systems = {
+      url = "github:pyproject-nix/build-system-pkgs";
+      inputs = {
+        pyproject-nix.follows = "pyproject-nix";
+        uv2nix.follows = "uv2nix";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+    nextcloud-mcp-server = {
+      url = "github:cbcoutinho/nextcloud-mcp-server/v0.198.0";
+      flake = false;
+    };
   };
   outputs =
     {
@@ -52,9 +75,22 @@
       hermes-agent,
       hermes-webui,
       systems,
+      pyproject-nix,
+      uv2nix,
+      pyproject-build-systems,
+      nextcloud-mcp-server,
       ...
     }:
     let
+      # Packages not in nixpkgs, exposed as flake outputs and via
+      # overlays.default (applied to every host).
+      mkPackages = pkgs: {
+        nextcloud-mcp-server = pkgs.callPackage ./pkgs/nextcloud-mcp-server.nix {
+          src = nextcloud-mcp-server;
+          inherit pyproject-nix uv2nix pyproject-build-systems;
+        };
+      };
+
       # Modules every host gets. Importing a module only declares its
       # options; nothing is enabled until a host or user config sets it.
       sharedModules = [
@@ -62,6 +98,7 @@
         agenix.nixosModules.default
         hermes-agent.nixosModules.default
         hermes-webui.nixosModules.default
+        { nixpkgs.overlays = [ self.overlays.default ]; }
         {
           home-manager = {
             sharedModules = [
@@ -84,6 +121,8 @@
     in
     rec {
       nixosModules.neovim = ./modules/neovim;
+      overlays.default = final: _prev: mkPackages final;
+      packages.x86_64-linux = mkPackages nixpkgs.legacyPackages.x86_64-linux;
       formatter = nixpkgs.lib.genAttrs (import systems) (
         system: (import nixpkgs { inherit system; }).nixfmt-tree
       );

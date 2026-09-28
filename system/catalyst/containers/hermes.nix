@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   age.secrets = {
     "hermes/messaging-env" = {
@@ -18,6 +23,12 @@
 
     "hermes/api-server-key" = {
       file = ../secrets/hermes/api-server-key.age;
+      owner = "hermes";
+    };
+
+    # NEXTCLOUD_PASSWORD=<app password of the "hermes" Nextcloud user>
+    "hermes/nextcloud-env" = {
+      file = ../secrets/hermes/nextcloud-env.age;
       owner = "hermes";
     };
   };
@@ -46,6 +57,24 @@
           "@modelcontextprotocol/server-github"
         ];
       };
+
+      # Notes, calendar/tasks, contacts, files, cookbook, news, mail, ... as
+      # the dedicated "hermes" Nextcloud user. The app password is resolved
+      # from $HERMES_HOME/.env (hermes/nextcloud-env) when the server is
+      # spawned, so only the placeholder reaches the store.
+      nextcloud = {
+        command = lib.getExe pkgs.nextcloud-mcp-server;
+        args = [
+          "run"
+          "--transport"
+          "stdio"
+        ];
+        env = {
+          NEXTCLOUD_HOST = "https://${config.services.nextcloud.hostName}";
+          NEXTCLOUD_USERNAME = "hermes";
+          NEXTCLOUD_PASSWORD = "\${NEXTCLOUD_PASSWORD}";
+        };
+      };
     };
 
     settings = {
@@ -73,6 +102,7 @@
       config.age.secrets."hermes/messaging-env".path
       config.age.secrets."hermes/claude-oauth-token".path
       config.age.secrets."hermes/api-server-key".path
+      config.age.secrets."hermes/nextcloud-env".path
     ];
 
     addToSystemPackages = true;
