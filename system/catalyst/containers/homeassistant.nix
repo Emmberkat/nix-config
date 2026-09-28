@@ -36,6 +36,7 @@ in
     home-assistant = {
       enable = true;
       customComponents = with pkgs.home-assistant-custom-components; [
+        auth_oidc
         frigate
         local_openai
 
@@ -115,6 +116,32 @@ in
         "automation ui" = "!include automations.yaml";
         "scene ui" = "!include scenes.yaml";
         "script ui" = "!include scripts.yaml";
+
+        # Pocket ID (pocketid.nix) login, added next to the built-in
+        # username/password provider, which stays for the companion app,
+        # local-only access, and recovery when auth.emmberkat.com is down.
+        # Public client: no secret, PKCE (on by default) instead. Redirect
+        # URI registered on the Pocket ID client:
+        #   https://home.emmberkat.com/auth/oidc/callback
+        auth_oidc = {
+          client_id = "eac92317-0eb9-4c22-9161-f4735e526252";
+          discovery_url = "https://auth.emmberkat.com/.well-known/openid-configuration";
+          display_name = "Pocket ID";
+          features = {
+            # First OIDC login attaches to the existing HA user whose local
+            # username equals the Pocket ID preferred_username, instead of
+            # creating a second account.
+            automatic_user_linking = true;
+            # Links to existing users, so no duplicate person entities.
+            automatic_person_creation = false;
+            # nginx terminates TLS; build https:// redirect URIs regardless
+            # of how the forwarded scheme reaches HA.
+            force_https = true;
+          };
+          # Defaults: username <- preferred_username, name <- name, and new
+          # (unlinked) users become admins only if in the Pocket ID
+          # "admins" group, otherwise regular users.
+        };
       };
     };
 
