@@ -24,9 +24,15 @@ in
       # tool calls and delivered an answer in 10m49s where the MoE model made 21
       # identical repeats and died twice. llama-server fetches it into
       # LLAMA_CACHE on first start, so there is no GGUF to copy by hand.
-      hf-repo = "unsloth/Qwen3.8-27B-GGUF";
-      hf-file = "Qwen3.8-27B-UD-Q4_K_XL.gguf";
-      alias = "Qwen3.8-27B-Q4_K_XL";
+      #
+      # Uncensored (abliterated) build: huihui-ai re-quantizes straight from
+      # unsloth's own GGUF weights, so this UD-Q4_K_XL is the same base model
+      # and the same dynamic quant scheme as unsloth/Qwen3.8-27B-GGUF, just
+      # with refusals ablated. huihui-ai's card notes MTP and the vision
+      # tower are left unmodified, so draft-mtp below still applies.
+      hf-repo = "huihui-ai/Huihui-Qwen3.8-27B-abliterated-GGUF";
+      hf-file = "Huihui-Qwen3.8-27B-abliterated-UD-Q4_K_XL.gguf";
+      alias = "Qwen3.8-27B-abliterated-Q4_K_XL";
 
       n-gpu-layers = 99;
       # 96K, measured on kuzco: 22,583 MiB of 24,560 at load, peaking at
