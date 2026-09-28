@@ -106,6 +106,20 @@ in
     ];
     armor = true;
   };
+  "system/catalyst/secrets/hermes/artifact-relay-env.age" = {
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
+    armor = true;
+  };
+  "system/catalyst/secrets/artifact-relay/environment.age" = {
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
+    armor = true;
+  };
   "system/catalyst/secrets/pocketid/key.age" = {
     publicKeys = [
       keys.admin
