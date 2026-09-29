@@ -71,7 +71,7 @@
         ];
         env = {
           NEXTCLOUD_HOST = "https://${config.services.nextcloud.hostName}";
-          NEXTCLOUD_USERNAME = "hermes";
+          NEXTCLOUD_USERNAME = "emmberkat";
           NEXTCLOUD_PASSWORD = "\${NEXTCLOUD_PASSWORD}";
         };
       };
