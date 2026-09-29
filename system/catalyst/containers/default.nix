@@ -7,6 +7,7 @@
     ./immich.nix
     ./jellyfin.nix
     ./llm.nix
+    ./muster.nix
     ./nextcloud.nix
     ./pocketid.nix
     ./searx.nix
