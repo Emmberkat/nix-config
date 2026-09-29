@@ -1,12 +1,4 @@
-{ pkgs, config, lib, ... }:
-let
-  # Pocket ID (pocketid.nix) OIDC client, set to Public: PKCE (S256, which
-  # user_oidc uses whenever the discovery doc advertises it) proves each code
-  # exchange. Redirect URI registered on the client:
-  #   https://nextcloud.emmberkat.com/apps/user_oidc/code
-  oidcClientId = "bf5eae97-a695-4124-a9e5-0492d3267ebc";
-in
-{
+{ pkgs, config, ... }: {
 
   age.secrets = {
     "nextcloud/adminpass".file = ../secrets/nextcloud/adminpass.age;
@@ -81,38 +73,24 @@ in
 
   };
 
-  # Register/refresh the Pocket ID provider. `user_oidc:provider` is an upsert
-  # keyed on the identifier, so this is idempotent and re-runs whenever the
-  # client ID changes. The provider lives in Nextcloud's DB.
+  # Pocket ID (pocketid.nix) login provider for user_oidc. It lives only in
+  # Nextcloud's DB (user_oidc has no config.php equivalent), so it is created
+  # once by hand, not on every boot. Re-run after a fresh DB or to change it:
   #
-  # user_oidc has no public-client mode: it always sends a client secret to
-  # the token endpoint. Pocket ID ignores the secret for public clients, so a
-  # fixed non-secret placeholder is stored instead of a real one.
-  systemd.services.nextcloud-oidc-provider = {
-    description = "Configure Pocket ID login for Nextcloud";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "nextcloud-setup.service" ];
-    requires = [ "nextcloud-setup.service" ];
-    restartTriggers = [ oidcClientId ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      User = "nextcloud";
-      # Same runtime credentials the module gives its own occ units: the S3
-      # secret is needed to boot Nextcloud at all.
-      inherit (config.systemd.services.nextcloud-update-db.serviceConfig) LoadCredential;
-    };
-    script = ''
-      ${lib.getExe config.services.nextcloud.occ} user_oidc:provider pocketid \
-        --clientid=${lib.escapeShellArg oidcClientId} \
-        --clientsecret=public-client-pkce \
-        --discoveryuri=https://auth.emmberkat.com/.well-known/openid-configuration \
-        --scope="openid email profile" \
-        --unique-uid=0 \
-        --mapping-uid=preferred_username \
-        --mapping-display-name=name \
-        --mapping-email=email
-    '';
-  };
+  #   sudo nextcloud-occ user_oidc:provider pocketid \
+  #     --clientid=bf5eae97-a695-4124-a9e5-0492d3267ebc \
+  #     --clientsecret=public-client-pkce \
+  #     --discoveryuri=https://auth.emmberkat.com/.well-known/openid-configuration \
+  #     --scope="openid email profile" \
+  #     --unique-uid=0 \
+  #     --mapping-uid=preferred_username \
+  #     --mapping-display-name=name \
+  #     --mapping-email=email
+  #
+  # The Pocket ID client is Public (PKCE S256, used automatically since the
+  # discovery doc advertises it). user_oidc has no public-client mode and
+  # always sends a client secret, which Pocket ID ignores for public clients,
+  # so the secret above is a fixed non-secret placeholder. Redirect URI on the
+  # client: https://nextcloud.emmberkat.com/apps/user_oidc/code
 
 }
