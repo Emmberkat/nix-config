@@ -3,7 +3,7 @@
 {
   imports = [
     ../common
-    ./containers
+    ./services
   ];
 
   systemd = {
