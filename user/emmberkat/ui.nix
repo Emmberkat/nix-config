@@ -10,10 +10,6 @@
   config = lib.mkIf config.emmberkat.ui.enable {
     programs = {
       obsidian.enable = true;
-      hermes-agent = {
-        enable = true;
-        desktop.enable = true;
-      };
     };
 
     home.packages = with pkgs; [
