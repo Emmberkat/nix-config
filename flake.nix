@@ -23,10 +23,7 @@
     };
     agenix = {
       url = "github:ryantm/agenix";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        home-manager.follows = "home-manager";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-github-actions = {
       url = "github:nix-community/nix-github-actions";
@@ -36,6 +33,7 @@
       url = "github:NousResearch/hermes-agent";
       inputs = {
         nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
         # Share the top-level uv2nix tooling instead of locking a second copy.
         pyproject-nix.follows = "pyproject-nix";
         uv2nix.follows = "uv2nix";
