@@ -25,6 +25,8 @@ jobs:
     name: ${{ matrix.name }} (${{ matrix.system }})
     needs: nix-matrix
     runs-on: ${{ matrix.os }}
+    # Cache credentials live in the main-only nix-cache environment.
+    environment: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'nix-cache' || '' }}
     strategy:
       matrix: ${{ fromJSON(needs.nix-matrix.outputs.matrix) }}
     steps:
@@ -36,9 +38,22 @@ jobs:
           sudo mount --bind /mnt/nixroot /nix
       - uses: nixbuild/nix-quick-install-action@v35
       - run: nix build -L ".#${{ matrix.attr }}" --no-update-lock-file --accept-flake-config --fallback
+      - name: Push locally built paths to cache
+        if: ${{ !cancelled() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.NIX_CACHE_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.NIX_CACHE_SECRET_ACCESS_KEY }}
+          NIX_SIGNING_KEY: ${{ secrets.NIX_SIGNING_KEY }}
+        run: |
+          set -Eeuo pipefail
+          key="$RUNNER_TEMP/nix-signing.key"
+          printf '%s' "$NIX_SIGNING_KEY" > "$key"
+          drv="$(nix path-info --derivation --no-update-lock-file ".#${{ matrix.attr }}")"
+          nix-store -qR --include-outputs "$drv" | grep -v '\.drv$' \
+            | xargs nix path-info --json \
+            | jq -r '(if type == "array" then .[] else to_entries[] | .value + {path: .key} end)
+                     | select(.ultimate == true) | .path' \
+            | nix copy --stdin --to "s3://nix?region=sea&endpoint=s3.emmberkat.com&compression=zstd&secret-key=$key"
 
   # Matrix job names vary with the check set, which doesn't work as a
   # required status check. This gate reports under a fixed name instead.
