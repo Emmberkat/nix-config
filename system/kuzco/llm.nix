@@ -54,11 +54,17 @@ in
       # VRAM and tok/s on kuzco after this change -- everything above is
       # arithmetic, not a live measurement of this exact config.
       ctx-size = 262144;
-      # One consumer, one slot. llama-server defaults to 4, and each slot
-      # reserves the full context: that left 154 MiB free and the server took
-      # a ROCm out-of-memory abort on its first real prompt. With one slot a
-      # 89,144-token request completes with 1,086 MiB still free.
-      parallel = 1;
+      # Four slots sharing one 256K pool: Home Assistant (pinned to slot 3),
+      # Hermes sessions and subagents. Slots are capped at 128K, so the pool
+      # is 2x oversubscribed: when it fills, idle slots are purged first, and
+      # only if the running requests alone exceed 256K do they all fail.
+      # Hermes reads the 128K slot size from /props and compacts at ~96K.
+      # Idle slots are not flushed to cache-ram, so HA's slot stays resident
+      # while Hermes runs.
+      parallel = 4;
+      kv-unified = "";
+      kv-unified-per-slot = 131072;
+      no-cache-idle-slots = "";
       flash-attn = "on";
       # q4_0, not the q8_0 this ran at through 98,304 ctx: reaching the full
       # 262,144 window on a 24 GiB card requires the coarser KV quant (see
