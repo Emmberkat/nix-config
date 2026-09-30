@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 {
   imports = [
+    ./comfyui.nix
     ./garage.nix
     ./homeassistant.nix
     ./hermes.nix
