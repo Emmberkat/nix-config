@@ -57,6 +57,7 @@
       trusted-public-keys = [
         "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
         "crystal:1ejOpnHE9Io7242e2uHtGeN2Mtcey67OyDp7qNwk5Rs="
+        "ci.emmberkat.com-1:zKoUaHn7DmqApO1CmvMyVtRK0c1ZliEdrYn8Yq+DtO0="
       ];
       experimental-features = [
         "nix-command"
