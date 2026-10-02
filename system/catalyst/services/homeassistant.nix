@@ -169,12 +169,17 @@ in
       };
 
       faster-whisper = {
-        package = pkgs.pkgsCuda.wyoming-faster-whisper;
+        package = pkgs.pkgsCuda.wyoming-faster-whisper.override {
+          python3Packages = pkgs.pkgsCuda.python3Packages.overrideScope (
+            _: _: { inherit (pkgs.python3Packages) onnxruntime; }
+          );
+        };
         servers.hass = {
           enable = true;
           uri = "tcp://0.0.0.0:10300";
           language = "en";
           model = "medium.en";
+          sttLibrary = "faster-whisper";
           device = "cuda";
         };
       };
