@@ -157,12 +157,12 @@ in
               url = "https://huggingface.co/jgkawell/jarvis";
               rev = "37f8763122312665f091d1fc760abaf1f79b02cc";
               fetchLFS = true;
-              hash = "sha256-yqKRDc4FyavsrrMvwVvImXGFwLj/Kxtc36JIKL0HJNE=";
+              nonConeMode = true;
+              sparseCheckout = [ "/en/en_GB/jarvis/high/jarvis-high.onnx*" ];
+              hash = "sha256-4to5pqyNtn3BlxXzw69dcJjEfAosBiXs46Hkb4eQgJE=";
             };
           in
           [
-            "--data-dir"
-            "${repo}/en/en_GB/jarvis/medium"
             "--data-dir"
             "${repo}/en/en_GB/jarvis/high"
           ];
