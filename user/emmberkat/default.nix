@@ -6,7 +6,6 @@
 {
 
   imports = [
-    ./desktop.nix
     ./git.nix
     ./ui.nix
     ./zsh.nix
