@@ -86,9 +86,16 @@
       };
 
       web.search_backend = "searxng";
+      plugins.enabled = [ "comfyui" ];
+      image_gen.provider = "comfyui";
     };
 
+    extraPlugins = [
+      (pkgs.runCommandLocal "comfyui" { } "cp -r ${./hermes-plugins/comfyui} $out")
+    ];
+
     environment = {
+      COMFYUI_URL = "http://127.0.0.1:${toString config.services.comfyui.port}";
       SEARXNG_URL = "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
       TELEGRAM_ALLOWED_USERS = "1629004256";
       DISCORD_ALLOWED_USERS = "288503618250735616";
