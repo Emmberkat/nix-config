@@ -12,14 +12,22 @@ in
     # CUDA 13 and the RTX 3060 is used. Models are NOT baked into the build:
     # drop .safetensors into
     # /mnt/comfyui/models/{diffusion_models,loras,text_encoders,vae,checkpoints}
-    # (or install ComfyUI-Manager and use its model downloader).
+    # (or use Manager -> Model Manager in the UI, enabled below).
     comfyui = {
       enable = true;
-      package = pkgs.pkgsCuda.comfyui;
-      # Listen on all interfaces; LAN-only exposure is enforced by the nginx
-      # proxy ACL below (allow 127.0.0.1/32 + 10.0.0.0/8, deny all), so the
-      # service itself stays unreachable from outside.
-      listen = [ "0.0.0.0" "::" ];
+      # withManager bundles ComfyUI-Manager (off by default in nixpkgs). The
+      # legacy UI flag is required for model downloads: only the legacy
+      # Manager UI has the Model Manager (the new frontend's built-in manager
+      # handles custom nodes only). Use Manager -> Model Manager to download
+      # catalog models into <dataDir>/models on catalyst. Custom nodes that
+      # need extra Python deps won't install at runtime (the Python env is in
+      # the read-only Nix store); add those via Nix instead.
+      package = pkgs.pkgsCuda.comfyui.override { withManager = true; };
+      extraArgs = [ "--enable-manager-legacy-ui" ];
+      # Loopback only: nginx (below) is the only client. This also matters to
+      # the Manager, which refuses installs at its default security_level
+      # unless ComfyUI listens on a loopback address.
+      listen = [ "127.0.0.1" ];
       port = comfyPort;
       # Keep models, outputs and custom nodes on the data disk (comfyui btrfs
       # subvolume, mounted in ../default.nix) instead of the small root drive.
@@ -30,7 +38,7 @@ in
       enableACME = true;
       forceSSL = true;
       locations."/" = {
-        proxyPass = "http://localhost:${toString comfyPort}";
+        proxyPass = "http://127.0.0.1:${toString comfyPort}";
         proxyWebsockets = true;
         extraConfig = ''
           allow 127.0.0.1/32;
