@@ -11,7 +11,7 @@ in
     # variant with cudaSupport=true, so its comfyui's torch is built against
     # CUDA 13 and the RTX 3060 is used. Models are NOT baked into the build:
     # drop .safetensors into
-    # /var/lib/comfyui/models/{diffusion_models,loras,text_encoders,vae,checkpoints}
+    # /mnt/comfyui/models/{diffusion_models,loras,text_encoders,vae,checkpoints}
     # (or install ComfyUI-Manager and use its model downloader).
     comfyui = {
       enable = true;
@@ -21,6 +21,9 @@ in
       # service itself stays unreachable from outside.
       listen = [ "0.0.0.0" "::" ];
       port = comfyPort;
+      # Keep models, outputs and custom nodes on the data disk (comfyui btrfs
+      # subvolume, mounted in ../default.nix) instead of the small root drive.
+      dataDir = "/mnt/comfyui";
     };
 
     nginx.virtualHosts."comfy.emmberkat.com" = {
@@ -37,4 +40,9 @@ in
       };
     };
   };
+
+  # The /mnt/comfyui mount is nofail so a missing subvolume can't drop catalyst
+  # into emergency mode at boot; this keeps ComfyUI from starting (and writing
+  # to the root drive underneath the mount point) unless it is actually mounted.
+  systemd.services.comfyui.unitConfig.RequiresMountsFor = [ "/mnt/comfyui" ];
 }
