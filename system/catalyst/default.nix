@@ -44,6 +44,9 @@
     htop
     smartmontools
     ncdu
+    nh
+    git
+    gh
   ];
 
   programs.zsh.enable = true;
