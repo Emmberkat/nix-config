@@ -33,8 +33,30 @@
           "jellyfin"
         ];
       };
+      # Read-only journal access for the agent (journalctl, no sudo needed).
+      hermes.extraGroups = [ "systemd-journal" ];
     };
   };
+
+  security.sudo.extraRules = [
+    # Let the agent deploy this host: run nixos-rebuild (switch/boot/...) as
+    # root without a password. Mirrors the btrbk module's pattern of listing
+    # both the store path and the /run/current-system/sw/bin path, so the rule
+    # keeps working across nixpkgs updates.
+    {
+      users = [ "hermes" ];
+      commands = [
+        {
+          command = "${pkgs.nixos-rebuild}/bin/nixos-rebuild";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/nixos-rebuild";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 
   environment.systemPackages = with pkgs; [
     neovim
