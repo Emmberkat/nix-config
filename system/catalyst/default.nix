@@ -198,6 +198,16 @@
       ];
     };
 
+    "/mnt/comfyui" = {
+      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
+      fsType = "btrfs";
+      options = [
+        "subvol=comfyui"
+        "noatime"
+        "nofail"
+      ];
+    };
+
   };
 
   swapDevices = [
