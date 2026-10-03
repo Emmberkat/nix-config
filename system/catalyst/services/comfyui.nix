@@ -27,7 +27,13 @@ in
       # need extra Python deps won't install at runtime (the Python env is in
       # the read-only Nix store); add those via Nix instead.
       package = pkgs.pkgsCuda.comfyui.override { withManager = true; };
-      extraArgs = [ "--enable-manager-legacy-ui" ];
+      # Both flags are needed: --enable-manager-legacy-ui implies the manager on
+      # the backend, but the frontend (1.52) only shows the Manager button when
+      # the literal "--enable-manager" is in ComfyUI's argv (system_stats).
+      extraArgs = [
+        "--enable-manager"
+        "--enable-manager-legacy-ui"
+      ];
       # Loopback only: nginx (below, behind oauth2-proxy) is the only client.
       # This also matters to the Manager, which refuses model installs at its
       # default security_level unless ComfyUI listens on a loopback address.
