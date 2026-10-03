@@ -127,4 +127,11 @@ in
     ];
     armor = true;
   };
+  "system/catalyst/secrets/comfyui/oauth2-proxy-cookie-secret.age" = {
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
+    armor = true;
+  };
 }
