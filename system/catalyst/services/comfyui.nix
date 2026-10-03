@@ -12,10 +12,16 @@ in
     # CUDA 13 and the RTX 3060 is used. Models are NOT baked into the build:
     # drop .safetensors into
     # /mnt/comfyui/models/{diffusion_models,loras,text_encoders,vae,checkpoints}
-    # (or install ComfyUI-Manager and use its model downloader).
+    # (or use the ComfyUI-Manager Model Manager in the UI, enabled below).
     comfyui = {
       enable = true;
-      package = pkgs.pkgsCuda.comfyui;
+      # withManager bundles ComfyUI-Manager (off by default in nixpkgs) and
+      # --enable-manager activates it, so models can be downloaded straight to
+      # catalyst from the UI (Manager -> Model Manager) into <dataDir>/models.
+      # Custom nodes that need extra Python deps won't install at runtime (the
+      # Python env is in the read-only Nix store); add those via Nix instead.
+      package = pkgs.pkgsCuda.comfyui.override { withManager = true; };
+      extraArgs = [ "--enable-manager" ];
       # Listen on all interfaces; LAN-only exposure is enforced by the nginx
       # proxy ACL below (allow 127.0.0.1/32 + 10.0.0.0/8, deny all), so the
       # service itself stays unreachable from outside.
