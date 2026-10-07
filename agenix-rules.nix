@@ -20,22 +20,6 @@ in
     ];
     armor = true;
   };
-  "system/crystal/user/emmberkat/secrets/restic/environment.age" = {
-    publicKeys = [
-      keys.admin
-      keys.emmberkat
-      keys.crystal
-    ];
-    armor = true;
-  };
-  "system/crystal/user/emmberkat/secrets/restic/password.age" = {
-    publicKeys = [
-      keys.admin
-      keys.emmberkat
-      keys.crystal
-    ];
-    armor = true;
-  };
   "system/catalyst/secrets/ddclient/password.age" = {
     publicKeys = [
       keys.admin
