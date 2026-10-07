@@ -59,7 +59,10 @@
   users.users.emmberkat = {
     isNormalUser = true;
     shell = pkgs.zsh;
-    extraGroups = [ "wheel" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+    ];
   };
 
   system.stateVersion = "26.11";
