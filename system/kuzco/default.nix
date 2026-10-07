@@ -44,17 +44,29 @@
     openssh.enable = true;
     smartd.enable = true;
     prometheus.exporters = {
-      node.enable = true;
-      node.openFirewall = true;
+      node = {
+        enable = true;
+        openFirewall = true;
+        enabledCollectors = [ "drm" ];
+      };
       smartctl.enable = true;
       smartctl.openFirewall = true;
     };
   };
 
-  users.users.emmberkat = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    extraGroups = [ "wheel" ];
+  users.users = {
+    emmberkat = {
+      isNormalUser = true;
+      shell = pkgs.zsh;
+      extraGroups = [ "wheel" ];
+    };
+    hermes = {
+      isNormalUser = true;
+      extraGroups = [ "systemd-journal" ];
+      openssh.authorizedKeys.keys = [
+        "restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICMXio8G3QOGD7JVNtXC2L8My3TF8wpq7KIwdIhBsUUr hermes@catalyst"
+      ];
+    };
   };
 
   programs.zsh.enable = true;
