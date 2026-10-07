@@ -62,7 +62,7 @@
     extraGroups = [ "wheel" ];
   };
 
-  system.stateVersion = "25.11";
+  system.stateVersion = "26.11";
 
   fileSystems = {
     "/" = {
