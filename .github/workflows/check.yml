@@ -12,7 +12,7 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: nixbuild/nix-quick-install-action@v35
       - id: set-matrix
         name: Generate Nix matrix
@@ -30,7 +30,7 @@ jobs:
     strategy:
       matrix: ${{ fromJSON(needs.nix-matrix.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Mount Nix store
         run: |
           sudo install -d -o "$USER" /nix
