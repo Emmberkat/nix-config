@@ -20,7 +20,7 @@ let
   # Prebuilt manylinux wheels (grpcio, pymupdf, numpy, ...) link against
   # libstdc++/zlib from the FHS; patch them against the Nix store instead.
   patchWheels =
-    final: prev:
+    _final: prev:
     lib.mapAttrs (
       _: drv:
       if drv ? overrideAttrs && lib.hasSuffix ".whl" (toString (drv.src or "")) then

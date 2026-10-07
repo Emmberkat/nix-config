@@ -1,7 +1,7 @@
 let
   keysDir = ./publickeys;
   keyFiles = builtins.readDir keysDir;
-  keys = builtins.mapAttrs (name: value: builtins.readFile (keysDir + "/${name}")) keyFiles;
+  keys = builtins.mapAttrs (name: _value: builtins.readFile (keysDir + "/${name}")) keyFiles;
 in
 {
   "system/crystal/user/emmberkat/secrets/syncthing/key.age" = {
