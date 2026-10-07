@@ -9,9 +9,7 @@ let
   cfg = config.emmberkat.neovim.go;
 in
 {
-  options.emmberkat.neovim.go.enable = mkEnableOption "go" // {
-    default = true;
-  };
+  options.emmberkat.neovim.go.enable = mkEnableOption "go";
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [

@@ -9,9 +9,7 @@ let
   cfg = config.emmberkat.neovim.kotlin;
 in
 {
-  options.emmberkat.neovim.kotlin.enable = mkEnableOption "kotlin" // {
-    default = true;
-  };
+  options.emmberkat.neovim.kotlin.enable = mkEnableOption "kotlin";
 
   config = mkIf cfg.enable {
     programs.neovim = {

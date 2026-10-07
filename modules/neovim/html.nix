@@ -9,9 +9,7 @@ let
   cfg = config.emmberkat.neovim.html;
 in
 {
-  options.emmberkat.neovim.html.enable = mkEnableOption "html" // {
-    default = true;
-  };
+  options.emmberkat.neovim.html.enable = mkEnableOption "html";
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [

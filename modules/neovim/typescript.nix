@@ -9,9 +9,7 @@ let
   cfg = config.emmberkat.neovim.typescript;
 in
 {
-  options.emmberkat.neovim.typescript.enable = mkEnableOption "typescript" // {
-    default = true;
-  };
+  options.emmberkat.neovim.typescript.enable = mkEnableOption "typescript";
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [

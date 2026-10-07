@@ -162,7 +162,15 @@
           {
             home-manager.users.emmberkat = {
               imports = [ ./system/crystal/user/emmberkat ];
-              emmberkat.ui.enable = true;
+              emmberkat = {
+                ui.enable = true;
+                neovim = {
+                  java.enable = true;
+                  kotlin.enable = true;
+                  python.enable = true;
+                  rust.enable = true;
+                };
+              };
             };
           }
         ];
@@ -171,38 +179,17 @@
           { nixpkgs.overlays = [ nix-minecraft.overlay ]; }
           ./system/catalyst
           nix-minecraft.nixosModules.minecraft-servers
-          {
-            home-manager.users.emmberkat.emmberkat.neovim = {
-              java.enable = false;
-              kotlin.enable = false;
-              rust.enable = false;
-            };
-          }
         ];
 
         emmberdeck = mkHost [
           ./system/emmberdeck
           {
-            home-manager.users.emmberkat.emmberkat = {
-              ui.enable = true;
-              neovim = {
-                java.enable = false;
-                kotlin.enable = false;
-                rust.enable = false;
-              };
-            };
+            home-manager.users.emmberkat.emmberkat.ui.enable = true;
           }
         ];
 
         kuzco = mkHost [
           ./system/kuzco
-          {
-            home-manager.users.emmberkat.emmberkat.neovim = {
-              java.enable = false;
-              kotlin.enable = false;
-              rust.enable = false;
-            };
-          }
         ];
 
         lattice = mkHost [
@@ -210,7 +197,15 @@
           {
             home-manager.users.emmberkat = {
               imports = [ ./system/lattice/user/emmberkat ];
-              emmberkat.ui.enable = true;
+              emmberkat = {
+                ui.enable = true;
+                neovim = {
+                  java.enable = true;
+                  kotlin.enable = true;
+                  python.enable = true;
+                  rust.enable = true;
+                };
+              };
             };
           }
         ];

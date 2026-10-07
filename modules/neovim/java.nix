@@ -9,9 +9,7 @@ let
   cfg = config.emmberkat.neovim.java;
 in
 {
-  options.emmberkat.neovim.java.enable = mkEnableOption "java" // {
-    default = true;
-  };
+  options.emmberkat.neovim.java.enable = mkEnableOption "java";
 
   config = mkIf cfg.enable {
     programs.neovim = {

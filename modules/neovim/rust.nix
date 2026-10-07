@@ -9,9 +9,7 @@ let
   cfg = config.emmberkat.neovim.rust;
 in
 {
-  options.emmberkat.neovim.rust.enable = mkEnableOption "rust" // {
-    default = true;
-  };
+  options.emmberkat.neovim.rust.enable = mkEnableOption "rust";
 
   config = mkIf cfg.enable {
     programs.neovim = {
