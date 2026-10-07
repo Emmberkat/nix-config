@@ -55,10 +55,4 @@
   };
   users.groups.garage = { };
 
-  #systemd.services.garage.serviceConfig.ReadWritePaths = [ "/mnt/garage-data" "/mnt/garage-meta" ];
-  #systemd.tmpfiles.rules = [
-  #  "d /mnt/garage-data 0700 garage garage - -"
-  #  "d /mnt/garage-meta 0700 garage garage - -"
-  #];
-
 }
