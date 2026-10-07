@@ -201,6 +201,16 @@
           }
         ];
 
+        lattice = mkHost [
+          ./system/lattice
+          {
+            home-manager.users.emmberkat = {
+              imports = [ ./system/lattice/user/emmberkat ];
+              emmberkat.ui.enable = true;
+            };
+          }
+        ];
+
       };
     };
 }
