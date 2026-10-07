@@ -19,5 +19,11 @@
   };
 
   security.polkit.enable = true;
-  xdg.portal.wlr.enable = true;
+  xdg.portal = {
+    wlr.enable = true;
+    config.common = {
+      default = [ "wlr" ];
+      "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+    };
+  };
 }
