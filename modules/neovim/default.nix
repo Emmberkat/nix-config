@@ -2,25 +2,22 @@
 {
 
   imports = [
+    ./go.nix
+    ./html.nix
     ./java.nix
     ./kotlin.nix
+    ./markdown.nix
+    ./nix.nix
+    ./ocaml.nix
     ./python.nix
     ./rust.nix
+    ./typescript.nix
+    ./yaml.nix
   ];
 
   config = {
     home.packages = with pkgs; [
       ripgrep
-      go
-      gopls
-      ocamlPackages.ocaml-lsp
-      ocamlPackages.ocamlformat
-      nil
-      nixpkgs-fmt
-      typescript-language-server
-      vscode-langservers-extracted
-      yaml-language-server
-      rumdl
     ];
     programs.neovim = {
       enable = true;
@@ -76,23 +73,6 @@
           plugin = nvim-lspconfig;
           type = "lua";
           config = ''
-            vim.lsp.enable('gopls')
-            vim.lsp.enable('ocamllsp')
-            vim.lsp.enable('html')
-            vim.lsp.enable('ts_ls')
-            vim.lsp.enable('yamlls')
-            vim.lsp.enable('rumdl')
-            vim.lsp.config('nil_ls', {
-              settings = {
-                ['nil'] = {
-                  formatting = {
-                    command = { "nixpkgs-fmt" },
-                  },
-                },
-              },
-            })
-            vim.lsp.enable('nil_ls')
-
             vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
             vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
             vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
@@ -126,16 +106,11 @@
           '';
         }
         nvim-treesitter-parsers.c
-        nvim-treesitter-parsers.go
         nvim-treesitter-parsers.gitcommit
         nvim-treesitter-parsers.gitignore
         nvim-treesitter-parsers.git_rebase
-        nvim-treesitter-parsers.html
         nvim-treesitter-parsers.lua
-        nvim-treesitter-parsers.nix
-        nvim-treesitter-parsers.ocaml
         nvim-treesitter-parsers.query
-        nvim-treesitter-parsers.typescript
         nvim-treesitter-parsers.vim
         nvim-treesitter-parsers.vimdoc
         nvim-treesitter-context
