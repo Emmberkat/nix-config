@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 let
   atm10_files = pkgs.fetchzip {
     url = "https://mediafilez.forgecdn.net/files/8094/893/ServerFiles-7.0.zip";

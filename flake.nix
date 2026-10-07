@@ -141,6 +141,10 @@
             statix check ${self}
             touch $out
           '';
+          deadnix = pkgs.runCommand "deadnix-check" { nativeBuildInputs = [ pkgs.deadnix ]; } ''
+            deadnix --fail ${self}
+            touch $out
+          '';
         }
         // nixpkgs.lib.optionalAttrs (system == "x86_64-linux") (
           nixpkgs.lib.mapAttrs' (

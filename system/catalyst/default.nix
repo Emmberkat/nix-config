@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 let
   dataUuid = "b531ad05-4769-4b89-a2ae-ecf66b637b55";
