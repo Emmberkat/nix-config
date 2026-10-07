@@ -9,9 +9,7 @@ let
   cfg = config.emmberkat.neovim.python;
 in
 {
-  options.emmberkat.neovim.python.enable = mkEnableOption "python" // {
-    default = true;
-  };
+  options.emmberkat.neovim.python.enable = mkEnableOption "python";
 
   config = mkIf cfg.enable {
     programs.neovim = {
