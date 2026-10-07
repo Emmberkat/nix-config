@@ -18,6 +18,7 @@ in
     settings = {
       host = "0.0.0.0";
       port = llamaPort;
+      metrics = true;
 
       # The dense 27B, not catalyst's Qwen3.6-35B-A3B MoE. This is the model
       # measured on crystal's 7900 XTX, and on the same task it made 12 distinct
