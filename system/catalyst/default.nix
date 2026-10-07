@@ -1,5 +1,15 @@
 { config, pkgs, ... }:
 
+let
+  dataUuid = "b531ad05-4769-4b89-a2ae-ecf66b637b55";
+  dataDisk = "/dev/disk/by-uuid/${dataUuid}";
+  dataMount = "/mnt/${dataUuid}";
+  subvol = name: extra: {
+    device = dataDisk;
+    fsType = "btrfs";
+    options = [ "subvol=${name}" ] ++ extra;
+  };
+in
 {
   imports = [
     ../common
@@ -86,7 +96,7 @@
     btrbk.instances.backups = {
       settings = {
         volume = {
-          "/mnt/b531ad05-4769-4b89-a2ae-ecf66b637b55" = {
+          ${dataMount} = {
             subvolume = {
               home = {
                 snapshot_create = "onchange";
@@ -137,99 +147,24 @@
       fsType = "vfat";
     };
 
-    "/mnt/b531ad05-4769-4b89-a2ae-ecf66b637b55" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
+    ${dataMount} = {
+      device = dataDisk;
       fsType = "btrfs";
     };
 
-    "/home" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      options = [ "subvol=home" ];
-    };
-
-    "/var/lib/frigate" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      options = [
-        "subvol=frigate"
-        "noatime"
-      ];
-    };
-
-    "/mnt/hass" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      options = [
-        "subvol=hass"
-        "noatime"
-      ];
-    };
-
-    "/media" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      options = [
-        "subvol=hass_media"
-        "noatime"
-      ];
-    };
-
-    "/mnt/sws" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      options = [
-        "subvol=sws"
-        "noatime"
-      ];
-    };
-
-    "/mnt/media" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      options = [
-        "subvol=media"
-        "noatime"
-      ];
-    };
-
-    "/mnt/garage-data" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      options = [
-        "subvol=garage-data"
-        "noatime"
-      ];
-    };
-
-    "/mnt/garage-meta" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      options = [
-        "subvol=garage-meta"
-        "noatime"
-      ];
-    };
-
-    "/mnt/immich" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      options = [
-        "subvol=immich"
-        "noatime"
-      ];
-    };
-
-    "/mnt/comfyui" = {
-      device = "/dev/disk/by-uuid/b531ad05-4769-4b89-a2ae-ecf66b637b55";
-      fsType = "btrfs";
-      options = [
-        "subvol=comfyui"
-        "noatime"
-        "nofail"
-      ];
-    };
-
+    "/home" = subvol "home" [ ];
+    "/var/lib/frigate" = subvol "frigate" [ "noatime" ];
+    "/mnt/hass" = subvol "hass" [ "noatime" ];
+    "/media" = subvol "hass_media" [ "noatime" ];
+    "/mnt/sws" = subvol "sws" [ "noatime" ];
+    "/mnt/media" = subvol "media" [ "noatime" ];
+    "/mnt/garage-data" = subvol "garage-data" [ "noatime" ];
+    "/mnt/garage-meta" = subvol "garage-meta" [ "noatime" ];
+    "/mnt/immich" = subvol "immich" [ "noatime" ];
+    "/mnt/comfyui" = subvol "comfyui" [
+      "noatime"
+      "nofail"
+    ];
   };
 
   swapDevices = [
