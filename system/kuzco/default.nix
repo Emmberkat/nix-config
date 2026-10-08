@@ -55,11 +55,6 @@
   };
 
   users.users = {
-    emmberkat = {
-      isNormalUser = true;
-      shell = pkgs.zsh;
-      extraGroups = [ "wheel" ];
-    };
     hermes = {
       isNormalUser = true;
       extraGroups = [ "systemd-journal" ];
@@ -68,8 +63,6 @@
       ];
     };
   };
-
-  programs.zsh.enable = true;
 
   environment.systemPackages = with pkgs; [
     neovim
