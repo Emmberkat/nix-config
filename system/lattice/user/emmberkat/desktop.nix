@@ -13,7 +13,11 @@
 
   # waybar's tray only speaks StatusNotifierItem, so nm-applet needs --indicator.
   xsession.preferStatusNotifierItems = true;
-  services.network-manager-applet.enable = true;
+  services = {
+    network-manager-applet.enable = true;
+    # Shows polkit password prompts (e.g. fprintd-enroll); sway has no agent.
+    polkit-gnome.enable = true;
+  };
 
   wayland.windowManager.sway = {
     enable = true;
