@@ -24,6 +24,8 @@
 
     # Sets the correct boot menu orientation on the steam deck.
     loader.systemd-boot.consoleMode = "5";
+    # The panel is natively portrait; keep the console (and tuigreet) upright.
+    kernelParams = [ "fbcon=rotate:1" ];
   };
 
   networking.hostName = "emmberdeck";
