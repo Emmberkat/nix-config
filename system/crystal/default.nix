@@ -89,7 +89,7 @@
 
   time.timeZone = "US/Pacific";
 
-  system.stateVersion = "25.11";
+  system.stateVersion = "26.11";
 
   programs = {
     zoom-us.enable = true;
