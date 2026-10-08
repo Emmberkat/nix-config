@@ -30,11 +30,12 @@
       ];
       modifier = "Mod4";
       menu = "${pkgs.wofi}/bin/wofi --show drun";
-      terminal = "${pkgs.wezterm}/bin/wezterm";
+      terminal = "${pkgs.foot}/bin/foot";
       bars = [ ];
     };
   };
   programs = {
+    foot.enable = true;
     swaylock.enable = true;
     waybar = {
       enable = true;
