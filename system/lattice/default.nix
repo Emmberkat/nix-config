@@ -54,7 +54,10 @@
 
   time.timeZone = "US/Pacific";
 
-  programs.zsh.enable = true;
+  programs = {
+    zsh.enable = true;
+    steam.enable = true;
+  };
 
   users.users.emmberkat = {
     isNormalUser = true;
