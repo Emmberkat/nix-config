@@ -60,7 +60,13 @@
 
   time.timeZone = "US/Pacific";
 
-  services.openssh.enable = true;
+  services = {
+    openssh.enable = true;
+    logind.settings.Login = {
+      HandlePowerKey = "suspend";
+      HandlePowerKeyLongPress = "poweroff";
+    };
+  };
 
   system.stateVersion = "25.11";
 
