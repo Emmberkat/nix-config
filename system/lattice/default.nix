@@ -79,7 +79,12 @@
     };
   };
 
-  swapDevices = [ { device = "/swapfile"; } ];
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 16 * 1024;
+    }
+  ];
 
   nixpkgs.hostPlatform = "x86_64-linux";
 }
