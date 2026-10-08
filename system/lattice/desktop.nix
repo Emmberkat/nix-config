@@ -18,7 +18,10 @@
     gvfs.enable = true;
   };
 
-  security.polkit.enable = true;
+  security = {
+    polkit.enable = true;
+    pam.services.swaylock = { };
+  };
   xdg.portal = {
     wlr.enable = true;
     config.common = {
