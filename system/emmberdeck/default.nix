@@ -85,6 +85,7 @@
   nixpkgs.hostPlatform = "x86_64-linux";
   hardware = {
     enableRedistributableFirmware = true;
+    bluetooth.enable = true;
     steam-hardware.enable = true;
     cpu.amd.updateMicrocode = true;
   };
