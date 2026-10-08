@@ -6,11 +6,11 @@
 
   imports = [
     ../common
+    ../desktop
     ./audio.nix
-    ./bluetooth.nix
-    ./browser.nix
-    ./desktop.nix
   ];
+
+  home-manager.users.emmberkat.programs.firefox.configPath = ".mozilla/firefox";
 
   boot = {
     initrd.availableKernelModules = [

@@ -1,10 +1,7 @@
 _: {
   imports = [
     ../common
-    ./audio.nix
-    ./bluetooth.nix
-    ./browser.nix
-    ./desktop.nix
+    ../desktop
   ];
 
   boot = {
