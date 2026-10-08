@@ -10,8 +10,6 @@
     ./audio.nix
   ];
 
-  home-manager.users.emmberkat.programs.firefox.configPath = ".mozilla/firefox";
-
   boot = {
     initrd.availableKernelModules = [
       "xhci_pci"
