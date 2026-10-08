@@ -48,12 +48,12 @@
       # getting the cache; this makes workstation builds match.
       substituters = [
         "https://cache.nixos-cuda.org"
-        "https://nix.emmberkat.com"
+        "https://nix.emmberkat.com?priority=60"
       ];
       # Kept so a non-root user can still opt into these explicitly.
       trusted-substituters = [
         "https://cache.nixos-cuda.org"
-        "https://nix.emmberkat.com"
+        "https://nix.emmberkat.com?priority=60"
       ];
       trusted-public-keys = [
         "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
