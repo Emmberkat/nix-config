@@ -35,14 +35,7 @@ in
 
   users = {
     users = {
-      emmberkat = {
-        isNormalUser = true;
-        shell = pkgs.zsh;
-        extraGroups = [
-          "wheel"
-          "jellyfin"
-        ];
-      };
+      emmberkat.extraGroups = [ "jellyfin" ];
       # Read-only journal access for the agent (journalctl, no sudo needed).
       hermes.extraGroups = [ "systemd-journal" ];
     };
@@ -80,8 +73,6 @@ in
     git
     gh
   ];
-
-  programs.zsh.enable = true;
 
   services = {
     openssh.enable = true;

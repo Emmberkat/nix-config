@@ -1,8 +1,4 @@
-{
-  pkgs,
-  ...
-}:
-{
+_: {
   imports = [
     ../common
     ./audio.nix
@@ -55,18 +51,10 @@
   time.timeZone = "US/Pacific";
 
   programs = {
-    zsh.enable = true;
     steam.enable = true;
   };
 
-  users.users.emmberkat = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-    ];
-  };
+  users.users.emmberkat.extraGroups = [ "networkmanager" ];
 
   system.stateVersion = "26.11";
 

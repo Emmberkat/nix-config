@@ -91,14 +91,6 @@
 
   time.timeZone = "US/Pacific";
 
-  programs.zsh.enable = true;
-
-  users.users.emmberkat = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    extraGroups = [ "wheel" ];
-  };
-
   system.stateVersion = "25.11";
 
   programs = {
