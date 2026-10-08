@@ -5,4 +5,6 @@ _: {
     ./browser.nix
     ./sway.nix
   ];
+
+  home-manager.users.emmberkat.imports = [ ./home.nix ];
 }
