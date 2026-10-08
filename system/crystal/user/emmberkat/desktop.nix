@@ -1,20 +1,12 @@
 {
-  pkgs,
   config,
   ...
 }:
 {
-
   age.secrets = {
     "syncthing/cert".file = ./secrets/syncthing/cert.age;
     "syncthing/key".file = ./secrets/syncthing/key.age;
   };
-
-  home.packages = with pkgs; [
-    swaybg
-    nautilus
-    file-roller
-  ];
 
   services.syncthing = {
     enable = true;
@@ -52,95 +44,59 @@
     };
   };
 
-  wayland.windowManager.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true;
-    config = {
-      startup = [
-        {
-          command = "swaybg -i .background-image";
-        }
-      ];
-      modifier = "Mod4";
-      menu = "${pkgs.wofi}/bin/wofi --show drun";
-      terminal = "${pkgs.foot}/bin/foot";
-      bars = [ ];
-      output = {
-        DP-3 = {
-          pos = "0 0";
-        };
-        DP-1 = {
-          pos = "1920 0";
-        };
-        DP-2 = {
-          pos = "4480 0";
-        };
+  wayland.windowManager.sway.config = {
+    output = {
+      DP-3 = {
+        pos = "0 0";
       };
-      workspaceOutputAssign = [
-        {
-          workspace = "1";
-          output = "DP-3";
-        }
-        {
-          workspace = "2";
-          output = "DP-1";
-        }
-        {
-          workspace = "3";
-          output = "DP-2";
-        }
-        {
-          workspace = "4";
-          output = "DP-1";
-        }
-        {
-          workspace = "5";
-          output = "DP-1";
-        }
-        {
-          workspace = "6";
-          output = "DP-1";
-        }
-        {
-          workspace = "7";
-          output = "DP-1";
-        }
-        {
-          workspace = "8";
-          output = "DP-1";
-        }
-        {
-          workspace = "9";
-          output = "DP-1";
-        }
-        {
-          workspace = "0";
-          output = "DP-1";
-        }
-      ];
-    };
-  };
-  programs = {
-    foot.enable = true;
-    swaylock.enable = true;
-    waybar = {
-      enable = true;
-      systemd.enable = true;
-      settings = {
-        mainBar = {
-          modules-left = [ "sway/workspaces" ];
-          modules-center = [ "sway/window" ];
-          modules-right = [
-            "wireplumber"
-            "cpu"
-            "memory"
-            "temperature"
-            "clock"
-            "tray"
-          ];
-        };
+      DP-1 = {
+        pos = "1920 0";
+      };
+      DP-2 = {
+        pos = "4480 0";
       };
     };
+    workspaceOutputAssign = [
+      {
+        workspace = "1";
+        output = "DP-3";
+      }
+      {
+        workspace = "2";
+        output = "DP-1";
+      }
+      {
+        workspace = "3";
+        output = "DP-2";
+      }
+      {
+        workspace = "4";
+        output = "DP-1";
+      }
+      {
+        workspace = "5";
+        output = "DP-1";
+      }
+      {
+        workspace = "6";
+        output = "DP-1";
+      }
+      {
+        workspace = "7";
+        output = "DP-1";
+      }
+      {
+        workspace = "8";
+        output = "DP-1";
+      }
+      {
+        workspace = "9";
+        output = "DP-1";
+      }
+      {
+        workspace = "0";
+        output = "DP-1";
+      }
+    ];
   };
-
 }
