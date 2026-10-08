@@ -2,8 +2,6 @@ _: {
   home-manager.users.emmberkat.programs = {
     firefox = {
       enable = true;
-      # The XDG path, which is home-manager's default from stateVersion 26.05.
-      configPath = ".config/mozilla/firefox";
       policies = {
         DisableTelemetry = true;
         DisableFirefoxStudies = true;
