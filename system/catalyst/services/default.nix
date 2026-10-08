@@ -9,6 +9,7 @@
     ./jellyfin.nix
     ./llm.nix
     ./muster.nix
+    ./mysql.nix
     ./nextcloud.nix
     ./pocketid.nix
     ./searx.nix
