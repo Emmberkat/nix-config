@@ -54,16 +54,6 @@
     };
   };
 
-  users.users = {
-    hermes = {
-      isNormalUser = true;
-      extraGroups = [ "systemd-journal" ];
-      openssh.authorizedKeys.keys = [
-        "restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICMXio8G3QOGD7JVNtXC2L8My3TF8wpq7KIwdIhBsUUr hermes@catalyst"
-      ];
-    };
-  };
-
   environment.systemPackages = with pkgs; [
     neovim
     curl

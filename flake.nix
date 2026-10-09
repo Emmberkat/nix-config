@@ -159,6 +159,7 @@
 
         crystal = mkHost [
           ./system/crystal
+          ./modules/hermes-user.nix
           {
             home-manager.users.emmberkat = {
               imports = [ ./system/crystal/user/emmberkat ];
@@ -183,6 +184,7 @@
 
         emmberdeck = mkHost [
           ./system/emmberdeck
+          ./modules/hermes-user.nix
           {
             home-manager.users.emmberkat.emmberkat.ui.enable = true;
           }
@@ -190,6 +192,7 @@
 
         kuzco = mkHost [
           ./system/kuzco
+          ./modules/hermes-user.nix
         ];
 
         lattice = mkHost [
