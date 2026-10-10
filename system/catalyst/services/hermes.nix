@@ -86,7 +86,24 @@
       };
 
       web.search_backend = "searxng";
+
+      # image_generate -> local ComfyUI (comfyui.nix) via the plugin below.
+      plugins.enabled = [ "comfyui" ];
+      image_gen = {
+        provider = "comfyui";
+        comfyui = {
+          url = "http://127.0.0.1:${toString config.services.comfyui.port}";
+          model = "z-image-turbo-int8";
+        };
+      };
     };
+
+    # Image-gen backend for the built-in image_generate tool: runs the API-format
+    # workflows in ./hermes-plugins/comfyui/workflows on the local ComfyUI.
+    # Linked into $HERMES_HOME/plugins/nix-managed-comfyui.
+    extraPlugins = [
+      (pkgs.runCommandLocal "comfyui" { } "cp -r ${./hermes-plugins/comfyui} $out")
+    ];
 
     environment = {
       SEARXNG_URL = "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
