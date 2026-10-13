@@ -12,6 +12,15 @@
   # Shows polkit password prompts (e.g. fprintd-enroll); sway has no agent.
   services.polkit-gnome.enable = true;
 
+  gtk = {
+    enable = true;
+    colorScheme = "dark";
+  };
+  qt = {
+    enable = true;
+    style.name = "adwaita-dark";
+  };
+
   wayland.windowManager.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
