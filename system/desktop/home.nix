@@ -7,10 +7,16 @@
     swaybg
     nautilus
     file-roller
+    nextcloud-client
   ];
 
   # Shows polkit password prompts (e.g. fprintd-enroll); sway has no agent.
   services.polkit-gnome.enable = true;
+
+  services.nextcloud-client = {
+    enable = true;
+    startInBackground = true;
+  };
 
   gtk = {
     enable = true;
