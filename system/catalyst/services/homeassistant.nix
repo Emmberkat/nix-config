@@ -199,7 +199,7 @@ in
 
     frigate = {
       enable = true;
-      package = pkgs.cudaPackages_12.pkgs.frigate;
+      package = pkgs.pkgsCuda.frigate;
       checkConfig = false;
       hostname = "frigate.emmberkat.com";
       vaapiDriver = "nvidia";
