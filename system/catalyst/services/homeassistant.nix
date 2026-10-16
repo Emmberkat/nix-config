@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }:
@@ -14,7 +15,24 @@ in
   };
 
   systemd.services = {
-    frigate.serviceConfig.EnvironmentFile = config.age.secrets."frigate/environment".path;
+    frigate = {
+      serviceConfig.EnvironmentFile = config.age.secrets."frigate/environment".path;
+      # Module's list minus rocminfo (~790 MiB of ROCm; this host is NVIDIA),
+      # plus the default service path that mkForce would drop.
+      path = lib.mkForce (
+        with pkgs;
+        [
+          libva-utils
+          procps
+          radeontop
+          coreutils
+          findutils
+          gnugrep
+          gnused
+          config.systemd.package
+        ]
+      );
+    };
     home-assistant.path = [ pkgs.ffmpeg-headless ];
   };
 
