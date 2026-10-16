@@ -103,5 +103,15 @@ in
   # The /mnt/comfyui mount is nofail so a missing subvolume can't drop catalyst
   # into emergency mode at boot; this keeps ComfyUI from starting (and writing
   # to the root drive underneath the mount point) unless it is actually mounted.
-  systemd.services.comfyui.unitConfig.RequiresMountsFor = [ "/mnt/comfyui" ];
+  systemd.services = {
+    comfyui.unitConfig.RequiresMountsFor = [ "/mnt/comfyui" ];
+    # OIDC discovery goes through nginx to Pocket ID and fails until both are up.
+    oauth2-proxy = {
+      after = [
+        "nginx.service"
+        "pocket-id.service"
+      ];
+      serviceConfig.RestartSec = "5s";
+    };
+  };
 }
