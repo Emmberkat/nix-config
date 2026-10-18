@@ -31,6 +31,7 @@
     enable = true;
     wrapperFeatures.gtk = true;
     config = {
+      assigns."4" = [ { class = "^steam$"; } ];
       startup = [
         {
           command = "swaybg -i .background-image";
