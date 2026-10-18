@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   ...
 }:
@@ -39,6 +40,16 @@
       modifier = "Mod4";
       menu = "${pkgs.wofi}/bin/wofi --show drun";
       terminal = "${pkgs.foot}/bin/foot";
+      keybindings = lib.mkOptionDefault {
+        "--locked XF86AudioRaiseVolume" =
+          "exec ${pkgs.wireplumber}/bin/wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+";
+        "--locked XF86AudioLowerVolume" =
+          "exec ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
+        "--locked XF86AudioMute" =
+          "exec ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+        "--locked XF86AudioMicMute" =
+          "exec ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
+      };
       bars = [ ];
     };
   };
