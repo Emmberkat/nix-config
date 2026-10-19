@@ -1,4 +1,4 @@
 name: comfyui
-version: 1.0.0
-description: "Text-to-image on a local ComfyUI server."
+version: 1.1.0
+description: "Text-to-image and image editing on a local ComfyUI server."
 kind: backend
