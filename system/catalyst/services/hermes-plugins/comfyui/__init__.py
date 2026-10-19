@@ -1,6 +1,7 @@
-"""image_gen backend: Flux.2 Klein 4B on a local ComfyUI, for text-to-image and edits."""
+"""image_gen backend: Qwen-Image 2.1 on a local ComfyUI, for text-to-image and edits."""
 
 import base64
+import io
 import json
 import os
 import random
@@ -8,6 +9,8 @@ import time
 import urllib.parse
 import urllib.request
 import uuid
+
+from PIL import Image
 
 from agent.file_safety import raise_if_read_blocked
 from agent.image_gen_provider import (
@@ -22,44 +25,45 @@ from agent.image_gen_provider import (
 from tools.url_safety import create_ssrf_safe_client, is_safe_url
 
 URL = os.environ.get("COMFYUI_URL", "http://127.0.0.1:8188")
-MODEL = "flux-2-klein-4b-fp8"
+MODEL = "qwen_image_2.1_int8_convrot"
+CLIP = "qwen3vl_8b_int8_convrot"  # 2.1 needs the 4096-dim Qwen3-VL 8B, not the 3584-dim 2.5-VL 7B
+VAE = "qwen_image_2.1_vae_bf16"
+LIGHTNING_LORA = "Qwen-Image-2512-Lightning-4steps-V1.0-bf16.safetensors"
 SIZES = {"square": (1024, 1024), "landscape": (1344, 768), "portrait": (768, 1344)}
+GEN_RESOLUTION = 1344  # square canvas for generation; cropped to the requested aspect after decode
 MAX_REFS = 2
-TIMEOUT = 600  # a cold model load takes ~2 min
+TIMEOUT = 600  # a cold model load takes ~4 min
 
 
-def workflow(prompt, size, images, seed):
-    """Text-to-image; each uploaded image adds a reference latent, which turns it into an edit."""
+def workflow(prompt, images, seed, lightning):
+    """Text-to-image; each uploaded image becomes a reference, which turns it into an edit."""
     wf = {
-        "unet": {"class_type": "UNETLoader", "inputs": {"unet_name": "flux-2-klein-4b-fp8.safetensors", "weight_dtype": "default"}},
-        "clip": {"class_type": "CLIPLoader", "inputs": {"clip_name": "qwen_3_4b.safetensors", "type": "flux2"}},
-        "vae": {"class_type": "VAELoader", "inputs": {"vae_name": "flux2-vae.safetensors"}},
-        "pos0": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["clip", 0], "text": prompt}},
-        "neg0": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["clip", 0], "text": ""}},
-        "noise": {"class_type": "RandomNoise", "inputs": {"noise_seed": seed}},
-        "sampler": {"class_type": "KSamplerSelect", "inputs": {"sampler_name": "euler"}},
-        "sample": {"class_type": "SamplerCustomAdvanced", "inputs": {
-            "noise": ["noise", 0], "guider": ["guider", 0], "sampler": ["sampler", 0], "sigmas": ["sigmas", 0], "latent_image": ["latent", 0]}},
-        "decode": {"class_type": "VAEDecode", "inputs": {"samples": ["sample", 0], "vae": ["vae", 0]}},
-        "save": {"class_type": "SaveImage", "inputs": {"images": ["decode", 0], "filename_prefix": "hermes"}},
+        "unet": {"class_type": "UNETLoader", "inputs": {"unet_name": MODEL + ".safetensors", "weight_dtype": "default"}},
+        "clip": {"class_type": "CLIPLoader", "inputs": {"clip_name": CLIP + ".safetensors", "type": "qwen_image"}},
+        "vae": {"class_type": "VAELoader", "inputs": {"vae_name": VAE + ".safetensors"}},
     }
-    pos, neg = ["pos0", 0], ["neg0", 0]
-    for i, name in enumerate(images, 1):
-        wf[f"load{i}"] = {"class_type": "LoadImage", "inputs": {"image": name}}
-        wf[f"image{i}"] = {"class_type": "ImageScaleToTotalPixels", "inputs": {
-            "image": [f"load{i}", 0], "upscale_method": "lanczos", "megapixels": 1, "resolution_steps": 16}}
-        wf[f"ref{i}"] = {"class_type": "VAEEncode", "inputs": {"pixels": [f"image{i}", 0], "vae": ["vae", 0]}}
-        wf[f"pos{i}"] = {"class_type": "ReferenceLatent", "inputs": {"conditioning": pos, "latent": [f"ref{i}", 0]}}
-        wf[f"neg{i}"] = {"class_type": "ReferenceLatent", "inputs": {"conditioning": neg, "latent": [f"ref{i}", 0]}}
-        pos, neg = [f"pos{i}", 0], [f"neg{i}", 0]
-    if images:  # an edit keeps the source image's shape
-        wf["size"] = {"class_type": "GetImageSize", "inputs": {"image": ["image1", 0]}}
-        width, height = ["size", 0], ["size", 1]
+    if lightning:
+        wf["lora"] = {"class_type": "LoraLoaderModelOnly", "inputs": {"model": ["unet", 0], "lora_name": LIGHTNING_LORA, "strength_model": 1.0}}
+        model, steps, cfg = ["lora", 0], 4, 1.0
     else:
-        width, height = size
-    wf["guider"] = {"class_type": "CFGGuider", "inputs": {"model": ["unet", 0], "positive": pos, "negative": neg, "cfg": 1}}
-    wf["sigmas"] = {"class_type": "Flux2Scheduler", "inputs": {"steps": 4, "width": width, "height": height}}
-    wf["latent"] = {"class_type": "EmptyFlux2LatentImage", "inputs": {"width": width, "height": height, "batch_size": 1}}
+        model, steps, cfg = ["unet", 0], 50, 4.0
+    wf["aura"] = {"class_type": "ModelSamplingAuraFlow", "inputs": {"model": model, "shift": 3.1, "sampling": "flow"}}
+    enc = {"clip": ["clip", 0], "prompt": prompt, "negative_prompt": "", "vae": ["vae", 0]}
+    if images:
+        # an edit: the node resizes references to ~1024 px preserving aspect; the output matches
+        enc["resolution"] = 1024
+        enc["images"] = {f"image_{i}": [f"load{i}", 0] for i in range(1, len(images) + 1)}
+        for i, name in enumerate(images, 1):
+            wf[f"load{i}"] = {"class_type": "LoadImage", "inputs": {"image": name}}
+    else:
+        enc["resolution"] = GEN_RESOLUTION
+    wf["enc"] = {"class_type": "TextEncodeQwenImage21", "inputs": enc}
+    wf["ks"] = {"class_type": "KSampler", "inputs": {
+        "model": ["aura", 0], "seed": seed, "steps": steps, "cfg": cfg,
+        "sampler_name": "euler", "scheduler": "simple",
+        "positive": ["enc", 0], "negative": ["enc", 1], "latent_image": ["enc", 2], "denoise": 1.0}}
+    wf["dec"] = {"class_type": "VAEDecode", "inputs": {"samples": ["ks", 0], "vae": ["vae", 0]}}
+    wf["save"] = {"class_type": "SaveImage", "inputs": {"images": ["dec", 0], "filename_prefix": "hermes"}}
     return wf
 
 
@@ -68,6 +72,41 @@ def api(path, body=None):
     req = urllib.request.Request(URL + path, data, {"Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=30) as resp:
         return resp.read()
+
+
+_lightning = None
+
+
+def has_lightning():
+    """The 4-step LoRA makes generation ~10x faster; fall back to 50 steps without it."""
+    global _lightning
+    if _lightning is None:
+        try:
+            names = json.loads(api("/api/object_info/LoraLoader"))["LoraLoader"]["input"]["required"]["lora_name"][0]
+            _lightning = LIGHTNING_LORA in names
+        except Exception:  # noqa: BLE001 - missing LoRA just means the slow path
+            _lightning = False
+    return _lightning
+
+
+def fit_aspect(data, width, height):
+    """Center-crop a square render to the requested aspect, then resize to the target size."""
+    img = Image.open(io.BytesIO(data))
+    w, h = img.size
+    target = width / height
+    if w / h > target:
+        new_w = int(h * target)
+        left = (w - new_w) // 2
+        img = img.crop((left, 0, left + new_w, h))
+    else:
+        new_h = int(w / target)
+        top = (h - new_h) // 2
+        img = img.crop((0, top, w, top + new_h))
+    if img.size != (width, height):
+        img = img.resize((width, height), Image.LANCZOS)
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return buf.getvalue()
 
 
 def read_source(ref):
@@ -109,7 +148,7 @@ class ComfyUIProvider(ImageGenProvider):
         meta = {"model": MODEL, "prompt": prompt, "aspect_ratio": aspect, "provider": self.name}
         try:
             images = [upload(read_source(s)) for s in sources]
-            wf = workflow(prompt, SIZES[aspect], images, random.randint(0, 2**50))
+            wf = workflow(prompt, images, random.randint(0, 2**50), has_lightning())
             prompt_id = json.loads(api("/prompt", {"prompt": wf}))["prompt_id"]
             deadline = time.monotonic() + TIMEOUT
             while not (entry := json.loads(api(f"/history/{prompt_id}")).get(prompt_id)):
@@ -119,6 +158,8 @@ class ComfyUIProvider(ImageGenProvider):
             if entry["status"]["status_str"] != "success":
                 raise RuntimeError(json.dumps(entry["status"]["messages"])[-1000:])
             image = api("/view?" + urllib.parse.urlencode(entry["outputs"]["save"]["images"][0]))
+            if not images:  # generation renders a square canvas; crop to the requested aspect
+                image = fit_aspect(image, *SIZES[aspect])
         except Exception as exc:  # noqa: BLE001 - surface any failure to the agent
             return error_response(error=f"ComfyUI: {exc}", **meta)
         path = save_b64_image(base64.b64encode(image).decode(), prefix="comfyui")
