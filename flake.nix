@@ -68,6 +68,13 @@
       url = "github:cbcoutinho/nextcloud-mcp-server/v0.198.0";
       flake = false;
     };
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        systems.follows = "systems";
+      };
+    };
   };
   outputs =
     {
@@ -84,6 +91,7 @@
       uv2nix,
       pyproject-build-systems,
       nextcloud-mcp-server,
+      llm-agents,
       ...
     }:
     let
@@ -177,7 +185,12 @@
         ];
 
         catalyst = mkHost [
-          { nixpkgs.overlays = [ nix-minecraft.overlay ]; }
+          {
+            nixpkgs.overlays = [
+              nix-minecraft.overlay
+              llm-agents.overlays.shared-nixpkgs
+            ];
+          }
           ./system/catalyst
           nix-minecraft.nixosModules.minecraft-servers
         ];

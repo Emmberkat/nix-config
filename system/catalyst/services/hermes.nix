@@ -4,6 +4,35 @@
   pkgs,
   ...
 }:
+let
+  agentPkg = config.services.hermes-agent.package;
+
+  # Its dependencies all ship in the agent's venv; listing them here would
+  # trip the module's collision check.
+  hindsightClient = agentPkg.passthru.python.pkgs.buildPythonPackage rec {
+    pname = "hindsight_client";
+    version = "0.10.3";
+    format = "wheel";
+    src = pkgs.fetchPypi {
+      inherit pname version format;
+      dist = "py3";
+      python = "py3";
+      hash = "sha256-tNDRu8KdzU7yWkojoIpIBG1TN7cEva+rsC0AENKZoGg=";
+    };
+    dontCheckRuntimeDeps = true;
+  };
+
+  hindsightPlugin =
+    let
+      src = pkgs.fetchFromGitHub {
+        owner = "vectorize-io";
+        repo = "hindsight";
+        rev = "d952b6e655fccab4581ee0722b51c5f103873d12";
+        hash = "sha256-qEjN1JRGLH7iGDkCEEeIG5ciFRpggvMbjjmrQP+ThCo=";
+      };
+    in
+    pkgs.runCommandLocal "hindsight" { } "cp -r ${src}/hindsight-integrations/hermes $out";
+in
 {
   age.secrets = {
     "hermes/messaging-env" = {
@@ -88,11 +117,21 @@
       web.search_backend = "searxng";
       plugins.enabled = [ "comfyui" ];
       image_gen.provider = "comfyui";
+      memory.provider = "hindsight";
     };
 
     extraPlugins = [
       (pkgs.runCommandLocal "comfyui" { } "cp -r ${./hermes-plugins/comfyui} $out")
+      hindsightPlugin
     ];
+
+    extraPythonPackages = [ hindsightClient ];
+
+    hermesHomeFiles."hindsight/config.json" = builtins.toJSON {
+      mode = "local_external";
+      api_url = "http://127.0.0.1:8890";
+      bank_id = "hermes";
+    };
 
     environment = {
       COMFYUI_URL = "http://127.0.0.1:${toString config.services.comfyui.port}";
@@ -121,7 +160,6 @@
   # messaging gateway.
   services.hermes-webui =
     let
-      agentPkg = config.services.hermes-agent.package;
       inherit (agentPkg.passthru.python) pythonVersion;
     in
     {
@@ -141,6 +179,7 @@
         HERMES_WEBUI_OIDC_ALLOW_VALUES = "emmabenkart@gmail.com";
         HERMES_WEBUI_OIDC_REDIRECT_URI = "https://hermes.emmberkat.com/api/auth/oidc/callback";
         HERMES_WEBUI_SECURE = "1";
+        PYTHONPATH = "${hindsightClient}/lib/python${pythonVersion}/site-packages";
       };
     };
 }
