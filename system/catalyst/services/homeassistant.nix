@@ -146,26 +146,35 @@ in
     };
 
     wyoming = {
-      piper.servers.hass = {
-        enable = true;
-        uri = "tcp://0.0.0.0:10200";
+      piper = {
+        # jarvis is an English (en_GB) voice, so skip piper-tts's Japanese
+        # extra: pyopenjtalk-plus's own test suite fails on Python 3.14
+        # (expects "must be str", pydantic raises "Expected str, got int").
+        package = pkgs.wyoming-piper.override {
+          piper-tts = pkgs.piper-tts.override { withJapanese = false; };
+        };
 
-        voice = "jarvis-high";
-        extraArgs =
-          let
-            repo = pkgs.fetchgit {
-              url = "https://huggingface.co/jgkawell/jarvis";
-              rev = "37f8763122312665f091d1fc760abaf1f79b02cc";
-              fetchLFS = true;
-              nonConeMode = true;
-              sparseCheckout = [ "/en/en_GB/jarvis/high/jarvis-high.onnx*" ];
-              hash = "sha256-4to5pqyNtn3BlxXzw69dcJjEfAosBiXs46Hkb4eQgJE=";
-            };
-          in
-          [
-            "--data-dir"
-            "${repo}/en/en_GB/jarvis/high"
-          ];
+        servers.hass = {
+          enable = true;
+          uri = "tcp://0.0.0.0:10200";
+
+          voice = "jarvis-high";
+          extraArgs =
+            let
+              repo = pkgs.fetchgit {
+                url = "https://huggingface.co/jgkawell/jarvis";
+                rev = "37f8763122312665f091d1fc760abaf1f79b02cc";
+                fetchLFS = true;
+                nonConeMode = true;
+                sparseCheckout = [ "/en/en_GB/jarvis/high/jarvis-high.onnx*" ];
+                hash = "sha256-4to5pqyNtn3BlxXzw69dcJjEfAosBiXs46Hkb4eQgJE=";
+              };
+            in
+            [
+              "--data-dir"
+              "${repo}/en/en_GB/jarvis/high"
+            ];
+        };
       };
 
       faster-whisper = {
