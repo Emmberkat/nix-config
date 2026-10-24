@@ -21,7 +21,10 @@
     unifi = {
       enable = true;
       openFirewall = true;
-      unifiPackage = pkgs.unifi;
+      # Drop once nixos-unstable has NixOS/nixpkgs#575661.
+      unifiPackage = pkgs.unifi.overrideAttrs (old: {
+        buildInputs = old.buildInputs ++ [ pkgs.stdenv.cc.cc.lib ];
+      });
       mongodbPackage = pkgs.mongodb-ce;
     };
 
