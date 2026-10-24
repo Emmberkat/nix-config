@@ -12,6 +12,9 @@
   };
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # Temporary: newer php84 for Nextcloud. Drop with the catalyst
+    # phpPackage override once nixos-unstable catches up.
+    nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     systems.url = "github:nix-systems/default";
     nix-minecraft = {
       url = "github:Infinidoge/nix-minecraft";
@@ -73,6 +76,7 @@
     {
       self,
       nixpkgs,
+      nixpkgs-small,
       home-manager,
       agenix,
       nix-minecraft,
@@ -178,6 +182,8 @@
 
         catalyst = mkHost [
           { nixpkgs.overlays = [ nix-minecraft.overlay ]; }
+          # Temporary, see nixpkgs-small input.
+          { services.nextcloud.phpPackage = nixpkgs-small.legacyPackages.x86_64-linux.php84; }
           ./system/catalyst
           nix-minecraft.nixosModules.minecraft-servers
         ];
