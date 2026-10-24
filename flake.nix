@@ -11,7 +11,10 @@
     ];
   };
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # Held at the last nixos-unstable that builds catalyst: later revs fail
+    # nvidia-kernel-modules in depmod (NixOS/nixpkgs#571170). Return to
+    # nixos-unstable once fixed upstream.
+    nixpkgs.url = "github:NixOS/nixpkgs/fe13242281a67641c0102cdb1087f0ebe586c7df";
     systems.url = "github:nix-systems/default";
     nix-minecraft = {
       url = "github:Infinidoge/nix-minecraft";
