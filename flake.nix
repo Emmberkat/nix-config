@@ -12,6 +12,10 @@
   };
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # TEMPORARY: PHP2Shell (CVE-2026-109618/109619) is fixed in PHP 8.4.27,
+    # which reached nixos-unstable-small before nixos-unstable. Remove this
+    # input (and the catalyst phpPackage override) once nixpkgs has 8.4.27.
+    nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     systems.url = "github:nix-systems/default";
     nix-minecraft = {
       url = "github:Infinidoge/nix-minecraft";
@@ -73,6 +77,7 @@
     {
       self,
       nixpkgs,
+      nixpkgs-small,
       home-manager,
       agenix,
       nix-minecraft,
@@ -178,6 +183,8 @@
 
         catalyst = mkHost [
           { nixpkgs.overlays = [ nix-minecraft.overlay ]; }
+          # TEMPORARY: patched PHP for Nextcloud (PHP2Shell), see nixpkgs-small.
+          { services.nextcloud.phpPackage = nixpkgs-small.legacyPackages.x86_64-linux.php84; }
           ./system/catalyst
           nix-minecraft.nixosModules.minecraft-servers
         ];
