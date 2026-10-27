@@ -1,7 +1,6 @@
 { pkgs, config, ... }: {
 
   age.secrets = {
-    "nextcloud/adminpass".file = ../secrets/nextcloud/adminpass.age;
     "nextcloud/s3secret".file = ../secrets/nextcloud/s3secret.age;
   };
 
@@ -19,7 +18,6 @@
       package = pkgs.nextcloud34;
       hostName = "nextcloud.emmberkat.com";
       config = {
-        adminpassFile = config.age.secrets."nextcloud/adminpass".path;
         dbtype = "sqlite";
         objectstore.s3 = {
           enable = true;
