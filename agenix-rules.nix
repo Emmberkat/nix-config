@@ -41,13 +41,6 @@ in
     ];
     armor = true;
   };
-  "system/catalyst/secrets/nextcloud/adminpass.age" = {
-    publicKeys = [
-      keys.admin
-      keys.catalyst
-    ];
-    armor = true;
-  };
   "system/catalyst/secrets/nextcloud/s3secret.age" = {
     publicKeys = [
       keys.admin

@@ -19,14 +19,16 @@ in
     # (or use Manager -> Model Manager in the UI, enabled below).
     comfyui = {
       enable = true;
-      # withManager bundles ComfyUI-Manager (off by default in nixpkgs). The
-      # legacy UI flag is required for model downloads: only the legacy
-      # Manager UI has the Model Manager (the new frontend's built-in manager
-      # handles custom nodes only). Use Manager -> Model Manager to download
-      # catalog models into <dataDir>/models on catalyst. Custom nodes that
-      # need extra Python deps won't install at runtime (the Python env is in
-      # the read-only Nix store); add those via Nix instead.
-      package = pkgs.pkgsCuda.comfyui.override { withManager = true; };
+      # ComfyUI-Manager via the module's extraPackages (the package's old
+      # withManager argument was removed upstream). The legacy UI flag is
+      # required for model downloads: only the legacy Manager UI has the Model
+      # Manager (the new frontend's built-in manager handles custom nodes
+      # only). Use Manager -> Model Manager to download catalog models into
+      # <dataDir>/models on catalyst. Custom nodes that need extra Python
+      # deps won't install at runtime (the Python env is in the read-only Nix
+      # store); add those via Nix instead.
+      package = pkgs.pkgsCuda.comfyui;
+      extraPackages = ps: with ps; [ comfyui-manager ];
       # Both flags are needed: --enable-manager-legacy-ui implies the manager on
       # the backend, but the frontend (1.52) only shows the Manager button when
       # the literal "--enable-manager" is in ComfyUI's argv (system_stats).
