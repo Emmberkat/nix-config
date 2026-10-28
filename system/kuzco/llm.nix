@@ -53,6 +53,9 @@ in
       # 62 GB of RAM and the model lives in VRAM, so there is room to keep
       # several conversations resident.
       cache-ram = 32768;
+      # Every cached prompt carries its context checkpoints, ~150 MiB of
+      # recurrent state each. The default 32 adds ~4.7 GiB to a long entry.
+      ctx-checkpoints = 8;
       # q4_0 K degrades long-context recall on Qwen. Mixed q8_0 K / q4_0 V has
       # no flash-attn kernel in the default build (GGML_CUDA_FA_QUANTS).
       cache-type-k = "q8_0";
