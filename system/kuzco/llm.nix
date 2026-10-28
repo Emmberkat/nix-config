@@ -10,9 +10,8 @@ in
     enable = true;
     package = pkgs.pkgsRocm.llama-cpp;
 
-    # catalyst's nginx proxies llama.emmberkat.com here, so unlike catalyst's
-    # localhost-only server this one has to listen on the LAN. The vhost
-    # already restricts callers to 10.0.0.0/8.
+    # Hermes and Home Assistant on catalyst call this directly over the LAN;
+    # there is no proxy in front of it.
     openFirewall = true;
 
     settings = {
