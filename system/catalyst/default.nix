@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 let
   dataUuid = "b531ad05-4769-4b89-a2ae-ecf66b637b55";
@@ -175,15 +175,6 @@ in
       open = false;
       powerManagement.enable = false;
       powerManagement.finegrained = false;
-      # kernel.dev now ships System.map, so modules_install runs depmod
-      # against the host's /lib/modules; aggregateModules runs it instead.
-      package = config.boot.kernelPackages.nvidiaPackages.stable.overrideAttrs (old: {
-        passthru = old.passthru // {
-          mod = old.passthru.mod.overrideAttrs (m: {
-            installFlags = (m.installFlags or [ ]) ++ [ "DEPMOD=true" ];
-          });
-        };
-      });
     };
   };
 
