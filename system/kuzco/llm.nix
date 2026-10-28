@@ -56,6 +56,9 @@ in
       # no flash-attn kernel in the default build (GGML_CUDA_FA_QUANTS).
       cache-type-k = "q8_0";
       cache-type-v = "q8_0";
+      # The MTP draft has its own KV cache, which defaults to f16.
+      cache-type-k-draft = "q8_0";
+      cache-type-v-draft = "q8_0";
       # Default output cap for requests without max_tokens; a repetition
       # loop once generated 186K tokens over 70 minutes.
       n-predict = 32768;
