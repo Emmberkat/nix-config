@@ -34,6 +34,9 @@ in
       hf-repo = "huihui-ai/Huihui-Qwen3.8-27B-abliterated-GGUF";
       hf-file = "Huihui-Qwen3.8-27B-abliterated-UD-IQ4_XS.gguf";
       alias = "Qwen3.8-27B";
+      # Nothing sends kuzco images, and -hf would otherwise load the 0.9 GB
+      # vision projector into VRAM.
+      no-mmproj = true;
 
       n-gpu-layers = 99;
       # q8_0 KV is 34 KiB/token here (16 full-attention layers x 4 KV heads x
