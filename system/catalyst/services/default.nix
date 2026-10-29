@@ -7,6 +7,7 @@
     ./hermes.nix
     ./immich.nix
     ./jellyfin.nix
+    ./mastodon.nix
     ./muster.nix
     ./mysql.nix
     ./nextcloud.nix
