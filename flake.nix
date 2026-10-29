@@ -16,11 +16,6 @@
     # phpPackage override once nixos-unstable catches up.
     nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     systems.url = "github:nix-systems/default";
-    nix-minecraft = {
-      url = "github:Infinidoge/nix-minecraft";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.systems.follows = "systems";
-    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -79,7 +74,6 @@
       nixpkgs-small,
       home-manager,
       agenix,
-      nix-minecraft,
       nix-github-actions,
       hermes-agent,
       hermes-webui,
@@ -181,11 +175,9 @@
         ];
 
         catalyst = mkHost [
-          { nixpkgs.overlays = [ nix-minecraft.overlay ]; }
           # Temporary, see nixpkgs-small input.
           { services.nextcloud.phpPackage = nixpkgs-small.legacyPackages.x86_64-linux.php84; }
           ./system/catalyst
-          nix-minecraft.nixosModules.minecraft-servers
         ];
 
         emmberdeck = mkHost [
