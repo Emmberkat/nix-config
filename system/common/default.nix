@@ -42,6 +42,8 @@
 
   nix = {
     gc.automatic = true;
+    # Periodic store optimisation (auto-optimise-store only covers post-rebuild).
+    optimise.automatic = true;
     settings = {
       auto-optimise-store = true;
       download-buffer-size = 536870912;
