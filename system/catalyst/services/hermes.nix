@@ -31,6 +31,12 @@
       file = ../secrets/hermes/nextcloud-env.age;
       owner = "hermes";
     };
+
+    # MUSTER_SESSION=<long-lived session cookie for the Muster MCP endpoint>
+    "hermes/muster-session" = {
+      file = ../secrets/hermes/muster-session.age;
+      owner = "hermes";
+    };
   };
 
   services = {
@@ -75,6 +81,18 @@
           NEXTCLOUD_PASSWORD = "\${NEXTCLOUD_PASSWORD}";
         };
       };
+
+      # Self-hosted 40K collection tracker. Serves MCP over HTTP at /mcp
+      # (loopback only). Auth is the long-lived session cookie from
+      # hermes/muster-session; the cookie itself is kept out of the store by
+      # living only in the on-disk config.yaml (mcp_servers.muster.headers),
+      # which the module's deep merge preserves across rebuilds.
+      muster = {
+        url = "http://127.0.0.1:8080/mcp";
+        enabled = true;
+        timeout = 120;
+        connect_timeout = 30;
+      };
     };
 
     settings = {
@@ -110,6 +128,7 @@
       config.age.secrets."hermes/claude-oauth-token".path
       config.age.secrets."hermes/api-server-key".path
       config.age.secrets."hermes/nextcloud-env".path
+      config.age.secrets."hermes/muster-session".path
     ];
 
     addToSystemPackages = true;
