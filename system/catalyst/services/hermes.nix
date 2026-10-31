@@ -31,12 +31,6 @@
       file = ../secrets/hermes/nextcloud-env.age;
       owner = "hermes";
     };
-
-    # MUSTER_SESSION=<long-lived session cookie for the Muster MCP endpoint>
-    "hermes/muster-session" = {
-      file = ../secrets/hermes/muster-session.age;
-      owner = "hermes";
-    };
   };
 
   services = {
@@ -82,14 +76,15 @@
         };
       };
 
-      # Self-hosted 40K collection tracker. Serves MCP over HTTP at /mcp
-      # (loopback only). Auth is the long-lived session cookie from
-      # hermes/muster-session; the cookie itself is kept out of the store by
-      # living only in the on-disk config.yaml (mcp_servers.muster.headers),
-      # which the module's deep merge preserves across rebuilds.
+      # Self-hosted 40K collection tracker, MCP over HTTP. Muster takes Pocket
+      # ID access tokens for its API (resource https://muster.emmberkat.com,
+      # scopes muster:read/muster:write) and says where to sign in (RFC 9728),
+      # so the URL is the public one: the token's resource must match it.
+      # Sign in once with `hermes mcp login muster` (device code); the tokens
+      # live in $HERMES_HOME/mcp-tokens/, outside the store, and survive deploys.
       muster = {
-        url = "http://127.0.0.1:8080/mcp";
-        enabled = true;
+        url = "https://muster.emmberkat.com/mcp";
+        auth = "oauth";
         timeout = 120;
         connect_timeout = 30;
       };
@@ -104,6 +99,15 @@
       };
 
       web.search_backend = "searxng";
+
+      # mcpServers has no oauth option. Muster's own public Pocket ID client
+      # (PKCE, no secret), since Pocket ID has no dynamic registration; the
+      # device flow because catalyst has no browser.
+      mcp_servers.muster.oauth = {
+        client_id = "f4b5eabb-ca92-4187-a0aa-d713073f6e43";
+        flow = "device";
+      };
+
       plugins.enabled = [ "comfyui" ];
       image_gen.provider = "comfyui";
     };
@@ -128,7 +132,6 @@
       config.age.secrets."hermes/claude-oauth-token".path
       config.age.secrets."hermes/api-server-key".path
       config.age.secrets."hermes/nextcloud-env".path
-      config.age.secrets."hermes/muster-session".path
     ];
 
     addToSystemPackages = true;
