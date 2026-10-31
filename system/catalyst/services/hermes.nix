@@ -102,10 +102,13 @@
 
       # mcpServers has no oauth option. Muster's own public Pocket ID client
       # (PKCE, no secret), since Pocket ID has no dynamic registration; the
-      # device flow because catalyst has no browser.
+      # device flow because catalyst has no browser. The device flow requests
+      # only the configured scope (it ignores Muster's scopes_supported), so
+      # without it Pocket ID issues a token with no Muster permissions.
       mcp_servers.muster.oauth = {
         client_id = "f4b5eabb-ca92-4187-a0aa-d713073f6e43";
         flow = "device";
+        scope = "muster:read muster:write offline_access";
       };
 
       plugins.enabled = [ "comfyui" ];
