@@ -82,11 +82,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793442991,
-        "narHash": "sha256-0tEeAnGmgQDHHU7u9zsu4ksUzH0ugsWAag9UM3xavv0=",
+        "lastModified": 1793458576,
+        "narHash": "sha256-bDB4C9eIh2x4v+cjt7UPwAgNQkd6vZKRA638I4gXbEc=",
         "owner": "nesquena",
         "repo": "hermes-webui",
-        "rev": "8402dc2e217a64aa6d836b732a4d25e292d31580",
+        "rev": "93ca24c0bde92af2a3545355e24f5c8001d05725",
         "type": "github"
       },
       "original": {
