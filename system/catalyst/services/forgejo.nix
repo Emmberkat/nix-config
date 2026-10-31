@@ -1,21 +1,3 @@
-# Forgejo — self-hosted git forge (community fork of Gitea), AGPL.
-#
-# Login is via Pocket ID (OIDC) only: registration is disabled and sign-in is
-# required, so the only way in is the "Pocket ID" OpenID Connect source.
-#
-# OIDC source (one-off, after first deploy — Forgejo keeps external auth
-# sources in its DB, not app.ini, so this can't be declarative):
-#   1. Create an admin to log in with:
-#        sudo -u forgejo forgejo --work-path /var/lib/forgejo admin user create \
-#          --admin --username <name> --email <email> --random-password
-#   2. Pocket ID → OIDC Clients → add "Forgejo", *not* public (Forgejo's goth
-#      OIDC client sends a client secret and has no PKCE), callback
-#      https://git.emmberkat.com/user/oauth2/Pocket%20ID/callback
-#   3. Forgejo Site Administration → Authentication Sources → Add:
-#        Type: OAuth2, Provider: OpenID Connect, Name: Pocket ID
-#        Client ID / Secret: from step 2 (stored in Forgejo's DB, so no
-#        agenix file — nothing on the host would read it)
-#        Auto Discovery URL: https://auth.emmberkat.com/.well-known/openid-configuration
 _: {
   services = {
     forgejo = {
