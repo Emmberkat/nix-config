@@ -2,6 +2,7 @@
 {
   imports = [
     ./comfyui.nix
+    ./forgejo.nix
     ./garage.nix
     ./homeassistant.nix
     ./hermes.nix
