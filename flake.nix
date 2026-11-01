@@ -158,6 +158,7 @@
         crystal = mkHost [
           ./system/crystal
           ./modules/hermes-user.nix
+          ./modules/hermes-android.nix
           {
             home-manager.users.emmberkat = {
               imports = [ ./system/crystal/user/emmberkat ];
@@ -183,6 +184,7 @@
         emmberdeck = mkHost [
           ./system/emmberdeck
           ./modules/hermes-user.nix
+          ./modules/hermes-android.nix
           {
             home-manager.users.emmberkat.emmberkat.ui.enable = true;
           }
