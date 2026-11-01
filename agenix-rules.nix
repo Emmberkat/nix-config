@@ -90,6 +90,13 @@ in
     ];
     armor = true;
   };
+  "system/catalyst/secrets/hermes/forgejo-env.age" = {
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
+    armor = true;
+  };
   "system/catalyst/secrets/pocketid/key.age" = {
     publicKeys = [
       keys.admin
