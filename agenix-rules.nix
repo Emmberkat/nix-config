@@ -104,4 +104,11 @@ in
     ];
     armor = true;
   };
+  "system/catalyst/secrets/forgejo-runner/token.age" = {
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
+    armor = true;
+  };
 }
