@@ -9,6 +9,7 @@
     nautilus
     file-roller
     nextcloud-client
+    makemkv
   ];
 
   # Shows polkit password prompts (e.g. fprintd-enroll); sway has no agent.
