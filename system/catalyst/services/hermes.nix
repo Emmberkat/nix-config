@@ -31,6 +31,13 @@
       file = ../secrets/hermes/nextcloud-env.age;
       owner = "hermes";
     };
+
+    # FORGEJO_TOKEN=<git.emmberkat.com PAT: read:repository, write:repository,
+    # read:issue; scoped to Muster/kitdata, so it can open PRs there>
+    "hermes/forgejo-env" = {
+      file = ../secrets/hermes/forgejo-env.age;
+      owner = "hermes";
+    };
   };
 
   services = {
@@ -135,6 +142,7 @@
       config.age.secrets."hermes/claude-oauth-token".path
       config.age.secrets."hermes/api-server-key".path
       config.age.secrets."hermes/nextcloud-env".path
+      config.age.secrets."hermes/forgejo-env".path
     ];
 
     addToSystemPackages = true;
