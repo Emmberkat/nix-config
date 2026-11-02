@@ -20,7 +20,11 @@ in
     network = {
       networks = {
         "10-eth" = {
-          matchConfig.Type = "ether";
+          # Podman's container veths are type ether too.
+          matchConfig = {
+            Type = "ether";
+            Kind = "!veth";
+          };
           networkConfig = {
             Address = "10.1.0.1/8";
             Gateway = "10.0.0.1";
