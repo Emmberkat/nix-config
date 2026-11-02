@@ -49,8 +49,17 @@
   };
 
   # Rootful until the runner module supports rootless Podman (its TODO).
-  virtualisation.podman = {
-    enable = true;
-    autoPrune.enable = true;
+  virtualisation = {
+    podman = {
+      enable = true;
+      autoPrune.enable = true;
+    };
+    # Podman's default pools are all inside 10.0.0.0/8, which the LAN route covers.
+    containers.containersConf.settings.network.default_subnet_pools = [
+      {
+        base = "172.16.0.0/12";
+        size = 24;
+      }
+    ];
   };
 }
