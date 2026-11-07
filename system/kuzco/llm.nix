@@ -67,9 +67,8 @@ in
       # about 4.3 GB, and the 8192 MiB default holds exactly one, so every
       # turn evicted the last and reprocessed the whole prompt: ~80 s at
       # ~730 tok/s, against a logged prefix similarity of 0.977. kuzco has
-      # 62 GB of RAM and the model lives in VRAM, so there is room to keep
-      # several conversations resident.
-      cache-ram = 32768;
+      # 32 GB of RAM, so this takes half and leaves the rest to the OS.
+      cache-ram = 16384;
       # q4_0 K degrades long-context recall on Qwen. Mixed q8_0 K / q4_0 V has
       # no flash-attn kernel in the default build (GGML_CUDA_FA_QUANTS).
       cache-type-k = "q8_0";
