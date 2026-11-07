@@ -35,33 +35,25 @@ in
       alias = "Qwen3.8-27B";
 
       n-gpu-layers = 99;
-      # q8_0 KV is 34 KiB/token here (16 full-attention layers x 4 KV heads x
-      # 256) vs 18 KiB at q4_0, so 144K at q8_0 costs about what 262K did at
-      # q4_0, which loaded with ~1.9 GB VRAM free.
-      ctx-size = 147456;
-      # Two slots sharing one unified KV pool, not two independent caches.
-      # The pool stays at 147456 -- today's measured size, ~1.35 GiB VRAM
-      # headroom -- so this buys concurrency with no VRAM or quant gamble.
-      # A second independent slot would reserve a full second 147K cache
-      # (~+4.8 GiB) and OOM the 24 GiB card, which is why this is unified.
+      # q8_0 KV plus the q8_0 MTP draft KV is ~40 KiB/token. The default even
+      # layer split leaves the second GPU ~2.7 GiB fuller than the first;
+      # with Q6_K_XL weights, 256K peaked at 24.0 of 24.6 GiB there and 288K
+      # ran out of memory.
+      ctx-size = 262144;
+      # Four slots share one unified KV pool, so Hermes's main session, Home
+      # Assistant and two subagents each keep their prefix resident; each
+      # extra slot measured ~0.5 GiB of VRAM. Sharing a slot, a Hermes turn
+      # evicts HA's cached prefix and the next Jarvis request pays a cold
+      # re-prefill. llama.cpp routes by LCP prefix similarity, so workloads
+      # self-segregate; the HA entry additionally pins itself to slot 1
+      # (llamacpp_id_slot). That pin is on the HA side, not in this repo.
       #
-      # Why two slots: with one, a Hermes turn evicts Home Assistant's cached
-      # prefix and the next Jarvis request pays a ~7 s cold re-prefill.
-      # llama.cpp 0.7.0 routes by LCP prefix similarity, not first-free, so
-      # the two workloads self-segregate into separate slots; the HA entry
-      # additionally pins itself to slot 1 (llamacpp_id_slot) to make it
-      # deterministic. That pin is on the HA side, not in this repo.
-      #
-      # The pool co-resides the Hermes main session (~112K observed max) and
-      # HA (~15K) at ~127K. A third concurrent consumer (a subagent, ~70K)
-      # does not fit alongside both, so it time-shares a slot: idle slots
-      # flush to cache-ram (32 GiB) and restore from RAM in seconds instead
-      # of a full re-prefill. The 128K per-slot cap stops one runaway session
-      # from eating the whole pool; Hermes reads slot_n_ctx from /props and
-      # compacts below it.
-      parallel = 2;
+      # No per-slot cap: the pool already equals the model's trained window,
+      # which is every slot's limit. Hermes reads it from /props and compacts
+      # at 0.75 of it. Idle slots flush to cache-ram and restore from RAM
+      # instead of a full re-prefill.
+      parallel = 4;
       kv-unified = "";
-      kv-unified-per-slot = 131072;
       flash-attn = "on";
       # Prompt cache, in host RAM. Each ~60K-token conversation snapshot is
       # about 4.3 GB, and the 8192 MiB default holds exactly one, so every
