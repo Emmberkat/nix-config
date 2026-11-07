@@ -30,8 +30,12 @@ in
       # the same dynamic quant family as unsloth/Qwen3.8-27B-GGUF, just with
       # refusals ablated. huihui-ai's card notes MTP and the vision tower are
       # left unmodified, so draft-mtp below still applies.
+      #
+      # Q6_K_XL, not IQ4_XS: with the weights split across two 7900 XTXs
+      # there is room for near-lossless weights. Measured on kuzco, decode
+      # is 6-19% slower than IQ4_XS and prompt reading is unchanged.
       hf-repo = "huihui-ai/Huihui-Qwen3.8-27B-abliterated-GGUF";
-      hf-file = "Huihui-Qwen3.8-27B-abliterated-UD-IQ4_XS.gguf";
+      hf-file = "Huihui-Qwen3.8-27B-abliterated-UD-Q6_K_XL.gguf";
       alias = "Qwen3.8-27B";
 
       n-gpu-layers = 99;
@@ -80,8 +84,8 @@ in
       # Default output cap for requests without max_tokens; a repetition
       # loop once generated 186K tokens over 70 minutes.
       n-predict = 32768;
-      # Multi-token prediction. Measured on IQ4_XS: ~0.6 draft acceptance,
-      # 66 tok/s at <16K depth falling to 44 tok/s past 96K.
+      # Multi-token prediction. Measured on Q6_K_XL: ~0.5-0.9 draft
+      # acceptance, 43-65 tok/s at <25K depth.
       spec-type = "draft-mtp";
       jinja = "";
       # Cap thinking so a squeezed context can't eat the whole output budget.
