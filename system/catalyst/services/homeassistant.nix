@@ -304,6 +304,14 @@ in
           };
         };
       };
+      # Vision provider for the chat API behind Assist's frigate_query tool.
+      # Roles are explicit: embeddings needs a dedicated embedding model.
+      settings.genai.kuzco = {
+        provider = "llamacpp";
+        base_url = "http://10.1.0.2:8041";
+        model = "Qwen3.8-27B";
+        roles = [ "chat" "descriptions" ];
+      };
       settings.mqtt = {
         enabled = true;
         host = "localhost";
