@@ -61,11 +61,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794084851,
-        "narHash": "sha256-xqMM1hlNKZzaqeyI3od8huGYB73keWBGaDgI5KGaJo0=",
+        "lastModified": 1794109100,
+        "narHash": "sha256-NDIWF2DDZlx7vGIOhvZZSlPBGZh2nrYxcAuPapaC93k=",
         "owner": "NousResearch",
         "repo": "hermes-agent",
-        "rev": "63f6852249f6ce79a6e84f7d64fd4486facce5d1",
+        "rev": "21ae0e1238fdf466fa52a85a6ebf75d6899e49da",
         "type": "github"
       },
       "original": {
