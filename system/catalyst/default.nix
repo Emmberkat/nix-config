@@ -73,7 +73,6 @@ in
     htop
     smartmontools
     ncdu
-    nh
     git
     gh
   ];
