@@ -12,9 +12,6 @@
   };
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # Temporary: newer php84 for Nextcloud. Drop with the catalyst
-    # phpPackage override once nixos-unstable catches up.
-    nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     systems.url = "github:nix-systems/default";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -71,7 +68,6 @@
     {
       self,
       nixpkgs,
-      nixpkgs-small,
       home-manager,
       agenix,
       nix-github-actions,
@@ -175,8 +171,6 @@
         ];
 
         catalyst = mkHost [
-          # Temporary, see nixpkgs-small input.
-          { services.nextcloud.phpPackage = nixpkgs-small.legacyPackages.x86_64-linux.php84; }
           ./system/catalyst
         ];
 

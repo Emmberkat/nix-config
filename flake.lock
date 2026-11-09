@@ -167,22 +167,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-small": {
-      "locked": {
-        "lastModified": 1794070417,
-        "narHash": "sha256-leOOarLQ85CtX6NUcHuqNoOCwHbNKLRj6mNK59enKAA=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "d63e5b96ca17ae27b5d248d29564e31ff7a83f02",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable-small",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "pyproject-build-systems": {
       "inputs": {
         "nixpkgs": [
@@ -238,7 +222,6 @@
         "nextcloud-mcp-server": "nextcloud-mcp-server",
         "nix-github-actions": "nix-github-actions",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-small": "nixpkgs-small",
         "pyproject-build-systems": "pyproject-build-systems",
         "pyproject-nix": "pyproject-nix",
         "systems": "systems",
