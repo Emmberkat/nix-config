@@ -38,7 +38,12 @@
 
   environment.systemPackages = with pkgs; [
     jq
+    nh
   ];
+
+  # Default flake for `nh os`: nh picks this host's entry from
+  # nixosConfigurations, so `nh os boot`/`switch` need no arguments.
+  environment.variables.NH_OS_FLAKE = "github:Emmberkat/nix-config";
 
   nix = {
     gc.automatic = true;
