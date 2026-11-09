@@ -30,7 +30,7 @@
 
     garage = {
       enable = true;
-      package = pkgs.garage;
+      package = pkgs.garage_2;
       settings = {
         metadata_dir = "/mnt/garage-meta";
         data_dir = "/mnt/garage-data";
