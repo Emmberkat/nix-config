@@ -10,6 +10,8 @@
     file-roller
     nextcloud-client
     makemkv
+    # CLI client for Cisco AnyConnect VPNs.
+    openconnect
   ];
 
   # Shows polkit password prompts (e.g. fprintd-enroll); sway has no agent.
