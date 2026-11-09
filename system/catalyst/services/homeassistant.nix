@@ -304,6 +304,12 @@ in
           };
         };
       };
+      # Pin the config version so Frigate skips its in-place 0.13->0.18
+      # migration. The 0.17-0 step misreads the named-provider `genai`
+      # block (genai.kuzco) as legacy flat keys and relocates it under
+      # objects.genai, which fails validation and drops Frigate into safe
+      # mode with zero cameras.
+      settings.version = "0.18-0";
       # Vision provider for the chat API behind Assist's frigate_query tool.
       # Roles are explicit: embeddings needs a dedicated embedding model.
       settings.genai.kuzco = {
