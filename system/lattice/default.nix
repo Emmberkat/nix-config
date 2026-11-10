@@ -1,4 +1,8 @@
-_: {
+{
+  pkgs,
+  ...
+}:
+{
   imports = [
     ../common
     ../desktop
@@ -43,7 +47,11 @@ _: {
   };
 
   networking.hostName = "lattice";
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    # Cisco AnyConnect VPN via the NetworkManager applet.
+    plugins = [ pkgs.networkmanager-openconnect ];
+  };
 
   time.timeZone = "US/Pacific";
 
