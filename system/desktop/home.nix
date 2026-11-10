@@ -9,6 +9,8 @@
     nautilus
     file-roller
     nextcloud-client
+    # Open-source RDP client (xfreerdp) for Citrix VDI / RDP; runs under XWayland.
+    freerdp
     makemkv
   ];
 
