@@ -59,6 +59,8 @@
     steam.enable = true;
   };
 
+  virtualisation.podman.enable = true;
+
   users.users.emmberkat.extraGroups = [ "networkmanager" ];
 
   system.stateVersion = "26.11";
