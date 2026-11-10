@@ -43,7 +43,10 @@ _: {
   };
 
   networking.hostName = "lattice";
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    wifi.macAddress = "permanent";
+  };
 
   time.timeZone = "US/Pacific";
 
