@@ -6,6 +6,21 @@ _: {
         DisableTelemetry = true;
         DisableFirefoxStudies = true;
         DisablePocket = true;
+        FirefoxHome = {
+          SponsoredTopSites = false;
+          SponsoredStories = false;
+          SponsoredPocket = false;
+          Stories = false;
+        };
+        FirefoxSuggest.SponsoredSuggestions = false;
+        UserMessaging = {
+          ExtensionRecommendations = false;
+          FeatureRecommendations = false;
+          MoreFromMozilla = false;
+          SkipOnboarding = true;
+          UrlbarInterventions = false;
+        };
+        OverridePostUpdatePage = "";
         ExtensionSettings = {
           "*".installation_mode = "blocked";
           "uBlock0@raymondhill.net" = {
