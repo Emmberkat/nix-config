@@ -118,11 +118,20 @@
         scope = "muster:read muster:write offline_access";
       };
 
-      plugins.enabled = [ "comfyui" ];
+      plugins.enabled = [
+        "comfyui"
+        "git-review"
+      ];
       image_gen.provider = "comfyui";
     };
 
     extraPlugins = [
+      (pkgs.fetchFromGitHub {
+        owner = "mister-ideas";
+        repo = "git-review";
+        rev = "a1944377c3f8d5699668b67379be9bf63ca0cee7";
+        hash = "sha256-gO0wovB/OIxMLWLF2KovISyTL+8eA+oKGlsjMfs2rEI=";
+      })
       (pkgs.runCommandLocal "comfyui" { } "cp -r ${./hermes-plugins/comfyui} $out")
     ];
 
