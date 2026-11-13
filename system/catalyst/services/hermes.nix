@@ -153,7 +153,10 @@ in
         "git-review"
       ];
       image_gen.provider = "comfyui";
-      memory.provider = "hindsight";
+      # The NixOS module symlinks extraPlugins as nix-managed-<name>, and
+      # Hermes uses the directory name as the memory provider id, so the
+      # configured name must match the symlink, not the plugin's own name.
+      memory.provider = "nix-managed-hindsight";
     };
 
     extraPlugins = [
