@@ -132,6 +132,11 @@ in
 
       web.search_backend = "searxng";
 
+      skills = {
+        external_dirs = [ "${pkgs.field-guide-skill}" ];
+        auto_load = [ "field-guide" ];
+      };
+
       # mcpServers has no oauth option. Muster's own public Pocket ID client
       # (PKCE, no secret), since Pocket ID has no dynamic registration; the
       # device flow because catalyst has no browser. The device flow requests
