@@ -63,6 +63,10 @@
       url = "github:cbcoutinho/nextcloud-mcp-server/v0.198.0";
       flake = false;
     };
+    field-guide = {
+      url = "github:Emmberkat/field-guide";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
@@ -78,6 +82,7 @@
       uv2nix,
       pyproject-build-systems,
       nextcloud-mcp-server,
+      field-guide,
       ...
     }:
     let
@@ -88,6 +93,7 @@
           src = nextcloud-mcp-server;
           inherit pyproject-nix uv2nix pyproject-build-systems;
         };
+        field-guide-skill = field-guide.packages.${pkgs.stdenv.hostPlatform.system}.skill;
       };
 
       # Modules every host gets. Importing a module only declares its
