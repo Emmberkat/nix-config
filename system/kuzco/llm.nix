@@ -31,11 +31,11 @@ in
       # refusals ablated. huihui-ai's card notes MTP and the vision tower are
       # left unmodified, so draft-mtp below still applies.
       #
-      # Q6_K_XL, not IQ4_XS: with the weights split across two 7900 XTXs
-      # there is room for near-lossless weights. Measured on kuzco, decode
-      # is 6-19% slower than IQ4_XS and prompt reading is unchanged.
+      # Q4_K_XL, not Q6_K_XL: Q6_K_XL decoded at ~37 tok/s against IQ4_XS's
+      # ~53 on kuzco, and published task benchmarks put Q4_K_XL level with
+      # Q6 and bf16 while its KL divergence is about half of IQ4_XS's.
       hf-repo = "huihui-ai/Huihui-Qwen3.8-27B-abliterated-GGUF";
-      hf-file = "Huihui-Qwen3.8-27B-abliterated-UD-Q6_K_XL.gguf";
+      hf-file = "Huihui-Qwen3.8-27B-abliterated-UD-Q4_K_XL.gguf";
       alias = "Qwen3.8-27B";
 
       n-gpu-layers = 99;
