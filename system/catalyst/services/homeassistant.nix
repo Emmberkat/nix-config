@@ -83,6 +83,7 @@ in
         "imap"
         "roborock"
         "met"
+        "nextcloud"
         "shopping_list"
         "scl"
         "tile"
