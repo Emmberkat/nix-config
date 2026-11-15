@@ -78,7 +78,10 @@
     users.hermes.extraGroups = [ "android" ];
   };
 
-  environment.systemPackages = [ pkgs.android-tools ];
+  environment.systemPackages = [
+    pkgs.android-tools
+    pkgs.vlc
+  ];
 
   system.stateVersion = "25.11";
 
