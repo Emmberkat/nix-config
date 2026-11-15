@@ -7,6 +7,7 @@
   home.packages = with pkgs; [
     swaybg
     nautilus
+    vlc
     file-roller
     nextcloud-client
     zulip
