@@ -39,11 +39,16 @@ in
       alias = "Qwen3.8-27B";
 
       n-gpu-layers = 99;
-      # q8_0 KV plus the q8_0 MTP draft KV is ~40 KiB/token. The default even
-      # layer split leaves the second GPU ~2.7 GiB fuller than the first;
-      # with Q6_K_XL weights, 256K peaked at 24.0 of 24.6 GiB there and 288K
-      # ran out of memory.
-      ctx-size = 262144;
+      # q8_0 KV plus the q8_0 MTP draft KV is ~40 KiB/token. With the even
+      # layer split the second GPU sits ~3.5 GiB fuller, so a 384K pool would
+      # leave it under 1 GiB spare; 57,43 puts both cards near 21 GiB.
+      # ROCm0 is card1.
+      tensor-split = "57,43";
+      # Q4_K_XL weights freed the room for a 384K pool, so four concurrent
+      # chats (median depth ~67K, p90 ~147K) stop overflowing a 256K pool.
+      ctx-size = 393216;
+      # Each slot stays at the model's trained window.
+      kv-unified-per-slot = 262144;
       # Four slots share one unified KV pool, so Hermes's main session, Home
       # Assistant and two subagents each keep their prefix resident; each
       # extra slot measured ~0.5 GiB of VRAM. Sharing a slot, a Hermes turn
@@ -52,8 +57,8 @@ in
       # self-segregate; the HA entry additionally pins itself to slot 1
       # (llamacpp_id_slot). That pin is on the HA side, not in this repo.
       #
-      # No per-slot cap: the pool already equals the model's trained window,
-      # which is every slot's limit. Hermes reads it from /props and compacts
+      # The pool is bigger than the trained window, so the per-slot cap above
+      # keeps /props n_ctx at 262144. Hermes reads it from there and compacts
       # at 0.75 of it. Idle slots flush to cache-ram and restore from RAM
       # instead of a full re-prefill.
       parallel = 4;
