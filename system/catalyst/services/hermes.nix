@@ -81,6 +81,9 @@ in
   services.hermes-agent = {
     enable = true;
 
+    # Podman for the docker terminal backend; the unit PATH has none.
+    extraPackages = [ config.virtualisation.podman.package ];
+
     mcpServers = {
       github = {
         command = "npx";
@@ -225,6 +228,8 @@ in
         HERMES_WEBUI_OIDC_ALLOW_VALUES = "emmabenkart@gmail.com";
         HERMES_WEBUI_OIDC_REDIRECT_URI = "https://hermes.emmberkat.com/api/auth/oidc/callback";
         HERMES_WEBUI_SECURE = "1";
+        # No PATH option here; point the docker terminal backend at podman.
+        HERMES_DOCKER_BINARY = lib.getExe config.virtualisation.podman.package;
         PYTHONPATH = "${hindsightClient}/lib/python${pythonVersion}/site-packages";
       };
     };
