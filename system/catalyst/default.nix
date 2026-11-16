@@ -42,6 +42,9 @@ in
       emmberkat.extraGroups = [ "jellyfin" ];
       # Read-only journal access for the agent (journalctl, no sudo needed).
       hermes.extraGroups = [ "systemd-journal" ];
+      # Subordinate uid/gid ranges so rootless podman (the agent's docker
+      # terminal backend) maps the full range instead of a single mapping.
+      hermes.autoSubUidGidRange = true;
     };
   };
 
