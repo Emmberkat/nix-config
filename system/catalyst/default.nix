@@ -46,19 +46,20 @@ in
   };
 
   security.sudo.extraRules = [
-    # Let the agent deploy this host: run nixos-rebuild (switch/boot/...) as
-    # root without a password. Mirrors the btrbk module's pattern of listing
-    # both the store path and the /run/current-system/sw/bin path, so the rule
-    # keeps working across nixpkgs updates.
+    # Let the agent deploy this host: the standard `nh os switch --refresh`
+    # (flake from NH_OS_FLAKE, see system/common) as root without a password.
+    # Mirrors the btrbk module's pattern of listing both the store path and
+    # the /run/current-system/sw/bin path, so the rule keeps working across
+    # nixpkgs updates.
     {
       users = [ "hermes" ];
       commands = [
         {
-          command = "${pkgs.nixos-rebuild}/bin/nixos-rebuild";
+          command = "${pkgs.nh}/bin/nh os switch --refresh";
           options = [ "NOPASSWD" ];
         }
         {
-          command = "/run/current-system/sw/bin/nixos-rebuild";
+          command = "/run/current-system/sw/bin/nh os switch --refresh";
           options = [ "NOPASSWD" ];
         }
       ];
