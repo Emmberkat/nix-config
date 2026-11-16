@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }:
@@ -213,6 +214,14 @@ in
     in
     {
       enable = true;
+      # Bind each turn's profile terminal settings per turn, not process-wide
+      # (nesquena/hermes-webui#5937). Drop once upstream binds the scope.
+      package = options.services.hermes-webui.package.default.overrideAttrs (old: {
+        postInstall = (old.postInstall or "") + ''
+          chmod u+w $out/hermes-webui/api/streaming.py
+          patch -d $out/hermes-webui -p1 < ${./hermes-webui-terminal-scope.patch}
+        '';
+      });
       agent = {
         package = agentPkg;
         dir = "${agentPkg.passthru.hermesVenv}/lib/python${pythonVersion}/site-packages";
