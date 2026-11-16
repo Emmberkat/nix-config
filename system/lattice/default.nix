@@ -56,6 +56,7 @@
   time.timeZone = "US/Pacific";
 
   programs = {
+    zoom-us.enable = true;
     steam.enable = true;
   };
 
