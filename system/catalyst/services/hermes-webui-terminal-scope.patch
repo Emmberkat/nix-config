@@ -1,0 +1,68 @@
+--- a/api/streaming.py
++++ b/api/streaming.py
+@@ -4087,6 +4087,39 @@
+         logger.debug("Failed to reset streaming Hermes home override", exc_info=True)
+ 
+ 
++def _set_streaming_terminal_scope(profile_home: str, runtime_env: dict, workspace: str):
++    """Bind the profile's TERMINAL_* policy to this turn's context (#5937).
++
++    The os.environ mirror is shared by concurrent turns, so without a scope a
++    turn's tools can run on another profile's backend. Overlay the turn's
++    effective values so behaviour matches the mirror: the profile .env wins
++    over config.yaml, and the session workspace is the cwd. Returns
++    ``(module, token)``; older agents without the scope API return
++    ``(None, None)`` and keep the env mirror.
++    """
++    if not profile_home:
++        return None, None
++    try:
++        from tools import terminal_scope as _ts
++    except Exception:
++        return None, None
++    scope = _ts.prepare_profile_terminal_scope(profile_home)
++    if not isinstance(scope, _ts.TerminalPolicyRefusal):
++        scope = dict(scope)
++        scope.update((k, v) for k, v in runtime_env.items() if k.startswith('TERMINAL_'))
++        scope['TERMINAL_CWD'] = workspace
++    return _ts, _ts.set_terminal_scope(scope)
++
++
++def _reset_streaming_terminal_scope(scope_mod, scope_token) -> None:
++    if scope_mod is None:
++        return
++    try:
++        scope_mod.reset_terminal_scope(scope_token)
++    except Exception:
++        logger.debug("Failed to reset streaming terminal scope", exc_info=True)
++
++
+ # ── Per-turn session identity (xsession wakeup misroute root fix — Option 1) ─
+ # WebUI bound per-turn session identity ONLY to the process-global
+ # os.environ['HERMES_SESSION_KEY'] (turn-start, line ~3263) and released the
+@@ -14680,6 +14713,7 @@
+     _streaming_cron_profile_home_token = None
+     _turn_pending_source = 'webui'
+     _streaming_hermes_home_override_ctx = (None, None, False)
++    _streaming_terminal_scope_ctx = (None, None)
+     # #8517 all-r2 finding 2: memory runs only on a turn that verifiably holds its
+     # session's profile home; set right after the turn-level override below.
+     _turn_memory_reason = 'the turn-level profile home was not established'
+@@ -14926,6 +14960,9 @@
+             _profile_home,
+         )
+         _streaming_hermes_home_override_ctx = _set_streaming_hermes_home_override(_profile_home)
++        _streaming_terminal_scope_ctx = _set_streaming_terminal_scope(
++            _profile_home, _safe_profile_runtime_env, str(s.workspace),
++        )
+         # #8517 all-r2 finding 2: the override set here is held until the outermost
+         # finally, across construction AND run_conversation (memory hooks, built-in
+         # MEMORY.md writes). A construction-time scope alone does not cover the turn,
+@@ -19100,6 +19137,7 @@
+         if _acquired_streaming_skill_home_patch_lock:
+             _SKILL_HOME_MODULE_PATCH_LOCK.release()
+             _acquired_streaming_skill_home_patch_lock = False
++        _reset_streaming_terminal_scope(*_streaming_terminal_scope_ctx)
+         _reset_streaming_hermes_home_override(*_streaming_hermes_home_override_ctx)
+         # xsession wakeup misroute root fix (Option 1): restore the per-turn
+         # session-identity context-locals (reset-token semantics). MUST run on
