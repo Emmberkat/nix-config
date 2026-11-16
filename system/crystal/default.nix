@@ -37,6 +37,7 @@
 
   systemd = {
     network = {
+      enable = true;
       networks = {
         "10-eth" = {
           matchConfig.Type = "ether";

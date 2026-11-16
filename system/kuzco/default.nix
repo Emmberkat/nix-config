@@ -31,12 +31,15 @@
 
   networking.hostName = "kuzco";
 
-  systemd.network.networks."10-eth" = {
-    matchConfig.Type = "ether";
-    networkConfig = {
-      Address = "10.1.0.2/8";
-      Gateway = "10.0.0.1";
-      DNS = "10.0.0.1";
+  systemd.network = {
+    enable = true;
+    networks."10-eth" = {
+      matchConfig.Type = "ether";
+      networkConfig = {
+        Address = "10.1.0.2/8";
+        Gateway = "10.0.0.1";
+        DNS = "10.0.0.1";
+      };
     };
   };
 

@@ -18,6 +18,7 @@ in
 
   systemd = {
     network = {
+      enable = true;
       networks = {
         "10-eth" = {
           # Podman's container veths are type ether too.
