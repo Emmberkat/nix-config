@@ -16,8 +16,6 @@
 
   home-manager.sharedModules = [ { home.stateVersion = config.system.stateVersion; } ];
 
-  systemd.network.enable = true;
-
   nixpkgs.config.allowUnfree = true;
 
   networking = {
