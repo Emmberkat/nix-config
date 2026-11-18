@@ -35,6 +35,12 @@ in
     };
     home-assistant = {
       enable = true;
+      # pylitterbot (litterrobot) needs fastmcp, which is broken against mcp 2.
+      package =
+        (pkgs.home-assistant.override {
+          packageOverrides = self: _: { mcp = self.mcp_1; };
+        }).overrideAttrs
+          { doInstallCheck = false; };
       customComponents = with pkgs.home-assistant-custom-components; [
         auth_oidc
         frigate
