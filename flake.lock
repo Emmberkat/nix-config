@@ -94,26 +94,6 @@
         "type": "github"
       }
     },
-    "hermes-webui": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1794033274,
-        "narHash": "sha256-PZQj4ud74OLYKTT70K3sPGDct2SW9hSKcK9xY5zKHZ8=",
-        "owner": "nesquena",
-        "repo": "hermes-webui",
-        "rev": "f328d3f8e17f92a72fd71cc05f1e45665f2bc662",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nesquena",
-        "repo": "hermes-webui",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -238,7 +218,6 @@
         "agenix": "agenix",
         "field-guide": "field-guide",
         "hermes-agent": "hermes-agent",
-        "hermes-webui": "hermes-webui",
         "home-manager": "home-manager",
         "nextcloud-mcp-server": "nextcloud-mcp-server",
         "nix-github-actions": "nix-github-actions",

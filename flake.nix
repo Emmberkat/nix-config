@@ -36,10 +36,6 @@
         pyproject-build-systems.follows = "pyproject-build-systems";
       };
     };
-    hermes-webui = {
-      url = "github:nesquena/hermes-webui";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     pyproject-nix = {
       url = "github:pyproject-nix/pyproject.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -76,7 +72,6 @@
       agenix,
       nix-github-actions,
       hermes-agent,
-      hermes-webui,
       systems,
       pyproject-nix,
       uv2nix,
@@ -102,7 +97,6 @@
         home-manager.nixosModules.home-manager
         agenix.nixosModules.default
         hermes-agent.nixosModules.default
-        hermes-webui.nixosModules.default
         { nixpkgs.overlays = [ self.overlays.default ]; }
         {
           home-manager = {
