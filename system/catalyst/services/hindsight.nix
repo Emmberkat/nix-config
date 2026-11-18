@@ -63,6 +63,8 @@ in
 
   services = {
     postgresql = {
+      # stateVersion 23.05 would otherwise default to postgresql_14 (EOL).
+      package = pkgs.postgresql_18;
       ensureDatabases = [ "hindsight" ];
       ensureUsers = [
         {
