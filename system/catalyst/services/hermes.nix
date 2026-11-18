@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  options,
   pkgs,
   ...
 }:
@@ -72,7 +71,7 @@ in
         enableACME = true;
         forceSSL = true;
         locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString config.services.hermes-webui.port}";
+          proxyPass = "http://127.0.0.1:${toString config.services.hermes-agent.backend.port}";
           proxyWebsockets = true;
         };
       };
@@ -81,6 +80,7 @@ in
 
   services.hermes-agent = {
     enable = true;
+    backend.mode = "dashboard";
 
     # Podman for the docker terminal backend; the unit PATH has none.
     extraPackages = [ config.virtualisation.podman.package ];
@@ -135,6 +135,14 @@ in
       };
 
       web.search_backend = "searxng";
+
+      dashboard = {
+        public_url = "https://hermes.emmberkat.com";
+        oauth.self_hosted = {
+          issuer = "https://auth.emmberkat.com";
+          client_id = "4a326920-c869-423c-bbd6-e201a99e4f8b";
+        };
+      };
 
       skills = {
         external_dirs = [ "${pkgs.field-guide-skill}" ];
@@ -203,43 +211,4 @@ in
 
     addToSystemPackages = true;
   };
-
-  # nesquena/hermes-webui replaces the built-in dashboard (backend.mode
-  # defaults to "none"). It runs the agent in-process with the agent's own
-  # venv, as the hermes user so it shares HERMES_HOME/state.db with the
-  # messaging gateway.
-  services.hermes-webui =
-    let
-      inherit (agentPkg.passthru.python) pythonVersion;
-    in
-    {
-      enable = true;
-      # Bind each turn's profile terminal settings per turn, not process-wide
-      # (nesquena/hermes-webui#5937). Drop once upstream binds the scope.
-      package = options.services.hermes-webui.package.default.overrideAttrs (old: {
-        postInstall = (old.postInstall or "") + ''
-          chmod u+w $out/hermes-webui/api/streaming.py
-          patch -d $out/hermes-webui -p1 < ${./hermes-webui-terminal-scope.patch}
-        '';
-      });
-      agent = {
-        package = agentPkg;
-        dir = "${agentPkg.passthru.hermesVenv}/lib/python${pythonVersion}/site-packages";
-      };
-      user = "hermes";
-      group = "hermes";
-      hermesHome = "${config.services.hermes-agent.stateDir}/.hermes";
-      port = 9119;
-      extraEnvironment = {
-        HERMES_WEBUI_OIDC_ISSUER = "https://auth.emmberkat.com";
-        HERMES_WEBUI_OIDC_CLIENT_ID = "4a326920-c869-423c-bbd6-e201a99e4f8b";
-        HERMES_WEBUI_OIDC_ALLOW_CLAIM = "email";
-        HERMES_WEBUI_OIDC_ALLOW_VALUES = "emmabenkart@gmail.com";
-        HERMES_WEBUI_OIDC_REDIRECT_URI = "https://hermes.emmberkat.com/api/auth/oidc/callback";
-        HERMES_WEBUI_SECURE = "1";
-        # No PATH option here; point the docker terminal backend at podman.
-        HERMES_DOCKER_BINARY = lib.getExe config.virtualisation.podman.package;
-        PYTHONPATH = "${hindsightClient}/lib/python${pythonVersion}/site-packages";
-      };
-    };
 }
