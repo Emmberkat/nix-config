@@ -81,15 +81,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1795176380,
-        "narHash": "sha256-gDIVg8og5FKsSlLKJMroKwLMU2tHry64D8xY+iIZj0k=",
-        "owner": "NousResearch",
+        "lastModified": 1794307593,
+        "narHash": "sha256-S8uDxh7wNP3BlZZcSUZ/kqodYF1m7axMCU2P1/Kbs30=",
+        "owner": "lassulus",
         "repo": "hermes-agent",
-        "rev": "2de9f51b8008a7d49a49221c184f2f11cbfc4af1",
+        "rev": "59e85f91d9d7a899cf2a7f9322c0a90859667080",
         "type": "github"
       },
       "original": {
-        "owner": "NousResearch",
+        "owner": "lassulus",
+        "ref": "fix/nix-patchelf-version",
         "repo": "hermes-agent",
         "type": "github"
       }

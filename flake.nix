@@ -26,7 +26,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hermes-agent = {
-      url = "github:NousResearch/hermes-agent";
+      # Pinned to the #152542 branch (guarded patchelf override) in the PR
+      # author's fork until it merges upstream; reverts to plain
+      # `github:NousResearch/hermes-agent` on merge.
+      url = "github:lassulus/hermes-agent/fix/nix-patchelf-version";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
