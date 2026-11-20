@@ -14,6 +14,7 @@
     ./mysql.nix
     ./nextcloud.nix
     ./pocketid.nix
+    ./prometheus.nix
     ./searx.nix
     ./unifi.nix
   ];
