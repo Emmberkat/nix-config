@@ -88,6 +88,8 @@ in
     prometheus.exporters = {
       node.enable = true;
       node.openFirewall = true;
+      nvidia-gpu.enable = true;
+      nvidia-gpu.openFirewall = true;
       smartctl.enable = true;
       smartctl.openFirewall = true;
     };
