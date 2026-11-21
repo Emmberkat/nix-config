@@ -31,12 +31,6 @@ in
           ];
         }
         {
-          job_name = "amdgpu";
-          static_configs = [
-            { targets = [ "10.1.0.2:9172" ]; }
-          ];
-        }
-        {
           job_name = "llama-server";
           static_configs = [
             { targets = [ "10.1.0.2:8041" ]; }
