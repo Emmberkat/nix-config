@@ -1,0 +1,320 @@
+{
+ "annotations": {
+  "list": [
+   {
+    "builtIn": 1,
+    "datasource": {
+     "type": "grafana",
+     "uid": "-- Grafana --"
+    },
+    "enable": true,
+    "hide": true,
+    "iconColor": "rgba(0, 211, 255, 1)",
+    "name": "Annotations & Alerts",
+    "type": "dashboard"
+   }
+  ]
+ },
+ "editable": true,
+ "fiscalYearStartMonth": 0,
+ "graphTooltip": 1,
+ "id": null,
+ "links": [],
+ "liveNow": false,
+ "refresh": "30s",
+ "schemaVersion": 39,
+ "tags": [
+  "kuzco",
+  "amdgpu"
+ ],
+ "templating": {
+  "list": [
+   {
+    "current": {},
+    "hide": 0,
+    "includeAll": false,
+    "label": "Prometheus",
+    "multi": false,
+    "name": "datasource",
+    "options": [],
+    "query": "prometheus",
+    "queryValue": "",
+    "refresh": 1,
+    "regex": "",
+    "skipUrlSync": false,
+    "type": "datasource"
+   },
+   {
+    "allValue": ".*",
+    "current": {},
+    "datasource": {
+     "type": "prometheus",
+     "uid": "${datasource}"
+    },
+    "definition": "label_values(node_drm_gpu_busy_percent, instance)",
+    "hide": 0,
+    "includeAll": true,
+    "label": "Instance",
+    "multi": true,
+    "name": "instance",
+    "options": [],
+    "query": {
+     "query": "label_values(node_drm_gpu_busy_percent, instance)",
+     "refId": "StandardVariableQuery"
+    },
+    "refresh": 1,
+    "regex": "",
+    "skipUrlSync": false,
+    "sort": 1,
+    "type": "query"
+   },
+   {
+    "allValue": ".*",
+    "current": {},
+    "datasource": {
+     "type": "prometheus",
+     "uid": "${datasource}"
+    },
+    "definition": "label_values(node_hwmon_chip_names{chip_name=\"amdgpu\"}, chip)",
+    "hide": 0,
+    "includeAll": true,
+    "label": "GPU chip",
+    "multi": true,
+    "name": "amdgpu_chip",
+    "options": [],
+    "query": {
+     "query": "label_values(node_hwmon_chip_names{chip_name=\"amdgpu\"}, chip)",
+     "refId": "StandardVariableQuery"
+    },
+    "refresh": 1,
+    "regex": "",
+    "skipUrlSync": false,
+    "sort": 1,
+    "type": "query"
+   }
+  ]
+ },
+ "time": {
+  "from": "now-6h",
+  "to": "now"
+ },
+ "timepicker": {},
+ "timezone": "",
+ "title": "AMD GPU (kuzco)",
+ "uid": "kuzco-amdgpu",
+ "version": 1,
+ "weekStart": "",
+ "panels": [
+  {
+   "datasource": {
+    "type": "prometheus",
+    "uid": "${datasource}"
+   },
+   "description": "GPU utilization from the node_exporter drm collector.",
+   "fieldConfig": {
+    "defaults": {
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "lineWidth": 1,
+      "fillOpacity": 10,
+      "showPoints": "never"
+     },
+     "unit": "percent",
+     "max": 100,
+     "min": 0
+    },
+    "overrides": []
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 0
+   },
+   "id": 1,
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "tooltip": {
+     "mode": "multi"
+    }
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "${datasource}"
+     },
+     "expr": "node_drm_gpu_busy_percent{instance=~\"$instance\"}",
+     "legendFormat": "{{card}}",
+     "refId": "A"
+    }
+   ],
+   "title": "GPU utilization",
+   "type": "timeseries"
+  },
+  {
+   "datasource": {
+    "type": "prometheus",
+    "uid": "${datasource}"
+   },
+   "description": "VRAM usage from the node_exporter drm collector.",
+   "fieldConfig": {
+    "defaults": {
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "lineWidth": 1,
+      "fillOpacity": 10,
+      "showPoints": "never"
+     },
+     "unit": "bytes"
+    },
+    "overrides": []
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 0
+   },
+   "id": 2,
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "tooltip": {
+     "mode": "multi"
+    }
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "${datasource}"
+     },
+     "expr": "node_drm_memory_vram_used_bytes{instance=~\"$instance\"}",
+     "legendFormat": "{{card}} used",
+     "refId": "A"
+    },
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "${datasource}"
+     },
+     "expr": "node_drm_memory_vram_size_bytes{instance=~\"$instance\"}",
+     "legendFormat": "{{card}} total",
+     "refId": "B"
+    }
+   ],
+   "title": "VRAM",
+   "type": "timeseries"
+  },
+  {
+   "datasource": {
+    "type": "prometheus",
+    "uid": "${datasource}"
+   },
+   "description": "GPU temperatures from the amdgpu hwmon chips.",
+   "fieldConfig": {
+    "defaults": {
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "lineWidth": 1,
+      "fillOpacity": 10,
+      "showPoints": "never"
+     },
+     "unit": "celsius"
+    },
+    "overrides": []
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 8
+   },
+   "id": 3,
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "tooltip": {
+     "mode": "multi"
+    }
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "${datasource}"
+     },
+     "expr": "node_hwmon_temp_celsius{instance=~\"$instance\", chip=~\"$amdgpu_chip\"}",
+     "legendFormat": "{{chip}} {{sensor}}",
+     "refId": "A"
+    }
+   ],
+   "title": "GPU temperature",
+   "type": "timeseries"
+  },
+  {
+   "datasource": {
+    "type": "prometheus",
+    "uid": "${datasource}"
+   },
+   "description": "Fan speeds from the amdgpu hwmon chips.",
+   "fieldConfig": {
+    "defaults": {
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "lineWidth": 1,
+      "fillOpacity": 10,
+      "showPoints": "never"
+     },
+     "unit": "rpm"
+    },
+    "overrides": []
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 8
+   },
+   "id": 4,
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "tooltip": {
+     "mode": "multi"
+    }
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "${datasource}"
+     },
+     "expr": "node_hwmon_fan_rpm{instance=~\"$instance\", chip=~\"$amdgpu_chip\"}",
+     "legendFormat": "{{chip}} {{sensor}}",
+     "refId": "A"
+    }
+   ],
+   "title": "Fan speed",
+   "type": "timeseries"
+  }
+ ]
+}

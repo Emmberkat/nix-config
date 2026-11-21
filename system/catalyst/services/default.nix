@@ -4,6 +4,7 @@
     ./comfyui.nix
     ./forgejo.nix
     ./garage.nix
+    ./grafana.nix
     ./homeassistant.nix
     ./hermes.nix
     ./hindsight.nix
