@@ -9,8 +9,9 @@ in
       settings = {
         server = {
           # Served by the vhost below, so the port stays on loopback.
+          # 3100: 3000 is taken by forgejo.
           http_addr = "127.0.0.1";
-          http_port = 3000;
+          http_port = 3100;
           root_url = "https://${grafHost}/";
         };
         # Login is handled by oauth2-proxy (Pocket ID) in front of nginx;
@@ -68,10 +69,15 @@ in
     enableACME = true;
     forceSSL = true;
     locations."/" = {
-      proxyPass = "http://127.0.0.1:3000";
+      proxyPass = "http://127.0.0.1:3100";
       proxyWebsockets = true;
     };
   };
 
-  age.secrets."grafana/secret-key".file = ../secrets/grafana/secret-key.age;
+  age.secrets."grafana/secret-key" = {
+    file = ../secrets/grafana/secret-key.age;
+    # Grafana reads the file at startup as the grafana user.
+    group = "grafana";
+    mode = "0440";
+  };
 }
