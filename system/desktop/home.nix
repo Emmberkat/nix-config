@@ -14,6 +14,8 @@
     # Open-source RDP client (xfreerdp) for Citrix VDI / RDP; runs under XWayland.
     freerdp
     makemkv
+    # CLI client for Cisco AnyConnect VPNs.
+    openconnect
   ];
 
   # Shows polkit password prompts (e.g. fprintd-enroll); sway has no agent.
