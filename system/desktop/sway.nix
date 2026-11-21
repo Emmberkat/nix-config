@@ -19,7 +19,10 @@
   };
 
   security = {
-    polkit.enable = true;
+    polkit = {
+      enable = true;
+      enablePkexecWrapper = true;
+    };
     pam.services.swaylock = { };
   };
   # Home Manager writes the GTK color-scheme to dconf.
