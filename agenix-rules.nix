@@ -41,6 +41,13 @@ in
     ];
     armor = true;
   };
+  "system/catalyst/secrets/grafana/secret-key.age" = {
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
+    armor = true;
+  };
   "system/catalyst/secrets/nextcloud/s3secret.age" = {
     publicKeys = [
       keys.admin
