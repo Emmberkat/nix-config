@@ -1,6 +1,5 @@
 _: {
   imports = [
-    ./android.nix
     ./audio.nix
     ./bluetooth.nix
     ./browser.nix
