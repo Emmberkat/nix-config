@@ -2,19 +2,6 @@
   pkgs,
   ...
 }:
-
-let
-  # gpu_busy_percent is not exposed by any node_exporter collector, so the
-  # script exporter reads it from sysfs on every scrape.
-  amdgpuMetrics = pkgs.writeShellScriptBin "amdgpu" ''
-    echo "# HELP amdgpu_utilization_percent GPU utilization in percent."
-    echo "# TYPE amdgpu_utilization_percent gauge"
-    for d in /sys/class/drm/card[0-9]*/device; do
-      [ -r "$d/gpu_busy_percent" ] || continue
-      echo "amdgpu_utilization_percent{card=\"$(basename "$(dirname "$d")")\"} $(cat "$d/gpu_busy_percent")"
-    done
-  '';
-in
 {
   imports = [
     ../common
@@ -62,20 +49,11 @@ in
       node = {
         enable = true;
         openFirewall = true;
+        # The drm collector exposes GPU utilization and VRAM per card.
         enabledCollectors = [ "drm" ];
       };
       smartctl.enable = true;
       smartctl.openFirewall = true;
-      script = {
-        enable = true;
-        openFirewall = true;
-        settings.scripts = [
-          {
-            name = "amdgpu";
-            command = [ "${amdgpuMetrics}/bin/amdgpu" ];
-          }
-        ];
-      };
     };
   };
 
