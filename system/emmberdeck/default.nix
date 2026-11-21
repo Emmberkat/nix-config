@@ -68,18 +68,9 @@
       HandlePowerKey = "suspend";
       HandlePowerKeyLongPress = "poweroff";
     };
-    udev.extraRules = ''
-      SUBSYSTEM=="usb", ENV{ID_DEBUG_APPLIANCE}=="android", GROUP="android", MODE="0660"
-    '';
-  };
-
-  users = {
-    groups.android = { };
-    users.hermes.extraGroups = [ "android" ];
   };
 
   environment.systemPackages = [
-    pkgs.android-tools
     pkgs.vlc
   ];
 
