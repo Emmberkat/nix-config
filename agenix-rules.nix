@@ -125,4 +125,11 @@ in
     ];
     armor = true;
   };
+  "system/catalyst/secrets/nextcloud-music-sync/password.age" = {
+    publicKeys = [
+      keys.admin
+      keys.catalyst
+    ];
+    armor = true;
+  };
 }
