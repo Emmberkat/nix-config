@@ -44,6 +44,10 @@
     };
   };
 
+  # Electron client for the Hermes backend on catalyst; connects via the app's
+  # own settings (URL + Pocket ID OAuth), so no Nix connection plumbing.
+  programs.hermes-agent.desktop.enable = true;
+
   wayland.windowManager.sway.config = {
     output = {
       DP-3 = {
