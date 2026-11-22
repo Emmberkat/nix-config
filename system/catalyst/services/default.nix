@@ -16,6 +16,7 @@
     ./nextcloud.nix
     ./pocketid.nix
     ./prometheus.nix
+    ./qbittorrent.nix
     ./searx.nix
     ./unifi.nix
   ];
