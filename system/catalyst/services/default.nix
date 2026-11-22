@@ -14,6 +14,7 @@
     ./muster.nix
     ./mysql.nix
     ./nextcloud.nix
+    ./nextcloud-music-sync.nix
     ./pocketid.nix
     ./prometheus.nix
     ./qbittorrent.nix
