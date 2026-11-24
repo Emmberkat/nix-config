@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   ...
@@ -87,4 +88,26 @@
       };
     };
   };
+
+  # The desktop's Kanban plugin ships off (`defaultEnabled: false`), and the
+  # on/off switch lives in the app's localStorage, which Nix can't seed. Flip
+  # the plugin's own default in the renderer source instead; a switch turned
+  # off by hand in Settings > Plugins still wins.
+  programs.hermes-agent.desktop.package =
+    config.programs.hermes-agent.package.hermesDesktop.override
+      (prev: {
+        hermesNpmLib = prev.hermesNpmLib // {
+          buildPnpmPackage =
+            attrs:
+            prev.hermesNpmLib.buildPnpmPackage (
+              attrs
+              // {
+                postPatch = (attrs.postPatch or "") + ''
+                  substituteInPlace apps/desktop/src/plugins/kanban/plugin.tsx \
+                    --replace-fail "defaultEnabled: false," "defaultEnabled: true,"
+                '';
+              }
+            );
+        };
+      });
 }
