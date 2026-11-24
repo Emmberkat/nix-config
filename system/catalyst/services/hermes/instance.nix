@@ -45,7 +45,12 @@
         inherit port;
       };
 
-      extraPackages = [ config.virtualisation.podman.package ];
+      # systemd-run: the gateway runs Kanban workers in their own user scope
+      # and refuses to spawn them when it is not on PATH.
+      extraPackages = [
+        config.virtualisation.podman.package
+        config.systemd.package
+      ];
 
       settings = {
         web.search_backend = "searxng";
