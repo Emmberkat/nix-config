@@ -32,8 +32,7 @@
   };
 
   home-manager.users.${user} = {
-    # The same zsh + starship setup as emmberkat's, for interactive logins.
-    imports = [ ../../../../user/emmberkat/zsh.nix ];
+    imports = [ ../../../../modules/zsh.nix ];
 
     services.hermes-agent = {
       enable = true;
