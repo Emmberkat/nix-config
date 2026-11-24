@@ -28,6 +28,21 @@ let
   hindsightPlugin =
     pkgs.runCommandLocal "hindsight" { }
       "cp -r ${hindsightSrc}/hindsight-integrations/hermes $out";
+
+  officialPlugins = pkgs.fetchFromGitHub {
+    owner = "NousResearch";
+    repo = "hermes-official-plugins";
+    rev = "80025332933bf84fb3c7b68f369d9fe59a771e98";
+    hash = "sha256-eI0XGxwrM9D9a6Vdoj+yAGDGJalaUgLE1fw+aLHjb8c=";
+  };
+
+  # Nix builds of Hermes report version 0.0.0, so the plugin's
+  # requires_hermes gate would skip it even though this core has
+  # pluggable delegation providers.
+  advancedDelegationPlugin = pkgs.runCommandLocal "advanced-delegation" { } ''
+    cp -r --no-preserve=mode ${officialPlugins}/advanced-delegation $out
+    sed -i '/^requires_hermes:/d' $out/plugin.yaml
+  '';
 in
 {
   age.secrets = {
@@ -161,9 +176,38 @@ in
       };
 
       plugins.enabled = [
+        "advanced-delegation"
         "comfyui"
         "git-review"
       ];
+
+      # Lets the agent pick a model per delegate_task subagent. Tasks that
+      # pick none run on the parent's model.
+      delegation = {
+        backend = "model_map";
+        backends.model_map.options = [
+          {
+            name = "fast";
+            description = "Claude Sonnet; well-specified subtasks: research, lookups, summaries, routine edits.";
+            provider = "anthropic";
+            model = "claude-sonnet-5-5";
+          }
+          {
+            name = "deep";
+            description = "Claude Opus, high effort; hard debugging, design and review.";
+            provider = "anthropic";
+            model = "claude-opus-5-5";
+            reasoning_effort = "high";
+          }
+          {
+            name = "local";
+            description = "Local model on kuzco; private and free, but slower and weaker.";
+            base_url = "http://10.1.0.2:8041/v1";
+            api_key = "llama-cpp-local";
+            model = "Qwen3.8-27B";
+          }
+        ];
+      };
       image_gen.provider = "comfyui";
       # The NixOS module symlinks extraPlugins as nix-managed-<name>, and
       # Hermes uses the directory name as the memory provider id, so the
@@ -180,6 +224,7 @@ in
       })
       (pkgs.runCommandLocal "comfyui" { } "cp -r ${./hermes-plugins/comfyui} $out")
       hindsightPlugin
+      advancedDelegationPlugin
     ];
 
     extraPythonPackages = [ hindsightClient ];
