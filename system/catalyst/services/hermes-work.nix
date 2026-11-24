@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   port = 9120;
   home = "/var/lib/hermes-work";
@@ -87,6 +92,13 @@ in
       SEARXNG_URL = "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
     };
     environmentFiles = [ config.age.secrets."hermes-work/claude-oauth-token".path ];
+  };
+
+  # Rootless podman maps its uid range with the setuid newuidmap, which
+  # NoNewPrivileges blocks.
+  home-manager.users.hermes-work.systemd.user.services = {
+    hermes-agent.Service.NoNewPrivileges = lib.mkForce false;
+    hermes-backend.Service.NoNewPrivileges = lib.mkForce false;
   };
 
   services.nginx.virtualHosts."work.hermes.emmberkat.com" = {
