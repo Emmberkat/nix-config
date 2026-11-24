@@ -5,8 +5,7 @@
   ...
 }:
 let
-  cfg = config.home-manager.users.hermes.services.hermes-agent;
-  agentPkg = cfg.package;
+  agentPkg = config.home-manager.users.hermes.services.hermes-agent.package;
 
   # The plugin and client live in the same vectorize-io/hindsight monorepo as
   # the server. Build them from the server package's own source, so they move
@@ -46,72 +45,53 @@ let
   '';
 in
 {
+  imports = [
+    (import ./instance.nix {
+      user = "hermes";
+      port = 9119;
+      domain = "hermes.emmberkat.com";
+      clientId = "4a326920-c869-423c-bbd6-e201a99e4f8b";
+    })
+  ];
+
   age.secrets = {
     "hermes/messaging-env" = {
-      file = ../secrets/hermes/messaging-env.age;
+      file = ../../secrets/hermes/messaging-env.age;
       owner = "hermes";
     };
 
     "hermes/mcp" = {
-      file = ../secrets/hermes/mcp.age;
+      file = ../../secrets/hermes/mcp.age;
       owner = "hermes";
     };
 
     "hermes/claude-oauth-token" = {
-      file = ../secrets/hermes/claude-oauth-token.age;
+      file = ../../secrets/hermes/claude-oauth-token.age;
       owner = "hermes";
     };
 
     "hermes/api-server-key" = {
-      file = ../secrets/hermes/api-server-key.age;
+      file = ../../secrets/hermes/api-server-key.age;
       owner = "hermes";
     };
 
     # NEXTCLOUD_PASSWORD=<app password of the "hermes" Nextcloud user>
     "hermes/nextcloud-env" = {
-      file = ../secrets/hermes/nextcloud-env.age;
+      file = ../../secrets/hermes/nextcloud-env.age;
       owner = "hermes";
     };
 
     # FORGEJO_TOKEN=<git.emmberkat.com PAT: read:repository, write:repository,
     # read:issue; scoped to Muster/kitdata, so it can open PRs there>
     "hermes/forgejo-env" = {
-      file = ../secrets/hermes/forgejo-env.age;
+      file = ../../secrets/hermes/forgejo-env.age;
       owner = "hermes";
     };
   };
 
-  users = {
-    groups.hermes = { };
-    users.hermes = {
-      isSystemUser = true;
-      group = "hermes";
-      home = "/var/lib/hermes";
-      createHome = true;
-      shell = pkgs.bashInteractive;
-      linger = true;
-    };
-  };
-
-  services.nginx.virtualHosts."hermes.emmberkat.com" = {
-    enableACME = true;
-    forceSSL = true;
-    locations."/" = {
-      proxyPass = "http://127.0.0.1:${toString cfg.backend.port}";
-      proxyWebsockets = true;
-    };
-  };
+  users.users.hermes.shell = pkgs.bashInteractive;
 
   home-manager.users.hermes.services.hermes-agent = {
-    enable = true;
-    gateway.enable = true;
-    hermesHome = "/var/lib/hermes/.hermes";
-    workingDirectory = "/var/lib/hermes/workspace";
-    backend.mode = "dashboard";
-
-    # Podman for the docker terminal backend; the unit PATH has none.
-    extraPackages = [ config.virtualisation.podman.package ];
-
     mcpServers = {
       github = {
         command = "npx";
@@ -159,16 +139,6 @@ in
         base_url = "http://10.1.0.2:8041/v1";
         api_key = "llama-cpp-local";
         default = "Qwen3.8-27B";
-      };
-
-      web.search_backend = "searxng";
-
-      dashboard = {
-        public_url = "https://hermes.emmberkat.com";
-        oauth.self_hosted = {
-          issuer = "https://auth.emmberkat.com";
-          client_id = "4a326920-c869-423c-bbd6-e201a99e4f8b";
-        };
       };
 
       skills = {
@@ -234,7 +204,7 @@ in
         rev = "a1944377c3f8d5699668b67379be9bf63ca0cee7";
         hash = "sha256-gO0wovB/OIxMLWLF2KovISyTL+8eA+oKGlsjMfs2rEI=";
       })
-      (pkgs.runCommandLocal "comfyui" { } "cp -r ${./hermes-plugins/comfyui} $out")
+      (pkgs.runCommandLocal "comfyui" { } "cp -r ${./plugins/comfyui} $out")
       hindsightPlugin
       advancedDelegationPlugin
     ];
@@ -248,8 +218,6 @@ in
     };
 
     environment = {
-      COMFYUI_URL = "http://127.0.0.1:${toString config.services.comfyui.port}";
-      SEARXNG_URL = "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
       TELEGRAM_ALLOWED_USERS = "1629004256";
       DISCORD_ALLOWED_USERS = "288503618250735616";
       API_SERVER_ENABLED = "true";

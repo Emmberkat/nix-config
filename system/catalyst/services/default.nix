@@ -6,8 +6,7 @@
     ./garage.nix
     ./grafana.nix
     ./homeassistant.nix
-    ./hermes.nix
-    ./hermes-work.nix
+    ./hermes
     ./hindsight.nix
     ./immich.nix
     ./jellyfin.nix
