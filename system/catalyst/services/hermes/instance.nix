@@ -8,6 +8,31 @@
   clientId,
 }:
 { config, pkgs, ... }:
+let
+  agentPkg = config.home-manager.users.${user}.services.hermes-agent.package;
+
+  # The plugin and client live in the same vectorize-io/hindsight monorepo as
+  # the server. Build them from the server package's own source, so they move
+  # with nixpkgs' hindsight-api-slim (bumped by the flake.lock workflow) and
+  # always match the server's API version.
+  hindsightSrc = pkgs.hindsight-api-slim.src;
+
+  # Its dependencies all ship in the agent's venv; listing them here would
+  # trip the module's collision check.
+  hindsightClient = agentPkg.passthru.python.pkgs.buildPythonPackage {
+    pname = "hindsight-client";
+    inherit (pkgs.hindsight-api-slim) version;
+    pyproject = true;
+    src = hindsightSrc;
+    sourceRoot = "${hindsightSrc.name}/hindsight-clients/python";
+    build-system = [ agentPkg.passthru.python.pkgs.hatchling ];
+    dontCheckRuntimeDeps = true;
+  };
+
+  hindsightPlugin =
+    pkgs.runCommandLocal "hindsight" { }
+      "cp -r ${hindsightSrc}/hindsight-integrations/hermes $out";
+in
 {
   users = {
     groups.${user} = { };
@@ -54,6 +79,10 @@
       settings = {
         web.search_backend = "searxng";
         toolsets = [ "kanban" ];
+        # The module symlinks extraPlugins as nix-managed-<name>, and
+        # Hermes uses the directory name as the memory provider id, so the
+        # configured name must match the symlink, not the plugin's own name.
+        memory.provider = "nix-managed-hindsight";
         dashboard = {
           public_url = "https://${domain}";
           oauth.self_hosted = {
@@ -61,6 +90,16 @@
             client_id = clientId;
           };
         };
+      };
+
+      extraPlugins = [ hindsightPlugin ];
+      extraPythonPackages = [ hindsightClient ];
+
+      # One shared server; each instance keeps its memories in its own bank.
+      hermesHomeFiles."hindsight/config.json" = builtins.toJSON {
+        mode = "local_external";
+        api_url = "http://127.0.0.1:8890";
+        bank_id = user;
       };
 
       environment = {

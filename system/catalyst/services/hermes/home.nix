@@ -5,30 +5,6 @@
   ...
 }:
 let
-  agentPkg = config.home-manager.users.hermes.services.hermes-agent.package;
-
-  # The plugin and client live in the same vectorize-io/hindsight monorepo as
-  # the server. Build them from the server package's own source, so they move
-  # with nixpkgs' hindsight-api-slim (bumped by the flake.lock workflow) and
-  # always match the server's API version.
-  hindsightSrc = pkgs.hindsight-api-slim.src;
-
-  # Its dependencies all ship in the agent's venv; listing them here would
-  # trip the module's collision check.
-  hindsightClient = agentPkg.passthru.python.pkgs.buildPythonPackage {
-    pname = "hindsight-client";
-    inherit (pkgs.hindsight-api-slim) version;
-    pyproject = true;
-    src = hindsightSrc;
-    sourceRoot = "${hindsightSrc.name}/hindsight-clients/python";
-    build-system = [ agentPkg.passthru.python.pkgs.hatchling ];
-    dontCheckRuntimeDeps = true;
-  };
-
-  hindsightPlugin =
-    pkgs.runCommandLocal "hindsight" { }
-      "cp -r ${hindsightSrc}/hindsight-integrations/hermes $out";
-
   officialPlugins = pkgs.fetchFromGitHub {
     owner = "NousResearch";
     repo = "hermes-official-plugins";
@@ -189,10 +165,6 @@ in
         ];
       };
       image_gen.provider = "comfyui";
-      # The module symlinks extraPlugins as nix-managed-<name>, and
-      # Hermes uses the directory name as the memory provider id, so the
-      # configured name must match the symlink, not the plugin's own name.
-      memory.provider = "nix-managed-hindsight";
     };
 
     extraPlugins = [
@@ -203,17 +175,8 @@ in
         hash = "sha256-gO0wovB/OIxMLWLF2KovISyTL+8eA+oKGlsjMfs2rEI=";
       })
       (pkgs.runCommandLocal "comfyui" { } "cp -r ${./plugins/comfyui} $out")
-      hindsightPlugin
       advancedDelegationPlugin
     ];
-
-    extraPythonPackages = [ hindsightClient ];
-
-    hermesHomeFiles."hindsight/config.json" = builtins.toJSON {
-      mode = "local_external";
-      api_url = "http://127.0.0.1:8890";
-      bank_id = "hermes";
-    };
 
     environment = {
       TELEGRAM_ALLOWED_USERS = "1629004256";
