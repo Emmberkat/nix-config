@@ -84,8 +84,27 @@ in
         port = llamaPort;
         models-preset = "${llamaPreset}";
         no-webui = true;
+        metrics = true;
       };
     };
+
+    prometheus.scrapeConfigs = [
+      {
+        job_name = "hindsight";
+        static_configs = [ { targets = [ "127.0.0.1:${toString port}" ]; } ];
+      }
+      {
+        # In router mode /metrics answers per model, selected by ?model=.
+        job_name = "llama-server-catalyst";
+        static_configs = map (model: {
+          targets = [ "127.0.0.1:${toString llamaPort}" ];
+          labels = {
+            inherit model;
+            __param_model = model;
+          };
+        }) (builtins.attrNames models);
+      }
+    ];
   };
 
   systemd.services = {
