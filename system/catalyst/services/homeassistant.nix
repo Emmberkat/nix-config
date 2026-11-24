@@ -213,6 +213,15 @@ in
       ];
     };
 
+    # The module's nginx serves the API without auth on this loopback port.
+    prometheus.scrapeConfigs = [
+      {
+        job_name = "frigate";
+        metrics_path = "/api/metrics";
+        static_configs = [ { targets = [ "127.0.0.1:5000" ]; } ];
+      }
+    ];
+
     frigate = {
       enable = true;
       package = pkgs.pkgsCuda.frigate;

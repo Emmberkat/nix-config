@@ -13,6 +13,10 @@ in
       globalConfig.scrape_interval = "15s";
       scrapeConfigs = [
         {
+          job_name = "prometheus";
+          static_configs = [ { targets = [ "127.0.0.1:9090" ]; } ];
+        }
+        {
           job_name = "node";
           static_configs = [
             { targets = [ "127.0.0.1:9100" "10.1.0.2:9100" ]; }
