@@ -45,8 +45,18 @@
           bind_addr = "[::]:3902";
           root_domain = ".emmberkat.com";
         };
+        # No metrics_token, so /metrics is open, but only on loopback. The
+        # rest of the admin API still needs a token.
+        admin.api_bind_addr = "127.0.0.1:3903";
       };
     };
+
+    prometheus.scrapeConfigs = [
+      {
+        job_name = "garage";
+        static_configs = [ { targets = [ "127.0.0.1:3903" ]; } ];
+      }
+    ];
   };
 
   users.users.garage = {
