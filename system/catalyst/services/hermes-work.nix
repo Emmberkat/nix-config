@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }:
@@ -26,12 +25,6 @@ in
     file = ../secrets/hermes/claude-oauth-token.age;
     owner = "hermes-work";
   };
-
-  # The local terminal backend snapshots a login shell, where the home
-  # instance's system-wide HERMES_HOME would otherwise win.
-  environment.extraInit = ''
-    if [ "$(id -un)" = hermes-work ]; then export HERMES_HOME=${hermesHome}; fi
-  '';
 
   home-manager.users.hermes-work.services.hermes-agent = {
     enable = true;
@@ -92,13 +85,6 @@ in
       SEARXNG_URL = "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
     };
     environmentFiles = [ config.age.secrets."hermes-work/claude-oauth-token".path ];
-  };
-
-  # Rootless podman maps its uid range with the setuid newuidmap, which
-  # NoNewPrivileges blocks.
-  home-manager.users.hermes-work.systemd.user.services = {
-    hermes-agent.Service.NoNewPrivileges = lib.mkForce false;
-    hermes-backend.Service.NoNewPrivileges = lib.mkForce false;
   };
 
   services.nginx.virtualHosts."work.hermes.emmberkat.com" = {
