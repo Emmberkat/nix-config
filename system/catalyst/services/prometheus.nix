@@ -31,6 +31,10 @@ in
           ];
         }
         {
+          job_name = "oauth2-proxy";
+          static_configs = [ { targets = [ "127.0.0.1:4181" ]; } ];
+        }
+        {
           job_name = "llama-server";
           static_configs = [
             { targets = [ "10.1.0.2:8041" ]; }
@@ -47,6 +51,7 @@ in
     oauth2-proxy = {
       cookie.domain = ".emmberkat.com";
       nginx.virtualHosts.${promHost} = { };
+      extraConfig.metrics-address = "127.0.0.1:4181";
     };
   };
 
