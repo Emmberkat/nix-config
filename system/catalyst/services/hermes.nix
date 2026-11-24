@@ -5,7 +5,8 @@
   ...
 }:
 let
-  agentPkg = config.services.hermes-agent.package;
+  cfg = config.home-manager.users.hermes.services.hermes-agent;
+  agentPkg = cfg.package;
 
   # The plugin and client live in the same vectorize-io/hindsight monorepo as
   # the server. Build them from the server package's own source, so they move
@@ -80,21 +81,32 @@ in
     };
   };
 
-  services = {
-    nginx.virtualHosts = {
-      "hermes.emmberkat.com" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString config.services.hermes-agent.backend.port}";
-          proxyWebsockets = true;
-        };
-      };
+  users = {
+    groups.hermes = { };
+    users.hermes = {
+      isSystemUser = true;
+      group = "hermes";
+      home = "/var/lib/hermes";
+      createHome = true;
+      shell = pkgs.bashInteractive;
+      linger = true;
     };
   };
 
-  services.hermes-agent = {
+  services.nginx.virtualHosts."hermes.emmberkat.com" = {
+    enableACME = true;
+    forceSSL = true;
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:${toString cfg.backend.port}";
+      proxyWebsockets = true;
+    };
+  };
+
+  home-manager.users.hermes.services.hermes-agent = {
     enable = true;
+    gateway.enable = true;
+    hermesHome = "/var/lib/hermes/.hermes";
+    workingDirectory = "/var/lib/hermes/workspace";
     backend.mode = "dashboard";
 
     # Podman for the docker terminal backend; the unit PATH has none.
@@ -209,7 +221,7 @@ in
         ];
       };
       image_gen.provider = "comfyui";
-      # The NixOS module symlinks extraPlugins as nix-managed-<name>, and
+      # The module symlinks extraPlugins as nix-managed-<name>, and
       # Hermes uses the directory name as the memory provider id, so the
       # configured name must match the symlink, not the plugin's own name.
       memory.provider = "nix-managed-hindsight";
@@ -253,7 +265,5 @@ in
       config.age.secrets."hermes/nextcloud-env".path
       config.age.secrets."hermes/forgejo-env".path
     ];
-
-    addToSystemPackages = true;
   };
 }
