@@ -22,8 +22,15 @@ in
     owner = "hermes-work";
   };
 
+  # The local terminal backend snapshots a login shell, where the home
+  # instance's system-wide HERMES_HOME would otherwise win.
+  environment.extraInit = ''
+    if [ "$(id -un)" = hermes-work ]; then export HERMES_HOME=${hermesHome}; fi
+  '';
+
   home-manager.users.hermes-work.services.hermes-agent = {
     enable = true;
+    gateway.enable = true;
     inherit hermesHome;
     workingDirectory = "${home}/workspace";
     backend = {
