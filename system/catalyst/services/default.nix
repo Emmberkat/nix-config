@@ -7,6 +7,7 @@
     ./grafana.nix
     ./homeassistant.nix
     ./hermes.nix
+    ./hermes-work.nix
     ./hindsight.nix
     ./immich.nix
     ./jellyfin.nix
