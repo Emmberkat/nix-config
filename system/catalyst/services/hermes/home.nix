@@ -89,8 +89,6 @@ in
     };
   };
 
-  users.users.hermes.shell = pkgs.bashInteractive;
-
   home-manager.users.hermes.services.hermes-agent = {
     mcpServers = {
       github = {

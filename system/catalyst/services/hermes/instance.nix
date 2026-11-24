@@ -7,7 +7,7 @@
   domain,
   clientId,
 }:
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   users = {
     groups.${user} = { };
@@ -17,6 +17,7 @@
       home = "/var/lib/${user}";
       createHome = true;
       linger = true;
+      shell = pkgs.zsh;
       autoSubUidGidRange = true;
     };
   };
@@ -30,33 +31,38 @@
     };
   };
 
-  home-manager.users.${user}.services.hermes-agent = {
-    enable = true;
-    gateway.enable = true;
-    hermesHome = "/var/lib/${user}/.hermes";
-    workingDirectory = "/var/lib/${user}/workspace";
-    backend = {
-      mode = "dashboard";
-      inherit port;
-    };
+  home-manager.users.${user} = {
+    # The same zsh + starship setup as emmberkat's, for interactive logins.
+    imports = [ ../../../../user/emmberkat/zsh.nix ];
 
-    extraPackages = [ config.virtualisation.podman.package ];
+    services.hermes-agent = {
+      enable = true;
+      gateway.enable = true;
+      hermesHome = "/var/lib/${user}/.hermes";
+      workingDirectory = "/var/lib/${user}/workspace";
+      backend = {
+        mode = "dashboard";
+        inherit port;
+      };
 
-    settings = {
-      web.search_backend = "searxng";
-      toolsets = [ "kanban" ];
-      dashboard = {
-        public_url = "https://${domain}";
-        oauth.self_hosted = {
-          issuer = "https://auth.emmberkat.com";
-          client_id = clientId;
+      extraPackages = [ config.virtualisation.podman.package ];
+
+      settings = {
+        web.search_backend = "searxng";
+        toolsets = [ "kanban" ];
+        dashboard = {
+          public_url = "https://${domain}";
+          oauth.self_hosted = {
+            issuer = "https://auth.emmberkat.com";
+            client_id = clientId;
+          };
         };
       };
-    };
 
-    environment = {
-      COMFYUI_URL = "http://127.0.0.1:${toString config.services.comfyui.port}";
-      SEARXNG_URL = "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
+      environment = {
+        COMFYUI_URL = "http://127.0.0.1:${toString config.services.comfyui.port}";
+        SEARXNG_URL = "http://127.0.0.1:${toString config.services.searx.settings.server.port}";
+      };
     };
   };
 }
