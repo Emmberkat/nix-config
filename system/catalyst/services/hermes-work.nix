@@ -94,12 +94,20 @@ in
     environmentFiles = [ config.age.secrets."hermes-work/claude-oauth-token".path ];
   };
 
-  # Rootless podman maps its uid range with the setuid newuidmap, which
-  # NoNewPrivileges blocks.
-  home-manager.users.hermes-work.systemd.user.services = {
-    hermes-agent.Service.NoNewPrivileges = lib.mkForce false;
-    hermes-backend.Service.NoNewPrivileges = lib.mkForce false;
-  };
+  # Rootless podman maps its uid range with the setuid newuidmap. That fails
+  # under NoNewPrivileges, and under PrivateTmp, which in a user unit implies
+  # PrivateUsers.
+  home-manager.users.hermes-work.systemd.user.services =
+    let
+      podmanCompatible.Service = {
+        NoNewPrivileges = lib.mkForce false;
+        PrivateTmp = lib.mkForce false;
+      };
+    in
+    {
+      hermes-agent = podmanCompatible;
+      hermes-backend = podmanCompatible;
+    };
 
   services.nginx.virtualHosts."work.hermes.emmberkat.com" = {
     enableACME = true;
