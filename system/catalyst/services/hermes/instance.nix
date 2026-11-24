@@ -44,6 +44,7 @@
 
     settings = {
       web.search_backend = "searxng";
+      toolsets = [ "kanban" ];
       dashboard = {
         public_url = "https://${domain}";
         oauth.self_hosted = {
