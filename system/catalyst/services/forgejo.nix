@@ -25,6 +25,7 @@
           OPENID_CONNECT_SCOPES = "profile email";
         };
         session.COOKIE_SECURE = true;
+        metrics.ENABLED = true;
       };
     };
 
@@ -45,7 +46,16 @@
       enableACME = true;
       forceSSL = true;
       locations."/".proxyPass = "http://127.0.0.1:3000";
+      # Without a token Forgejo serves /metrics to anyone; keep it on loopback.
+      locations."= /metrics".return = "404";
     };
+
+    prometheus.scrapeConfigs = [
+      {
+        job_name = "forgejo";
+        static_configs = [ { targets = [ "127.0.0.1:3000" ]; } ];
+      }
+    ];
   };
 
   # Rootful until the runner module supports rootless Podman (its TODO).
