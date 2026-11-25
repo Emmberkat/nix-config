@@ -165,6 +165,7 @@ in
         ];
       };
       image_gen.provider = "comfyui";
+      security.protected_instruction_files = false;
     };
 
     extraPlugins = [
