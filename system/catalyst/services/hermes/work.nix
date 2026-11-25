@@ -9,9 +9,16 @@
     })
   ];
 
-  age.secrets."hermes-work/claude-oauth-token" = {
-    file = ../../secrets/hermes/claude-oauth-token.age;
-    owner = "hermes-work";
+  age.secrets = {
+    "hermes-work/claude-oauth-token" = {
+      file = ../../secrets/hermes/claude-oauth-token.age;
+      owner = "hermes-work";
+    };
+
+    "hermes-work/tokens" = {
+      file = ../../secrets/hermes-work/tokens.age;
+      owner = "hermes-work";
+    };
   };
 
   home-manager.users.hermes-work.services.hermes-agent = {
@@ -48,6 +55,9 @@
       };
     };
 
-    environmentFiles = [ config.age.secrets."hermes-work/claude-oauth-token".path ];
+    environmentFiles = [
+      config.age.secrets."hermes-work/claude-oauth-token".path
+      config.age.secrets."hermes-work/tokens".path
+    ];
   };
 }
