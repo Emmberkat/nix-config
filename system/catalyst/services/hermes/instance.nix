@@ -79,6 +79,7 @@ in
       settings = {
         web.search_backend = "searxng";
         toolsets = [ "kanban" ];
+        security.protected_instruction_files = false;
         # The module symlinks extraPlugins as nix-managed-<name>, and
         # Hermes uses the directory name as the memory provider id, so the
         # configured name must match the symlink, not the plugin's own name.
